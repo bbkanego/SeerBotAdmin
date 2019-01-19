@@ -1,0 +1,15 @@
+{
+  "searchBots":{
+    "pageHeading": "Search Bots",
+    "resultsTable": {
+      "heading": "Following Bots were found",
+      "colHeaders": {
+        "col1": "Name",
+        "col2": "Display Name",
+        "col3": "Description",
+        "col4": "Type",
+        "col5": "Status"
+      }
+    }
+  }
+}

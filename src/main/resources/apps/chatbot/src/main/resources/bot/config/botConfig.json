@@ -1,0 +1,69 @@
+{
+  "sentenceDetectModel": "nlp/models/standard/en-sent.bin",
+  "tokenizerModel": "nlp/models/standard/en-token.bin",
+  "slotMatcherModels": [
+    {
+      "type": "Address",
+      "model": "nlp/models/custom/en-ner-address.bin"
+    }
+  ],
+  "nlpIntentMatcher": {
+    "intentModel": "nlp/models/custom/en-cat-eventgenie-intents-dynamic.bin",
+    "minMatchScore": "0.60f",
+    "maybeMatchScore": "0.15f"
+  },
+  "intents": [
+    {
+      "intent": "SearchEvents"
+    },{
+      "intent": "MaybeSearchEvents"
+    },{
+      "intent": "DeleteEventYesNo"
+    },{
+      "intent": "PerformEventDelete"
+    },{
+      "intent": "EventDeleted"
+    },{
+      "intent": "SearchEventsNear"
+    },{
+      "intent": "SearchRoles"
+    },{
+      "intent": "ValidateAddress"
+    },{
+      "intent": "GaveAddress",
+      "slots": ["Address"]
+    },{
+      "intent": "Stop"
+    },{
+      "intent": "Help"
+    },{
+      "intent": "Hi"
+    },{
+      "intent": "AddRoles"
+    },{
+      "intent": "ThankYou"
+    },{
+      "intent": "CancelEventDelete"
+    },{
+      "intent": "HaveLogInIssues"
+    }
+  ],
+  "inkStory": "bot/ink/eventGenie.ink.json",
+  "globalIntents": [
+    {"intentName": "Stop", "knotName": "stop"},
+    {"intentName": "Help", "knotName": "help"},
+    {"intentName": "Hi", "knotName": "Hi"},
+    {"intentName": "SearchEvents", "knotName": "SearchEvents"},
+    {"intentName": "MaybeSearchEvents", "knotName": "MayBeSearchEvents"},
+    {"intentName": "SearchRoles", "knotName": "SearchRoles"},
+    {"intentName": "MaybeSearchRoles", "knotName": "MayBeSearchRoles"},
+    {"intentName": "SearchEventsNear", "knotName": "SearchEventsNear"},
+    {"intentName": "AddRoles", "knotName": "AddRoles"},
+    {"intentName": "DeleteEventYesNo", "knotName": "DeleteEventYesNoBlock"},
+    {"intentName": "EventDeleted", "knotName": "EventDeleted"},
+    {"intentName": "PerformEventDelete", "knotName": "PerformEventDeleteAction"},
+    {"intentName": "ThankYou", "knotName": "ThankYou"},
+    {"intentName": "GaveAddress", "knotName": "GaveAddress"},
+    {"intentName": "CancelEventDelete", "knotName": "CancelEventDelete"}
+  ]
+}

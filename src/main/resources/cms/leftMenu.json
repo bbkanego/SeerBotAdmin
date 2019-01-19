@@ -1,0 +1,23 @@
+{
+  "leftMenu": {
+    "admin": {
+      "heading": "Admin",
+      "option1": "Create Bot",
+      "option2": "Search Bot",
+      "option3": "Add Standard Intents",
+      "option4": "Search Intents"
+    },
+    "botsLife": {
+      "heading": "Manage Bots",
+      "option1": "Launch Bot",
+      "option2": "Train Bot",
+      "option3": "Manage Models",
+      "option4": "Test Bot"
+    },
+    "maintainModel": {
+      "heading": "Manage Models",
+      "option1": "Train Model",
+      "option2": "Search Model"
+    }
+  }
+}

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE form-validation PUBLIC
+        "-//Apache Software Foundation//DTD Commons Validator Rules Configuration 1.4.0//EN"
+        "http://jakarta.apache.org/commons/dtds/validator_1_4_0.dtd">
+
+<form-validation>
+    <formset>
+        <form name="validateBotRule" classType="com.seerlogics.botadmin.model.Bot">
+            <field id="botName" property="name" depends="required,validateMaxLength">
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>50</var-value>
+                </var>
+            </field>
+            <field id="botDisplayName" property="displayName" depends="required,validateMaxLength">
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>50</var-value>
+                </var>
+            </field>
+            <field id="botDesc" property="description" depends="required,validateMaxLength">
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>200</var-value>
+                </var>
+            </field>
+            <field id="botCat" property="category" depends="required"/>
+            <field id="botOwner" property="owner" depends="required"/>
+            <field id="botStatus" property="status" depends="required"/>
+            <field id="botConfigurations" property="configurations" depends="required"/>
+            <field id="botSupportedLanguages" property="supportedLanguages" depends="required"/>
+        </form>
+
+        <form name="validatePersonRule" classType="com.seerlogics.botadmin.model.Party">
+            <field id="personName" property="name" depends="required,validateMaxLength">
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>50</var-value>
+                </var>
+            </field>
+            <field id="firstName" property="firstName" depends="required,validateMaxLength">
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>50</var-value>
+                </var>
+            </field>
+            <field id="lastName" property="lastName" depends="required,validateMaxLength">
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>200</var-value>
+                </var>
+            </field>
+        </form>
+
+        <form name="validateIntentRule" classType="com.seerlogics.botadmin.model.PredefinedIntentUtterances">
+            <field id="personName" property="intent" depends="required,validateMaxLength">
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>150</var-value>
+                </var>
+            </field>
+            <field id="firstName" property="utterance" depends="required,validateMaxLength">
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>300</var-value>
+                </var>
+            </field>
+            <field id="intentCat" property="category" depends="required"/>
+        </form>
+
+        <form name="validateTrainModelRule" classType="com.seerlogics.botadmin.model.TrainedModel">
+            <field id="modelName" property="name" depends="required,validateMaxLength">
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>300</var-value>
+                </var>
+            </field>
+            <field id="modelDescription" property="description" depends="required,validateMaxLength">
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>1000</var-value>
+                </var>
+            </field>
+            <field id="modelCategory" property="category" depends="required"/>
+        </form>
+
+        <form name="validateLaunchBotRule" classType="com.seerlogics.botadmin.dto.LaunchModel">
+            <field id="botToLaunch" property="bot" depends="required"/>
+            <field id="modelToUse" property="trainedModelId" depends="required,validateLong"/>
+        </form>
+    </formset>
+</form-validation>

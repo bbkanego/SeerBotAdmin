@@ -1,0 +1,18 @@
+{
+  "maintainModels": {
+    "trainModel": {
+      "pageHeading": "Train Model",
+      "nameLabel": "Name",
+      "descriptionNameLabel": "Description",
+      "categoryLabel": "Category"
+    },
+    "searchTrainedModel": {
+      "pageHeading": "Search Trained Models",
+      "nameLabel": "Name",
+      "fileNameLabel": "File Name",
+      "descriptionNameLabel": "Description",
+      "categoryLabel": "Category",
+      "fileTypeLabel": "File Type"
+    }
+  }
+}

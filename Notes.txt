@@ -1,0 +1,38 @@
+http://localhost:8091/h2ChatAdmin
+
+----------------------------------------------------------------------------------------------------
+Error Desc: Caused by: org.hibernate.PersistentObjectException: detached entity passed to persist: com.paulsanwald.Account
+                at org.hibernate.event.internal.DefaultPersistEventListener.onPersist(DefaultPersistEventListener.java:141)
+
+Soln: This is because you are passing an already saved/persisted entity as a possible FK into another object and then trying to "PERSIST" it
+as if its a new entity. To resolve this issue remove the "CascadeType.PERSIST" from the cascade type list
+----------------------------------------------------------------------------------------------------
+
+H2 connection string: jdbc:h2:file:~/svn/code/java/BotAdmin/h2/botDB;AUTO_SERVER=true
+
+Bhushans-MacBook-Pro:Angular-Library-With-NgPackagr bkane$ npm run packagr
+Bhushans-MacBook-Pro:Angular-Library-With-NgPackagr bkane$ npm pack ./dist
+Bhushans-MacBook-Pro:Angular-NLP-Chat-Admin bkane$ npm install ../Angular-Library-With-NgPackagr/my-component-library-0.0.0.tgz
+
+----------------------------------------------------------------------------------------------------
+-- Alter table to add a new FK column
+ALTER TABLE BOT ADD STATUS_ID BIGINT NULL;
+
+-- Make that new column as a FK
+ALTER TABLE BOT
+ADD FOREIGN KEY (STATUS_ID)
+REFERENCES STATUS(ID);
+
+-- Make that col as non null
+ALTER TABLE BOT ALTER COLUMN STATUS_ID SET NOT NULL;
+----------------------------------------------------------------------------------------------------
+nohup java -jar /home/bkane/svn/code/java/BotAdmin/src/main/resources/apps/chatbot/target/chatbot-0.0.1-SNAPSHOT.jar > nohup.out 2> nohup.err < /dev/null &
+
+NG command to build PROD: ng build --target=production --environment=prod --output-path chatClientProd/www/
+
+User: bkaneec2
+Signin URL: https://bbkanego.signin.aws.amazon.com/console
+pwd:Big letter start.....get and set!
+https://bbkanego.signin.aws.amazon.com/console
+Access key ID: AKIAIEFDAK33VJY245SQ
+Secret access key: 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

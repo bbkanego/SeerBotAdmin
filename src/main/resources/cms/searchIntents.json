@@ -1,0 +1,13 @@
+{
+  "searchIntents":{
+    "pageHeading": "Search Intents",
+    "resultsTable": {
+      "heading": "Following intents were found",
+      "colHeaders": {
+        "col1": "Intents",
+        "col2": "Utterance",
+        "col3": "Type"
+      }
+    }
+  }
+}

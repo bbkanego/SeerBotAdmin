@@ -1,0 +1,25 @@
+{
+  "owner": {
+    "type": "PERSON",
+    "id": 4,
+    "creationDate": "11/04/2018 01:00:40",
+    "lastUpdateDate": "11/04/2018 01:00:40",
+    "referenceData": {},
+    "name": "Bhushan",
+    "contactModes": [],
+    "firstName": "Bhushan",
+    "lastName": "Kane"
+  },
+  "userName": "admin",
+  "password": "12345678",
+  "roles": [{
+    "id": 3,
+    "creationDate": "11/04/2018 12:37:00",
+    "lastUpdateDate": "11/04/2018 12:37:00",
+    "referenceData": {},
+    "code": "ADMIN",
+    "description": "This person is an admin!",
+    "role": "Administrator",
+    "entitlements": "READ,WRITE,UPDATE,DELETE"
+  }]
+}

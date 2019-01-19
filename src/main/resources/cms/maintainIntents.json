@@ -1,0 +1,16 @@
+{
+  "maintainIntents":{
+    "addIntent": {
+      "pageHeading": "Add Intent",
+      "intentLabel": "Intent",
+      "utteranceLabel": "Utterance",
+      "categoryLabel": "Category"
+    },
+    "editIntent": {
+      "pageHeading": "Edit Intent",
+      "intentLabel": "Intent",
+      "utteranceLabel": "Utterance",
+      "categoryLabel": "Category"
+    }
+  }
+}

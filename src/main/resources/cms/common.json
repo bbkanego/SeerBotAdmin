@@ -1,0 +1,11 @@
+{
+  "commonMessages": {
+    "saveButton": "Save",
+    "updateButton": "Update",
+    "deleteButton": "Delete",
+    "revertButton": "Revert",
+    "cancelButton": "Cancel",
+    "okButton": "Ok",
+    "requiredIndicator": "<span class='glyphicon glyphicon-asterisk icon-required'></span>&nbsp;Indicate Required Fields"
+  }
+}

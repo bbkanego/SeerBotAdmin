@@ -1,0 +1,18 @@
+{
+  "launchBot": {
+    "startLaunch": {
+      "pageHeading": "Launch Bot",
+      "message": "Click 'Launch Now' to launch your bot. Once you do that the bot will be available for use over the internet",
+      "nameLabel": "Name",
+      "displayNameLabel": "Display Name",
+      "categoryLabel": "Category",
+      "descriptionLabel": "Description",
+      "statusLabel": "Status",
+      "launchNowButton": "Launch Now"
+    },
+    "launched": {
+      "pageHeading": "Bot Launched",
+      "message": "Your bot has been launched. You may access the bot at URL: "
+    }
+  }
+}

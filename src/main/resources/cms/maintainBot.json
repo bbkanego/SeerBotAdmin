@@ -1,0 +1,18 @@
+{
+  "maintainBot": {
+    "addBot": {
+      "pageHeading": "Create Bot",
+      "nameLabel": "Name",
+      "displayNameLabel": "Display Name",
+      "categoryLabel": "Category",
+      "descriptionLabel": "Description"
+    },
+    "editBot": {
+      "pageHeading": "Update Bot",
+      "nameLabel": "Name",
+      "displayNameLabel": "Display Name",
+      "categoryLabel": "Category",
+      "descriptionLabel": "Description"
+    }
+  }
+}
