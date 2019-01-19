@@ -10,7 +10,7 @@
         <relativePath>../SeerlogicsBom/pom.xml</relativePath>
     </parent>
 
-    <artifactId>SeerlogicsBotAdmin</artifactId>
+    <artifactId>seerlogics-bot-admin</artifactId>
     <packaging>jar</packaging>
     <version>1.0.0-SNAPSHOT</version>
     <name>SeerlogicsBotAdmin</name>
