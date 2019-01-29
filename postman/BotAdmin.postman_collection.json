@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "b4eaeb14-db90-437a-90ee-c0ae4c37a9f6",
+		"_postman_id": "7985f158-0308-f735-f0db-f42a7bf824f0",
 		"name": "BotAdmin",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
@@ -45,9 +45,6 @@
 				},
 				{
 					"name": "Get Predefined Intents",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
 						"method": "GET",
 						"header": [
@@ -62,7 +59,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "[\n\t{\n\t\t\"intent\": \"SearchCreditCardsDeals\",\n\t\t\"utterance\": \"search all credit card deals\",\n\t\t\"description\": \"search all credit card deals\",\n\t\t\"category\": {\n\t        \"id\": 15,\n\t        \"creationDate\": \"11/15/2018 01:12:46\",\n\t        \"lastUpdateDate\": \"11/15/2018 01:12:46\",\n\t        \"referenceData\": {},\n\t        \"code\": \"CREDIT_CARD_BOT\",\n\t        \"name\": \"Credit Card Bot\",\n\t        \"description\": \"Credit Card Bot\"\n\t    }\n\t},\n\t{\n\t\t\"intent\": \"SearchCreditCardsDeals\",\n\t\t\"utterance\": \"are the new credit card deals\",\n\t\t\"description\": \"are the new credit card deals\",\n\t\t\"category\": {\n\t        \"id\": 15,\n\t        \"creationDate\": \"11/15/2018 01:12:46\",\n\t        \"lastUpdateDate\": \"11/15/2018 01:12:46\",\n\t        \"referenceData\": {},\n\t        \"code\": \"CREDIT_CARD_BOT\",\n\t        \"name\": \"Credit Card Bot\",\n\t        \"description\": \"Credit Card Bot\"\n\t    }\n\t},\n\t{\n\t\t\"intent\": \"SearchCreditCardsDeals\",\n\t\t\"utterance\": \"hot credit card deals\",\n\t\t\"description\": \"search all credit card deals\",\n\t\t\"category\": {\n\t        \"id\": 15,\n\t        \"creationDate\": \"11/15/2018 01:12:46\",\n\t        \"lastUpdateDate\": \"11/15/2018 01:12:46\",\n\t        \"referenceData\": {},\n\t        \"code\": \"CREDIT_CARD_BOT\",\n\t        \"name\": \"Credit Card Bot\",\n\t        \"description\": \"Credit Card Bot\"\n\t    }\n\t}\n]"
+							"raw": ""
 						},
 						"url": {
 							"raw": "http://localhost:8091/api/v1/predefined-intent",
@@ -82,9 +79,6 @@
 				},
 				{
 					"name": "Get Predefined By Id",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
 						"method": "GET",
 						"header": [
@@ -99,7 +93,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "[\n\t{\n\t\t\"intent\": \"SearchCreditCardsDeals\",\n\t\t\"utterance\": \"search all credit card deals\",\n\t\t\"description\": \"search all credit card deals\",\n\t\t\"category\": {\n\t        \"id\": 15,\n\t        \"creationDate\": \"11/15/2018 01:12:46\",\n\t        \"lastUpdateDate\": \"11/15/2018 01:12:46\",\n\t        \"referenceData\": {},\n\t        \"code\": \"CREDIT_CARD_BOT\",\n\t        \"name\": \"Credit Card Bot\",\n\t        \"description\": \"Credit Card Bot\"\n\t    }\n\t},\n\t{\n\t\t\"intent\": \"SearchCreditCardsDeals\",\n\t\t\"utterance\": \"are the new credit card deals\",\n\t\t\"description\": \"are the new credit card deals\",\n\t\t\"category\": {\n\t        \"id\": 15,\n\t        \"creationDate\": \"11/15/2018 01:12:46\",\n\t        \"lastUpdateDate\": \"11/15/2018 01:12:46\",\n\t        \"referenceData\": {},\n\t        \"code\": \"CREDIT_CARD_BOT\",\n\t        \"name\": \"Credit Card Bot\",\n\t        \"description\": \"Credit Card Bot\"\n\t    }\n\t},\n\t{\n\t\t\"intent\": \"SearchCreditCardsDeals\",\n\t\t\"utterance\": \"hot credit card deals\",\n\t\t\"description\": \"search all credit card deals\",\n\t\t\"category\": {\n\t        \"id\": 15,\n\t        \"creationDate\": \"11/15/2018 01:12:46\",\n\t        \"lastUpdateDate\": \"11/15/2018 01:12:46\",\n\t        \"referenceData\": {},\n\t        \"code\": \"CREDIT_CARD_BOT\",\n\t        \"name\": \"Credit Card Bot\",\n\t        \"description\": \"Credit Card Bot\"\n\t    }\n\t}\n]"
+							"raw": ""
 						},
 						"url": {
 							"raw": "http://localhost:8091/api/v1/predefined-intent/24",
@@ -120,9 +114,6 @@
 				},
 				{
 					"name": "Get Predefined Init",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
 						"method": "GET",
 						"header": [
@@ -137,7 +128,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "[\n\t{\n\t\t\"intent\": \"SearchCreditCardsDeals\",\n\t\t\"utterance\": \"search all credit card deals\",\n\t\t\"description\": \"search all credit card deals\",\n\t\t\"category\": {\n\t        \"id\": 15,\n\t        \"creationDate\": \"11/15/2018 01:12:46\",\n\t        \"lastUpdateDate\": \"11/15/2018 01:12:46\",\n\t        \"referenceData\": {},\n\t        \"code\": \"CREDIT_CARD_BOT\",\n\t        \"name\": \"Credit Card Bot\",\n\t        \"description\": \"Credit Card Bot\"\n\t    }\n\t},\n\t{\n\t\t\"intent\": \"SearchCreditCardsDeals\",\n\t\t\"utterance\": \"are the new credit card deals\",\n\t\t\"description\": \"are the new credit card deals\",\n\t\t\"category\": {\n\t        \"id\": 15,\n\t        \"creationDate\": \"11/15/2018 01:12:46\",\n\t        \"lastUpdateDate\": \"11/15/2018 01:12:46\",\n\t        \"referenceData\": {},\n\t        \"code\": \"CREDIT_CARD_BOT\",\n\t        \"name\": \"Credit Card Bot\",\n\t        \"description\": \"Credit Card Bot\"\n\t    }\n\t},\n\t{\n\t\t\"intent\": \"SearchCreditCardsDeals\",\n\t\t\"utterance\": \"hot credit card deals\",\n\t\t\"description\": \"search all credit card deals\",\n\t\t\"category\": {\n\t        \"id\": 15,\n\t        \"creationDate\": \"11/15/2018 01:12:46\",\n\t        \"lastUpdateDate\": \"11/15/2018 01:12:46\",\n\t        \"referenceData\": {},\n\t        \"code\": \"CREDIT_CARD_BOT\",\n\t        \"name\": \"Credit Card Bot\",\n\t        \"description\": \"Credit Card Bot\"\n\t    }\n\t}\n]"
+							"raw": ""
 						},
 						"url": {
 							"raw": "http://localhost:8091/api/v1/predefined-intent/init",
@@ -151,6 +142,77 @@
 								"v1",
 								"predefined-intent",
 								"init"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Intents Init",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{BearerKey}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8091/api/v1/predefined-intent/search/init",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8091",
+							"path": [
+								"api",
+								"v1",
+								"predefined-intent",
+								"search",
+								"init"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Intents",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{BearerKey}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"referenceData\": {\n        \"categories\": [\n            {\n                \"id\": 1,\n                \"creationDate\": \"01/28/2019 04:35:17\",\n                \"lastUpdateDate\": \"01/28/2019 04:35:17\",\n                \"referenceData\": {},\n                \"code\": \"SALES_APP\",\n                \"name\": \"Sales App\",\n                \"description\": \"Sales Application\"\n            },\n            {\n                \"id\": 2,\n                \"creationDate\": \"01/28/2019 04:35:58\",\n                \"lastUpdateDate\": \"01/28/2019 04:35:58\",\n                \"referenceData\": {},\n                \"code\": \"MED_BOT\",\n                \"name\": \"Medical Practise Bot\",\n                \"description\": \"Medical Practise Bot\"\n            },\n            {\n                \"id\": 3,\n                \"creationDate\": \"01/28/2019 04:36:39\",\n                \"lastUpdateDate\": \"01/28/2019 04:36:39\",\n                \"referenceData\": {},\n                \"code\": \"DENTAL_PRACTISE_BOT\",\n                \"name\": \"Dental Practise Bot\",\n                \"description\": \"Dental Practise Bot\"\n            },\n            {\n                \"id\": 4,\n                \"creationDate\": \"01/28/2019 04:37:55\",\n                \"lastUpdateDate\": \"01/28/2019 04:37:55\",\n                \"referenceData\": {},\n                \"code\": \"EVENT_BOT\",\n                \"name\": \"Event Management Bot\",\n                \"description\": \"Event Management Bot\"\n            }\n        ]\n    },\n    \"intentName\": null,\n    \"utterance\": \"hello search for events\",\n    \"category\": {\n                \"id\": 4,\n                \"creationDate\": \"01/28/2019 04:37:55\",\n                \"lastUpdateDate\": \"01/28/2019 04:37:55\",\n                \"referenceData\": {},\n                \"code\": \"EVENT_BOT\",\n                \"name\": \"Event Management Bot\",\n                \"description\": \"Event Management Bot\"\n            },\n    \"searchResults\": []\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8091/api/v1/predefined-intent/search",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8091",
+							"path": [
+								"api",
+								"v1",
+								"predefined-intent",
+								"search"
 							]
 						}
 					},
@@ -270,9 +332,6 @@
 				},
 				{
 					"name": "Launch Chatbot Start",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
 						"method": "GET",
 						"header": [
@@ -289,7 +348,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"bot\": {\n        \"type\": \"VOICE_BOT\",\n        \"id\": 92,\n        \"creationDate\": \"11/24/2018 10:02:05\",\n        \"lastUpdateDate\": \"11/25/2018 01:39:12\",\n        \"referenceData\": {},\n        \"name\": \"Credit Card Voice Bot2\",\n        \"displayName\": \"Credit Card Voice Bot2\",\n        \"description\": \"This is a dental voice bot!\",\n        \"category\": {\n            \"id\": 15,\n            \"creationDate\": \"11/15/2018 01:12:46\",\n            \"lastUpdateDate\": \"11/15/2018 01:12:46\",\n            \"referenceData\": {},\n            \"code\": \"CREDIT_CARD_BOT\",\n            \"name\": \"Credit Card Bot\",\n            \"description\": \"Credit Card Bot\"\n        },\n        \"owner\": {\n            \"id\": 8,\n            \"creationDate\": \"11/15/2018 01:00:58\",\n            \"lastUpdateDate\": \"11/15/2018 01:00:58\",\n            \"referenceData\": {},\n            \"owner\": {\n                \"type\": \"person\",\n                \"id\": 9,\n                \"creationDate\": \"11/15/2018 01:00:58\",\n                \"lastUpdateDate\": \"11/15/2018 01:00:58\",\n                \"referenceData\": {},\n                \"name\": \"Bhushan\",\n                \"contactModes\": [\n                    {\n                        \"type\": \"street_address\",\n                        \"id\": 10,\n                        \"creationDate\": \"11/15/2018 01:00:58\",\n                        \"lastUpdateDate\": \"11/15/2018 01:00:58\",\n                        \"referenceData\": {},\n                        \"street\": \"13816 Daltrey Lane\",\n                        \"city\": \"Charlotte\",\n                        \"state\": \"SC\",\n                        \"zip\": \"38277\"\n                    }\n                ],\n                \"firstName\": \"Bhushan\",\n                \"lastName\": \"Kane\"\n            },\n            \"userName\": \"admin\",\n            \"roles\": [\n                {\n                    \"id\": 7,\n                    \"creationDate\": \"11/15/2018 12:50:50\",\n                    \"lastUpdateDate\": \"11/15/2018 12:50:50\",\n                    \"referenceData\": {},\n                    \"code\": \"ADMIN\",\n                    \"description\": \"This person is an admin\",\n                    \"role\": \"Adminstrator\",\n                    \"entitlements\": \"READ,WRITE,UPDATE,DELETE,ADMIN\"\n                }\n            ]\n        },\n        \"status\": {\n            \"id\": 101,\n            \"creationDate\": \"11/25/2018 12:13:25\",\n            \"lastUpdateDate\": \"11/25/2018 12:13:25\",\n            \"referenceData\": {},\n            \"code\": \"STOPPED\",\n            \"description\": \"The Bot has been stopped\",\n            \"name\": \"Stopped\"\n        },\n        \"supportedLanguages\": [\n            {\n                \"id\": 17,\n                \"creationDate\": \"11/15/2018 01:14:32\",\n                \"lastUpdateDate\": \"11/15/2018 01:14:32\",\n                \"referenceData\": {},\n                \"code\": \"en\",\n                \"name\": \"English\",\n                \"description\": \"US English\",\n                \"locale\": \"en_us\"\n            },\n            {\n                \"id\": 18,\n                \"creationDate\": \"11/15/2018 01:14:32\",\n                \"lastUpdateDate\": \"11/15/2018 01:14:32\",\n                \"referenceData\": {},\n                \"code\": \"mr\",\n                \"name\": \"Marathi\",\n                \"description\": \"Indian Marathi\",\n                \"locale\": \"mr_in\"\n            }\n        ],\n        \"configurations\": []\n    },\n    \"trainedModelId\": \"sdsdsdsds\"\n}"
+							"raw": ""
 						},
 						"url": {
 							"raw": "http://localhost:8091/api/v1/chatbot/launch/start/92",
@@ -1308,9 +1367,6 @@
 				},
 				{
 					"name": "Get All Trained Models",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
 						"method": "GET",
 						"header": [
