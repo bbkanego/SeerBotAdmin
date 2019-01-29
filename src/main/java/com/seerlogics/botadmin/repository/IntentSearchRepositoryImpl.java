@@ -15,10 +15,16 @@ import java.util.List;
 
 /**
  * Created by bkane on 1/28/19.
+ * https://www.baeldung.com/spring-data-criteria-queries
+ * https://github.com/eugenp/tutorials/blob/5e3eb4ae41bf58c419ffd1b70409c66e93a07243/persistence-modules/spring-jpa/src/main/java/org/baeldung/persistence/dao/BookRepositoryImpl.java
  */
 @Repository
 public class IntentSearchRepositoryImpl implements IntentSearchRepository {
-    EntityManager em;
+    private EntityManager em;
+
+    public IntentSearchRepositoryImpl(EntityManager em) {
+        this.em = em;
+    }
 
     @Override
     public List<PredefinedIntentUtterances> findIntentsAndUtterances(SearchIntentsDto searchIntentsDto) {

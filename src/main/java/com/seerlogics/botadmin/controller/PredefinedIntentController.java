@@ -1,5 +1,6 @@
 package com.seerlogics.botadmin.controller;
 
+import com.seerlogics.botadmin.dto.SearchIntentsDto;
 import com.seerlogics.botadmin.model.Category;
 import com.seerlogics.botadmin.model.PredefinedIntentUtterances;
 import com.seerlogics.botadmin.service.CategoryService;
@@ -102,5 +103,17 @@ public class PredefinedIntentController extends BaseController implements CrudCo
             return true;
         }
         return false;
+    }
+
+    @GetMapping("/search/init")
+    @ResponseBody
+    public SearchIntentsDto initSearchIntents() {
+        return predefinedIntentService.initSearchIntentsCriteria();
+    }
+
+    @PostMapping("/search")
+    @ResponseBody
+    public List<PredefinedIntentUtterances> searchIntents(@RequestBody SearchIntentsDto searchIntentsDto) {
+        return predefinedIntentService.findIntentsAndUtterances(searchIntentsDto);
     }
 }
