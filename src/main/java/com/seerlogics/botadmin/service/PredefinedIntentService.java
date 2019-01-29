@@ -1,14 +1,17 @@
 package com.seerlogics.botadmin.service;
 
+import com.seerlogics.botadmin.dto.SearchIntentsDto;
 import com.seerlogics.botadmin.model.Category;
 import com.seerlogics.botadmin.model.PredefinedIntentUtterances;
 import com.seerlogics.botadmin.repository.PredefinedIntentRepository;
 import com.lingoace.spring.service.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by bkane on 11/3/18.
@@ -50,5 +53,9 @@ public class PredefinedIntentService extends BaseServiceImpl<PredefinedIntentUtt
 
     public List<PredefinedIntentUtterances> findIntentsByCategory(String catCode) {
         return predefinedIntentRepository.findIntentsByCode(catCode);
+    }
+
+    public List<PredefinedIntentUtterances> findBy(SearchIntentsDto searchIntentsDto) {
+        return predefinedIntentRepository.findIntentsAndUtterances(searchIntentsDto);
     }
 }

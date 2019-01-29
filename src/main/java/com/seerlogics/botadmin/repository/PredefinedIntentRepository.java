@@ -5,13 +5,15 @@ import com.seerlogics.botadmin.model.PredefinedIntentUtterances;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 /**
  * Created by bkane on 11/16/18.
  */
-public interface PredefinedIntentRepository extends JpaRepository<PredefinedIntentUtterances, Long> {
+@Repository
+public interface PredefinedIntentRepository extends JpaRepository<PredefinedIntentUtterances, Long>, IntentSearchRepository {
     List<PredefinedIntentUtterances> findByCategory(Category cat);
 
     @Query("select pu from PredefinedIntentUtterances pu where pu.category.code = :code")

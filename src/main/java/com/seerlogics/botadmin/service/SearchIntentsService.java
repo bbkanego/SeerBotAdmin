@@ -12,9 +12,16 @@ public class SearchIntentsService {
     @Autowired
     private CategoryService categoryService;
 
+    @Autowired
+    private PredefinedIntentService predefinedIntentService;
+
     public SearchIntentsDto initCriteria() {
         SearchIntentsDto searchIntentsDto = new SearchIntentsDto();
         searchIntentsDto.getReferenceData().put("categories", categoryService.getAll());
+        return searchIntentsDto;
+    }
+
+    public SearchIntentsDto search(SearchIntentsDto searchIntentsDto) {
         return searchIntentsDto;
     }
 
