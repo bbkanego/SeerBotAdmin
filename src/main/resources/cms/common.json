@@ -1,6 +1,8 @@
 {
   "commonMessages": {
     "saveButton": "Save",
+    "searchButton": "Search",
+    "resetButton": "Reset",
     "updateButton": "Update",
     "deleteButton": "Delete",
     "revertButton": "Revert",

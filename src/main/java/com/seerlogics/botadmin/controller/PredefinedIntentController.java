@@ -1,5 +1,6 @@
 package com.seerlogics.botadmin.controller;
 
+import com.lingoace.validation.Validate;
 import com.seerlogics.botadmin.dto.SearchIntentsDto;
 import com.seerlogics.botadmin.model.Category;
 import com.seerlogics.botadmin.model.PredefinedIntentUtterances;
@@ -113,7 +114,8 @@ public class PredefinedIntentController extends BaseController implements CrudCo
 
     @PostMapping("/search")
     @ResponseBody
-    public List<PredefinedIntentUtterances> searchIntents(@RequestBody SearchIntentsDto searchIntentsDto) {
+    public List<PredefinedIntentUtterances> searchIntents(@Validate("validateSearchIntentRule")
+                                                              @RequestBody SearchIntentsDto searchIntentsDto) {
         return predefinedIntentService.findIntentsAndUtterances(searchIntentsDto);
     }
 }

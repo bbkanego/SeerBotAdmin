@@ -88,5 +88,10 @@
             <field id="botToLaunch" property="bot" depends="required"/>
             <field id="modelToUse" property="trainedModelId" depends="required,validateLong"/>
         </form>
+
+        <form name="validateSearchIntentRule" classType="com.seerlogics.botadmin.dto.SearchIntentsDto">
+            <field id="intentCategory" property="category" depends="required"/>
+        </form>
+
     </formset>
 </form-validation>
