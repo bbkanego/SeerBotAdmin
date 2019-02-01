@@ -1,7 +1,7 @@
 package com.seerlogics.botadmin.service;
 
 import com.lingoace.spring.service.BaseServiceImpl;
-import com.seerlogics.botadmin.dto.SearchIntentsDto;
+import com.seerlogics.botadmin.dto.SearchIntents;
 import com.seerlogics.botadmin.model.Category;
 import com.seerlogics.botadmin.model.PredefinedIntentUtterances;
 import com.seerlogics.botadmin.repository.PredefinedIntentRepository;
@@ -56,13 +56,13 @@ public class PredefinedIntentService extends BaseServiceImpl<PredefinedIntentUtt
         return predefinedIntentRepository.findIntentsByCode(catCode);
     }
 
-    public SearchIntentsDto initSearchIntentsCriteria() {
-        SearchIntentsDto searchIntentsDto = new SearchIntentsDto();
-        searchIntentsDto.getReferenceData().put("categories", categoryService.getAll());
-        return searchIntentsDto;
+    public SearchIntents initSearchIntentsCriteria() {
+        SearchIntents searchIntents = new SearchIntents();
+        searchIntents.getReferenceData().put("categories", categoryService.getAll());
+        return searchIntents;
     }
 
-    public List<PredefinedIntentUtterances> findIntentsAndUtterances(SearchIntentsDto searchIntentsDto) {
-        return predefinedIntentRepository.findIntentsAndUtterances(searchIntentsDto);
+    public List<PredefinedIntentUtterances> findIntentsAndUtterances(SearchIntents searchIntents) {
+        return predefinedIntentRepository.findIntentsAndUtterances(searchIntents);
     }
 }

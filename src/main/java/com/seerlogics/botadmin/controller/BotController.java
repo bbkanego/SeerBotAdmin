@@ -1,6 +1,7 @@
 package com.seerlogics.botadmin.controller;
 
 import com.seerlogics.botadmin.dto.LaunchModel;
+import com.seerlogics.botadmin.dto.SearchBots;
 import com.seerlogics.botadmin.event.InstanceLaunchedEvent;
 import com.seerlogics.botadmin.model.Bot;
 import com.seerlogics.botadmin.model.Configuration;
@@ -35,7 +36,6 @@ public class BotController extends BaseController implements ApplicationListener
     @PostMapping(value = {"", "/",})
     @ResponseBody
     public Boolean save(@Validate("validateBotRule") @RequestBody Bot chatBot) {
-        chatBot.setOwner(accountService.getAuthenticatedUser());
         this.botService.save(chatBot);
         return true;
     }
@@ -116,5 +116,17 @@ public class BotController extends BaseController implements ApplicationListener
         if (applicationEvent instanceof InstanceLaunchedEvent) {
             LOGGER.debug("Instance has been launched!!");
         }
+    }
+
+    @GetMapping(value = "/search/init")
+    @ResponseBody
+    public SearchBots initSearchBots() {
+        return botService.initSearchBots();
+    }
+
+    @PostMapping(value = "/search")
+    @ResponseBody
+    public List<Bot> searchBots(@Validate("validateSearchBotsRule") @RequestBody SearchBots searchBots) {
+        return botService.findBots(searchBots);
     }
 }

@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
  * Created by bkane on 11/1/18.
  */
 @Repository
-public interface BotRepository extends JpaRepository<Bot, Long> {
+public interface BotRepository extends JpaRepository<Bot, Long>, BotSearchRepository {
 }

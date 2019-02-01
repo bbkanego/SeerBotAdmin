@@ -25,9 +25,7 @@
                 </var>
             </field>
             <field id="botCat" property="category" depends="required"/>
-            <field id="botOwner" property="owner" depends="required"/>
             <field id="botStatus" property="status" depends="required"/>
-            <field id="botConfigurations" property="configurations" depends="required"/>
             <field id="botSupportedLanguages" property="supportedLanguages" depends="required"/>
         </form>
 
@@ -89,8 +87,12 @@
             <field id="modelToUse" property="trainedModelId" depends="required,validateLong"/>
         </form>
 
-        <form name="validateSearchIntentRule" classType="com.seerlogics.botadmin.dto.SearchIntentsDto">
+        <form name="validateSearchIntentRule" classType="com.seerlogics.botadmin.dto.SearchIntents">
             <field id="intentCategory" property="category" depends="required"/>
+        </form>
+
+        <form name="validateSearchBotsRule" classType="com.seerlogics.botadmin.dto.SearchBots">
+            <field id="botCategory" property="category" depends="required"/>
         </form>
 
     </formset>

@@ -199,7 +199,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"referenceData\": {\n        \"categories\": [\n            {\n                \"id\": 1,\n                \"creationDate\": \"01/28/2019 04:35:17\",\n                \"lastUpdateDate\": \"01/28/2019 04:35:17\",\n                \"referenceData\": {},\n                \"code\": \"SALES_APP\",\n                \"name\": \"Sales App\",\n                \"description\": \"Sales Application\"\n            },\n            {\n                \"id\": 2,\n                \"creationDate\": \"01/28/2019 04:35:58\",\n                \"lastUpdateDate\": \"01/28/2019 04:35:58\",\n                \"referenceData\": {},\n                \"code\": \"MED_BOT\",\n                \"name\": \"Medical Practise Bot\",\n                \"description\": \"Medical Practise Bot\"\n            },\n            {\n                \"id\": 3,\n                \"creationDate\": \"01/28/2019 04:36:39\",\n                \"lastUpdateDate\": \"01/28/2019 04:36:39\",\n                \"referenceData\": {},\n                \"code\": \"DENTAL_PRACTISE_BOT\",\n                \"name\": \"Dental Practise Bot\",\n                \"description\": \"Dental Practise Bot\"\n            },\n            {\n                \"id\": 4,\n                \"creationDate\": \"01/28/2019 04:37:55\",\n                \"lastUpdateDate\": \"01/28/2019 04:37:55\",\n                \"referenceData\": {},\n                \"code\": \"EVENT_BOT\",\n                \"name\": \"Event Management Bot\",\n                \"description\": \"Event Management Bot\"\n            }\n        ]\n    },\n    \"intentName\": null,\n    \"utterance\": \"hello search for events\",\n    \"category\": {\n                \"id\": 4,\n                \"creationDate\": \"01/28/2019 04:37:55\",\n                \"lastUpdateDate\": \"01/28/2019 04:37:55\",\n                \"referenceData\": {},\n                \"code\": \"EVENT_BOT\",\n                \"name\": \"Event Management Bot\",\n                \"description\": \"Event Management Bot\"\n            },\n    \"searchResults\": []\n}"
+							"raw": "{\n    \"referenceData\": {\n        \"categories\": [\n            {\n                \"id\": 1,\n                \"creationDate\": \"01/28/2019 04:35:17\",\n                \"lastUpdateDate\": \"01/28/2019 04:35:17\",\n                \"referenceData\": {},\n                \"code\": \"SALES_APP\",\n                \"name\": \"Sales App\",\n                \"description\": \"Sales Application\"\n            },\n            {\n                \"id\": 2,\n                \"creationDate\": \"01/28/2019 04:35:58\",\n                \"lastUpdateDate\": \"01/28/2019 04:35:58\",\n                \"referenceData\": {},\n                \"code\": \"MED_BOT\",\n                \"name\": \"Medical Practise Bot\",\n                \"description\": \"Medical Practise Bot\"\n            },\n            {\n                \"id\": 3,\n                \"creationDate\": \"01/28/2019 04:36:39\",\n                \"lastUpdateDate\": \"01/28/2019 04:36:39\",\n                \"referenceData\": {},\n                \"code\": \"DENTAL_PRACTISE_BOT\",\n                \"name\": \"Dental Practise Bot\",\n                \"description\": \"Dental Practise Bot\"\n            },\n            {\n                \"id\": 4,\n                \"creationDate\": \"01/28/2019 04:37:55\",\n                \"lastUpdateDate\": \"01/28/2019 04:37:55\",\n                \"referenceData\": {},\n                \"code\": \"EVENT_BOT\",\n                \"name\": \"Event Management Bot\",\n                \"description\": \"Event Management Bot\"\n            }\n        ]\n    },\n    \"intentName\": \"SearchEvents\",\n    \"utterance\": \"\",\n    \"category\": {\n                \"id\": 4,\n                \"creationDate\": \"01/28/2019 04:37:55\",\n                \"lastUpdateDate\": \"01/28/2019 04:37:55\",\n                \"referenceData\": {},\n                \"code\": \"EVENT_BOT\",\n                \"name\": \"Event Management Bot\",\n                \"description\": \"Event Management Bot\"\n            },\n    \"searchResults\": []\n}"
 						},
 						"url": {
 							"raw": "http://localhost:8091/api/v1/predefined-intent/search",
@@ -681,6 +681,79 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Search Bots Init",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "{{content-type}}"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{BearerKey}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8091/api/v1/chatbot/search/init",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8091",
+							"path": [
+								"api",
+								"v1",
+								"chatbot",
+								"search",
+								"init"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Search Bots",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{BearerKey}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"referenceData\": {\n        \"category\": [\n            {\n                \"id\": 1,\n                \"creationDate\": \"01/28/2019 04:35:17\",\n                \"lastUpdateDate\": \"01/28/2019 04:35:17\",\n                \"referenceData\": {},\n                \"code\": \"SALES_APP\",\n                \"name\": \"Sales App\",\n                \"description\": \"Sales Application\"\n            },\n            {\n                \"id\": 2,\n                \"creationDate\": \"01/28/2019 04:35:58\",\n                \"lastUpdateDate\": \"01/28/2019 04:35:58\",\n                \"referenceData\": {},\n                \"code\": \"MED_BOT\",\n                \"name\": \"Medical Practise Bot\",\n                \"description\": \"Medical Practise Bot\"\n            },\n            {\n                \"id\": 3,\n                \"creationDate\": \"01/28/2019 04:36:39\",\n                \"lastUpdateDate\": \"01/28/2019 04:36:39\",\n                \"referenceData\": {},\n                \"code\": \"DENTAL_PRACTISE_BOT\",\n                \"name\": \"Dental Practise Bot\",\n                \"description\": \"Dental Practise Bot\"\n            },\n            {\n                \"id\": 4,\n                \"creationDate\": \"01/28/2019 04:37:55\",\n                \"lastUpdateDate\": \"01/28/2019 04:37:55\",\n                \"referenceData\": {},\n                \"code\": \"EVENT_BOT\",\n                \"name\": \"Event Management Bot\",\n                \"description\": \"Event Management Bot\"\n            }\n        ]\n    },\n    \"searchResults\": [],\n    \"name\": null,\n    \"displayName\": null,\n    \"description\": null,\n    \"category\": {\n                \"id\": 4,\n                \"creationDate\": \"01/28/2019 04:37:55\",\n                \"lastUpdateDate\": \"01/28/2019 04:37:55\",\n                \"referenceData\": {},\n                \"code\": \"EVENT_BOT\",\n                \"name\": \"Event Management Bot\",\n                \"description\": \"Event Management Bot\"\n            }\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8091/api/v1/chatbot/search",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8091",
+							"path": [
+								"api",
+								"v1",
+								"chatbot",
+								"search"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -1104,7 +1177,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "[\n\t{\n\t\t\"code\": \"STOPPED\",\n\t\t\"name\": \"Stopped\",\n\t\t\"description\": \"The Bot has been stopped\"\n\t}\n]"
+							"raw": "[\n\t{\n\t\t\"code\": \"STOPPED\",\n\t\t\"name\": \"Stopped\",\n\t\t\"description\": \"The Bot has been stopped\"\n\t},\n\t{\n\t\t\"code\": \"DRAFT\",\n\t\t\"name\": \"Draft\",\n\t\t\"description\": \"The Bot in Draft Status\"\n\t},\n\t{\n\t\t\"code\": \"LAUNCHED\",\n\t\t\"name\": \"Launched\",\n\t\t\"description\": \"The Bot in Launched Status\"\n\t},\n\t{\n\t\t\"code\": \"DEV\",\n\t\t\"name\": \"Development\",\n\t\t\"description\": \"The Bot in Development Status\"\n\t},\n\t{\n\t\t\"code\": \"UAT\",\n\t\t\"name\": \"User Acceptance Testing\",\n\t\t\"description\": \"The Bot in UAT Status\"\n\t}\n]"
 						},
 						"url": {
 							"raw": "http://localhost:8091/api/v1/status/save-all",

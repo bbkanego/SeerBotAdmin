@@ -1,11 +1,12 @@
 package com.seerlogics.botadmin.service;
 
-import com.seerlogics.botadmin.dto.LaunchModel;
-import com.seerlogics.botadmin.model.*;
-import com.seerlogics.botadmin.repository.BotRepository;
 import com.lingoace.exception.jpa.UnknownTypeException;
 import com.lingoace.spring.service.BaseServiceImpl;
 import com.lingoace.util.RunScript;
+import com.seerlogics.botadmin.dto.LaunchModel;
+import com.seerlogics.botadmin.dto.SearchBots;
+import com.seerlogics.botadmin.model.*;
+import com.seerlogics.botadmin.repository.BotRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by bkane on 10/31/18.
@@ -39,11 +41,15 @@ public class BotService extends BaseServiceImpl<Bot> {
     private TrainedModelService trainedModelService;
 
     @Autowired
+    private AccountService accountService;
+
+    @Autowired
     private BotLauncher botLauncher;
 
     public Bot initModel(String type) {
         Collection<Category> categories = categoryService.getAll();
         Collection<Language> languages = languageService.getAll();
+        Collection<Status> statuses = statusService.getAll();
         Bot bot = null;
         if (Bot.BOT_TYPE.CHAT_BOT.name().toLowerCase().equals(type)) {
             bot = new ChatBot();
@@ -54,6 +60,12 @@ public class BotService extends BaseServiceImpl<Bot> {
         }
         bot.getReferenceData().put("categories", categories);
         bot.getReferenceData().put("languages", languages);
+        bot.getReferenceData().put("statuses", statuses);
+
+        List<Status> draftStatus = statuses.stream().filter(status -> status.getCode().equals(Status.STATUS_CODES.DRAFT.name()))
+                .collect(Collectors.toList());
+        bot.setStatus(draftStatus.get(0));
+
         return bot;
     }
 
@@ -64,6 +76,7 @@ public class BotService extends BaseServiceImpl<Bot> {
 
     @Override
     public Bot save(Bot bot) {
+        bot.setOwner(accountService.getAuthenticatedUser());
         return this.botRepository.save(bot);
     }
 
@@ -130,5 +143,15 @@ public class BotService extends BaseServiceImpl<Bot> {
         bot.setStatus(statusService.findByCode(Status.STATUS_CODES.STOPPED.name()));
         bot.getConfigurations().clear();
         return this.save(bot);
+    }
+
+    public SearchBots initSearchBots() {
+        SearchBots searchBots = new SearchBots();
+        searchBots.getReferenceData().put("category", categoryService.getAll());
+        return searchBots;
+    }
+
+    public List<Bot> findBots(SearchBots searchBots) {
+        return this.botRepository.findBots(searchBots);
     }
 }

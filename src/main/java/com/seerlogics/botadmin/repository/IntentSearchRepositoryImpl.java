@@ -1,6 +1,6 @@
 package com.seerlogics.botadmin.repository;
 
-import com.seerlogics.botadmin.dto.SearchIntentsDto;
+import com.seerlogics.botadmin.dto.SearchIntents;
 import com.seerlogics.botadmin.model.PredefinedIntentUtterances;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Repository;
@@ -27,7 +27,7 @@ public class IntentSearchRepositoryImpl implements IntentSearchRepository {
     }
 
     @Override
-    public List<PredefinedIntentUtterances> findIntentsAndUtterances(SearchIntentsDto searchIntentsDto) {
+    public List<PredefinedIntentUtterances> findIntentsAndUtterances(SearchIntents searchIntents) {
 
         CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
         CriteriaQuery<PredefinedIntentUtterances> criteriaQuery = criteriaBuilder.createQuery(PredefinedIntentUtterances.class);
@@ -35,15 +35,15 @@ public class IntentSearchRepositoryImpl implements IntentSearchRepository {
         Root<PredefinedIntentUtterances> predefinedIntentUtterancesRoot = criteriaQuery.from(PredefinedIntentUtterances.class);
         List<Predicate> predicates = new ArrayList<>();
 
-        if (StringUtils.isNotBlank(searchIntentsDto.getUtterance())) {
+        if (StringUtils.isNotBlank(searchIntents.getUtterance())) {
             predicates.add(criteriaBuilder.like(predefinedIntentUtterancesRoot.get("utterance"),
-                    "%" + searchIntentsDto.getUtterance() + "%"));
+                    "%" + searchIntents.getUtterance() + "%"));
         }
-        if (StringUtils.isNotBlank(searchIntentsDto.getIntentName())) {
-            predicates.add(criteriaBuilder.equal(predefinedIntentUtterancesRoot.get("intent"), searchIntentsDto.getIntentName()));
+        if (StringUtils.isNotBlank(searchIntents.getIntentName())) {
+            predicates.add(criteriaBuilder.equal(predefinedIntentUtterancesRoot.get("intent"), searchIntents.getIntentName()));
         }
-        if (searchIntentsDto.getCategory() != null) {
-            predicates.add(criteriaBuilder.equal(predefinedIntentUtterancesRoot.get("category"), searchIntentsDto.getCategory()));
+        if (searchIntents.getCategory() != null) {
+            predicates.add(criteriaBuilder.equal(predefinedIntentUtterancesRoot.get("category"), searchIntents.getCategory()));
         }
 
         criteriaQuery.where(predicates.toArray(new Predicate[predicates.size()]));
