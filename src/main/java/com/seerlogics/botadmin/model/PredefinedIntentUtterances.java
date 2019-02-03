@@ -9,6 +9,7 @@ import javax.persistence.*;
  * This table will contain ALL the predefined intent and utterances for specific types
  * of bots defined by the category.
  * There will be a separate table for client defined intents and utterances.
+ * The customer will not be allowed to edi this. They can copy these over to custom intents and edit those.
  */
 @Entity
 @Table(name = "predefined_intent_utterance",
