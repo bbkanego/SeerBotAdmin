@@ -1,12 +1,18 @@
 {
   "maintainIntents":{
     "addIntent": {
-      "pageHeading": "Add Intent",
+      "pageHeadingPredefined": "Add Predefined Intent",
+      "pageHeadingCustom": "Add Custom Intent",
       "intentLabel": "Intent",
       "utteranceLabel": "Utterance",
-      "categoryLabel": "Category"
+      "categoryLabel": "Category",
+      "enterIntent": "Enter Intents",
+      "uploadIntents": "Upload Intents File",
+      "uploadIntentsDetails": "The intents file should have intent and utterance separated by a space. Each intent/utterance combination should be on a separate line"
     },
     "editIntent": {
+      "pageHeadingPredefined": "Edit Predefined Intent",
+      "pageHeadingCustom": "Edit Custom Intent",
       "pageHeading": "Edit Intent",
       "intentLabel": "Intent",
       "utteranceLabel": "Utterance",
