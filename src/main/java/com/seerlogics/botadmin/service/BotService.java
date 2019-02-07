@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
  * Created by bkane on 10/31/18.
  */
 @Service
+@Transactional
 public class BotService extends BaseServiceImpl<Bot> {
 
     protected static final Logger LOGGER = LoggerFactory.getLogger(BotService.class);

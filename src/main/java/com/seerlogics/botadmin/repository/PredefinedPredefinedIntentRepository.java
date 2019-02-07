@@ -13,7 +13,8 @@ import java.util.List;
  * Created by bkane on 11/16/18.
  */
 @Repository
-public interface PredefinedIntentRepository extends JpaRepository<PredefinedIntentUtterances, Long>, IntentSearchRepository {
+public interface PredefinedPredefinedIntentRepository extends JpaRepository<PredefinedIntentUtterances, Long>,
+        PredefinedIntentSearchRepository {
     List<PredefinedIntentUtterances> findByCategory(Category cat);
 
     @Query("select pu from PredefinedIntentUtterances pu where pu.category.code = :code")

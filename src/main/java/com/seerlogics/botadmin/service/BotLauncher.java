@@ -24,12 +24,13 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Created by bkane on 12/30/18.
  */
 @Component
+@Transactional
 public class BotLauncher {
     protected static final Logger LOGGER = LoggerFactory.getLogger(BotLauncher.class);
 

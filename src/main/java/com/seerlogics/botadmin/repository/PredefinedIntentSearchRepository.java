@@ -8,6 +8,6 @@ import java.util.List;
 /**
  * Created by bkane on 1/28/19.
  */
-public interface IntentSearchRepository {
+public interface PredefinedIntentSearchRepository {
     List<PredefinedIntentUtterances> findIntentsAndUtterances(SearchIntents searchIntents);
 }

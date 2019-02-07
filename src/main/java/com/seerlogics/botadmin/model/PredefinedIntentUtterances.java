@@ -26,6 +26,10 @@ public class PredefinedIntentUtterances extends BaseModel {
     @JoinColumn(name = "category_id")
     private Category category;
 
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name = "owner_account_id", nullable = false)
+    private Account owner;
+
     public String getIntent() {
         return intent;
     }
@@ -48,5 +52,13 @@ public class PredefinedIntentUtterances extends BaseModel {
 
     public void setCategory(Category category) {
         this.category = category;
+    }
+
+    public Account getOwner() {
+        return owner;
+    }
+
+    public void setOwner(Account owner) {
+        this.owner = owner;
     }
 }

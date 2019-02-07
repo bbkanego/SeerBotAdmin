@@ -6,12 +6,14 @@ import com.lingoace.spring.service.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import org.springframework.transaction.annotation.Transactional;
 import java.util.Collection;
 
 /**
  * Created by bkane on 11/3/18.
  */
 @Service
+@Transactional
 public class RoleService extends BaseServiceImpl<Role> {
 
     @Autowired

@@ -6,6 +6,7 @@ import com.lingoace.spring.service.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import org.springframework.transaction.annotation.Transactional;
 import java.util.Collection;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import java.util.List;
  * Created by bkane on 11/3/18.
  */
 @Service
+@Transactional
 public class StatusService extends BaseServiceImpl<Status> {
 
     @Autowired

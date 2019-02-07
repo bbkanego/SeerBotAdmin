@@ -1,13 +1,13 @@
 package com.seerlogics.botadmin.controller;
 
+import com.lingoace.spring.controller.BaseController;
+import com.lingoace.spring.controller.CrudController;
 import com.lingoace.validation.Validate;
 import com.seerlogics.botadmin.dto.SearchIntents;
 import com.seerlogics.botadmin.model.Category;
-import com.seerlogics.botadmin.model.PredefinedIntentUtterances;
+import com.seerlogics.botadmin.model.CustomIntentUtterance;
 import com.seerlogics.botadmin.service.CategoryService;
-import com.seerlogics.botadmin.service.PredefinedIntentService;
-import com.lingoace.spring.controller.BaseController;
-import com.lingoace.spring.controller.CrudController;
+import com.seerlogics.botadmin.service.CustomIntentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,59 +21,57 @@ import java.util.List;
  * Created by bkane on 11/11/18.
  */
 @RestController
-@RequestMapping(value = "/api/v1/predefined-intent")
-public class PredefinedIntentController extends BaseController implements CrudController<PredefinedIntentUtterances> {
+@RequestMapping(value = "/api/v1/custom-intent")
+public class CustomIntentController extends BaseController implements CrudController<CustomIntentUtterance> {
     @Autowired
-    private PredefinedIntentService predefinedIntentService;
+    private CustomIntentService customIntentService;
 
     @Autowired
     private CategoryService categoryService;
 
     @PostMapping(value = {"", "/",})
     @ResponseBody
-    public Boolean save(@RequestBody PredefinedIntentUtterances utterances) {
-        this.predefinedIntentService.save(utterances);
+    public Boolean save(@RequestBody CustomIntentUtterance utterances) {
+        this.customIntentService.save(utterances);
         return true;
     }
 
     @PostMapping(value = {"/save-all"})
     @ResponseBody
-    public Boolean save(@RequestBody List<PredefinedIntentUtterances> intentUtterances) {
-        this.predefinedIntentService.saveAll(intentUtterances);
+    public Boolean save(@RequestBody List<CustomIntentUtterance> intentUtterances) {
+        this.customIntentService.saveAll(intentUtterances);
         return true;
     }
 
     @GetMapping(value = {"", "/",})
     @ResponseBody
-    public Collection<PredefinedIntentUtterances> getAll() {
-        return this.predefinedIntentService.getAll();
+    public Collection<CustomIntentUtterance> getAll() {
+        return this.customIntentService.getAll();
     }
 
     @GetMapping(value = "/{id}")
     @ResponseBody
-    public PredefinedIntentUtterances getById(@PathVariable("id") Long id) {
-        PredefinedIntentUtterances predefinedIntentUtterances = this.predefinedIntentService.getSingle(id);
-        predefinedIntentUtterances.getReferenceData().put("categories", categoryService.getAll());
-        return predefinedIntentUtterances;
+    public CustomIntentUtterance getById(@PathVariable("id") Long id) {
+        return this.customIntentService.getSingle(id);
     }
 
     @DeleteMapping(value = "/{id}")
     @ResponseBody
     public Boolean delete(@PathVariable("id") Long id) {
-        this.predefinedIntentService.delete(id);
+        this.customIntentService.delete(id);
         return true;
     }
 
     @GetMapping(value = "/init")
     @ResponseBody
-    public PredefinedIntentUtterances init() {
-        return predefinedIntentService.initPredefinedIntentUtterance();
+    public CustomIntentUtterance init() {
+        return this.customIntentService.initCustomIntentUtterance();
     }
 
     @GetMapping(value = "/search/{category}")
     @ResponseBody
-    public List<PredefinedIntentUtterances> searchByCat(@PathVariable("category") String category) {
-        return predefinedIntentService.findIntentsByCategory(category);
+    public List<CustomIntentUtterance> searchByCat(@PathVariable("category") String category) {
+        return customIntentService.findIntentsByCategory(category);
     }
 
     @PostMapping("/upload")
@@ -83,19 +81,19 @@ public class PredefinedIntentController extends BaseController implements CrudCo
             try {
                 String fileContent = new String(file.getBytes(), StandardCharsets.UTF_8);
                 String[] rows = fileContent.split("\n");
-                List<PredefinedIntentUtterances> predefinedIntentUtterancesList = new ArrayList<>();
+                List<CustomIntentUtterance> customIntentUtteranceList = new ArrayList<>();
                 Collection<Category> categories = this.categoryService.getAll();
                 Category category = categories.stream().filter(categoryOne -> categoryCode.equals(categoryOne.getCode())).findAny().orElse(null);
                 for (String row : rows) {
                     String[] cols = row.split(" ", 2);
                     LOGGER.debug(String.format("intent: %s, utterance: %s", cols[0], cols[1]));
-                    PredefinedIntentUtterances predefinedIntentUtterances = new PredefinedIntentUtterances();
-                    predefinedIntentUtterances.setCategory(category);
-                    predefinedIntentUtterances.setIntent(cols[0].trim());
-                    predefinedIntentUtterances.setUtterance(cols[1].trim());
-                    predefinedIntentUtterancesList.add(predefinedIntentUtterances);
+                    CustomIntentUtterance customIntentUtterance = new CustomIntentUtterance();
+                    customIntentUtterance.setCategory(category);
+                    customIntentUtterance.setIntent(cols[0].trim());
+                    customIntentUtterance.setUtterance(cols[1].trim());
+                    customIntentUtteranceList.add(customIntentUtterance);
                 }
-                this.predefinedIntentService.saveAll(predefinedIntentUtterancesList);
+                this.customIntentService.saveAll(customIntentUtteranceList);
             } catch (Exception e) {
                 return false;
             }
@@ -107,13 +105,13 @@ public class PredefinedIntentController extends BaseController implements CrudCo
     @GetMapping("/search/init")
     @ResponseBody
     public SearchIntents initSearchIntents() {
-        return predefinedIntentService.initSearchIntentsCriteria();
+        return customIntentService.initSearchIntentsCriteria();
     }
 
     @PostMapping("/search")
     @ResponseBody
-    public List<PredefinedIntentUtterances> searchIntents(@Validate("validateSearchIntentRule")
+    public List<CustomIntentUtterance> searchIntents(@Validate("validateSearchIntentRule")
                                                               @RequestBody SearchIntents searchIntents) {
-        return predefinedIntentService.findIntentsAndUtterances(searchIntents);
+        return customIntentService.findIntentsAndUtterances(searchIntents);
     }
 }

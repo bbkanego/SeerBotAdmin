@@ -8,6 +8,7 @@
     "revertButton": "Revert",
     "cancelButton": "Cancel",
     "okButton": "Ok",
+    "thisIsRequired": "This is required",
     "requiredIndicator": "<span class='glyphicon glyphicon-asterisk icon-required'></span>&nbsp;Indicate Required Fields"
   }
 }

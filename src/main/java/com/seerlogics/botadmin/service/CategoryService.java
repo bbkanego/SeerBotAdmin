@@ -6,12 +6,14 @@ import com.lingoace.spring.service.BaseServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import org.springframework.transaction.annotation.Transactional;
 import java.util.Collection;
 
 /**
  * Created by bkane on 11/1/18.
  */
 @Service
+@Transactional
 public class CategoryService extends BaseServiceImpl<Category> {
 
     @Autowired

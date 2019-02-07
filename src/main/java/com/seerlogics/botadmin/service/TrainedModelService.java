@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 
+import org.springframework.transaction.annotation.Transactional;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -19,6 +20,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Service
+@Transactional
 public class TrainedModelService extends BaseServiceImpl<TrainedModel> {
     @Autowired
     private TrainedModelRepository trainedModelRepository;

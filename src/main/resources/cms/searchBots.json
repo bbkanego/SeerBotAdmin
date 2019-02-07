@@ -1,6 +1,11 @@
 {
   "searchBots":{
-    "pageHeading": "Search Bots",
+    "pageHeading": "Edit Bot",
+    "message": "Search Bot to edit.",
+    "pageHeadingLaunchBot": "Launch Bot",
+    "messageLaunch": "Search Bot to launch.",
+    "pageHeadingTestBot": "Test Bot",
+    "messageTest": "Search Bot to test.",
     "resultsTable": {
       "heading": "Following Bots were found",
       "colHeaders": {

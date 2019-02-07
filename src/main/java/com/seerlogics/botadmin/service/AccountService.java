@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import org.springframework.transaction.annotation.Transactional;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
@@ -21,6 +22,7 @@ import java.util.Set;
 /**
  * Created by bkane on 11/3/18.
  */
+@Transactional
 @Service(value = "accountService")
 public class AccountService extends BaseServiceImpl<Account> implements UserDetailsService {
 
