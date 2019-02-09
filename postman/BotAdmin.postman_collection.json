@@ -1547,6 +1547,122 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "Chatbot_local_test",
+			"item": [
+				{
+					"name": "Get-All-Chats",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{BearerKey}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Trained Category Model2\",\n\t\"description\": \"Trained Category Model2\",\n\t\"category\": {\n        \"id\": 15,\n        \"creationDate\": \"11/15/2018 01:12:46\",\n        \"lastUpdateDate\": \"11/15/2018 01:12:46\",\n        \"referenceData\": {},\n        \"code\": \"CREDIT_CARD_BOT\",\n        \"name\": \"Credit Card Bot\",\n        \"description\": \"Credit Card Bot\"\n    }\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8099/chatbot/api/chats",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8099",
+							"path": [
+								"chatbot",
+								"api",
+								"chats"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Chat-Initiate",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{BearerKey}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"message\": \"Initiate\",\n\t\"accountId\": \"ChatBot\",\n\t\"chatSessionId\": \"dsfdsf234adsasdasd23sdasd\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8099/chatbot/api/chats",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8099",
+							"path": [
+								"chatbot",
+								"api",
+								"chats"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Chat-not-initiate",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{BearerKey}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"message\": \"Initiate 22323\",\n\t\"accountId\": \"ChatBot 32323\",\n\t\"chatSessionId\": \"dsfdsf234adsasdasd23sdasd\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8099/chatbot/api/chats",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8099",
+							"path": [
+								"chatbot",
+								"api",
+								"chats"
+							]
+						}
+					},
+					"response": []
+				}
+			]
 		}
 	]
 }
