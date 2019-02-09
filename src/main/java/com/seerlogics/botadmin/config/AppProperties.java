@@ -31,6 +31,15 @@ public class AppProperties {
     private String instanceKey;
     private String instanceRole;
     private String securityGroup;
+    private String runEnvironment;
+
+    public String getRunEnvironment() {
+        return runEnvironment;
+    }
+
+    public void setRunEnvironment(String runEnvironment) {
+        this.runEnvironment = runEnvironment;
+    }
 
     public String getInstanceRole() {
         return instanceRole;
