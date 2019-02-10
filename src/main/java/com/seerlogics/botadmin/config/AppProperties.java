@@ -1,7 +1,6 @@
 package com.seerlogics.botadmin.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
@@ -19,6 +18,7 @@ public class AppProperties {
     private String artifactS3BucketName;
     private String awsCredentialProfileName;
     private String cleanBuildScript;
+    private String launchBotScript;
     private String botArtifactName;
     private String botArtifactType;
     private String botArtifactLocation;
@@ -32,6 +32,14 @@ public class AppProperties {
     private String instanceRole;
     private String securityGroup;
     private String runEnvironment;
+
+    public String getLaunchBotScript() {
+        return launchBotScript;
+    }
+
+    public void setLaunchBotScript(String launchBotScript) {
+        this.launchBotScript = launchBotScript;
+    }
 
     public String getRunEnvironment() {
         return runEnvironment;

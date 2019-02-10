@@ -13,6 +13,10 @@
     "launched": {
       "pageHeading": "Bot Launched",
       "message": "Your bot has been launched. You may access the bot at URL: "
+    },
+    "test": {
+      "pageHeading": "Test Bot",
+      "message": "You can test the bot using the below: "
     }
   }
 }

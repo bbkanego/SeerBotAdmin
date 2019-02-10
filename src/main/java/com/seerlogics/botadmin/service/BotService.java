@@ -104,39 +104,18 @@ public class BotService extends BaseServiceImpl<Bot> {
     }
 
     public Bot launchBot(LaunchModel launchModel) {
-        // get the bot and model to use
         Bot bot = this.botRepository.getOne(launchModel.getBot().getId());
         botLauncher.launchBotAsync(launchModel);
         return bot;
     }
 
-    public Bot launchBotOld(LaunchModel launchModel) {
-        String contextPath = "/chatbot";
-        // get the bot and model to use
-        Bot bot = this.botRepository.getOne(launchModel.getBot().getId());
-        TrainedModel trainedModel = this.trainedModelService.getSingle(launchModel.getTrainedModelId());
-        this.trainedModelService.writeModelToFile(trainedModel,
-                "apps/chatbot/src/main/resources/nlp/models/custom/en-cat-eventgenie-intents-dynamic.bin");
-        RunScript.runCommand("chmod +x /home/bkane/svn/code/java/BotAdmin/src/main/resources/scripts/clean.sh");
-        RunScript.runCommand("/home/bkane/svn/code/java/BotAdmin/src/main/resources/scripts/clean.sh");
-        RunScript.runCommand("chmod +x /home/bkane/svn/code/java/BotAdmin/src/main/resources/scripts/install.sh");
-        RunScript.runCommand("/home/bkane/svn/code/java/BotAdmin/src/main/resources/scripts/install.sh");
-        String freePort = String.valueOf(RunScript.getAFreePort());
-        RunScript.runCommand("chmod +x /home/bkane/svn/code/java/BotAdmin/src/main/resources/scripts/launchBot.sh");
-        RunScript.runCommandWithArgs("/home/bkane/svn/code/java/BotAdmin/src/main/resources/scripts/launchBot.sh",
-                "--server.port=" + freePort, "--server.servlet.context-path=" + contextPath);
-        bot.setStatus(statusService.findByCode(Status.STATUS_CODES.LAUNCHED.name()));
-        Configuration configuration = new Configuration();
-        configuration.setTrainedModel(trainedModel);
-        configuration.setEnvironment(Status.STATUS_CODES.LAUNCHED.name());
-        configuration.setUrl("http://localhost:" + freePort + contextPath + "/api/chats");
-        configuration.setPort(Integer.parseInt(freePort));
-        bot.getConfigurations().add(configuration);
-        this.save(bot);
+    public Bot stopBot(Long id) {
+        Bot bot = this.botRepository.getOne(id);
+        botLauncher.stopBotAsync(id);
         return bot;
     }
 
-    public Bot stopBot(Long id) {
+    public Bot stopBotOld(Long id) {
         Bot bot = this.botRepository.getOne(id);
         List<Configuration> configs = new ArrayList<>(bot.getConfigurations());
         RunScript.runCommand("chmod +x /home/bkane/svn/code/java/BotAdmin/src/main/resources/scripts/stopBot.sh");
