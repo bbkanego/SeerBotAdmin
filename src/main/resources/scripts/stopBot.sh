@@ -1,5 +1,4 @@
 #!/bin/bash
 echo "======================================Terminate the BOT now======================================"
-echo "Terminating bot running at port: $1"
-kill -9 $(lsof -ti tcp:$1)
+kill -9 $(lsof -i tcp:8099 | grep 'java' | awk '$8 == "TCP" { print $2 }')
 echo "======================================Terminate the BOT complete======================================"

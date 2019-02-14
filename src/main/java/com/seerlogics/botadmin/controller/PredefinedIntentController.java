@@ -4,6 +4,7 @@ import com.lingoace.validation.Validate;
 import com.seerlogics.botadmin.dto.SearchIntents;
 import com.seerlogics.botadmin.model.Category;
 import com.seerlogics.botadmin.model.PredefinedIntentUtterances;
+import com.seerlogics.botadmin.service.AccountService;
 import com.seerlogics.botadmin.service.CategoryService;
 import com.seerlogics.botadmin.service.PredefinedIntentService;
 import com.lingoace.spring.controller.BaseController;
@@ -29,6 +30,9 @@ public class PredefinedIntentController extends BaseController implements CrudCo
     @Autowired
     private CategoryService categoryService;
 
+    @Autowired
+    private AccountService accountService;
+
     @PostMapping(value = {"", "/",})
     @ResponseBody
     public Boolean save(@RequestBody PredefinedIntentUtterances utterances) {
@@ -52,9 +56,7 @@ public class PredefinedIntentController extends BaseController implements CrudCo
     @GetMapping(value = "/{id}")
     @ResponseBody
     public PredefinedIntentUtterances getById(@PathVariable("id") Long id) {
-        PredefinedIntentUtterances predefinedIntentUtterances = this.predefinedIntentService.getSingle(id);
-        predefinedIntentUtterances.getReferenceData().put("categories", categoryService.getAll());
-        return predefinedIntentUtterances;
+        return this.predefinedIntentService.getSingle(id);
     }
 
     @DeleteMapping(value = "/{id}")
@@ -76,7 +78,7 @@ public class PredefinedIntentController extends BaseController implements CrudCo
         return predefinedIntentService.findIntentsByCategory(category);
     }
 
-    @PostMapping("/upload")
+    @PostMapping(value = "/upload")
     public Boolean uploadIntentsFromFile(@RequestPart("intentsData") MultipartFile file,
                                          @RequestPart("category") String categoryCode) {
         if (!file.isEmpty()) {
@@ -93,6 +95,7 @@ public class PredefinedIntentController extends BaseController implements CrudCo
                     predefinedIntentUtterances.setCategory(category);
                     predefinedIntentUtterances.setIntent(cols[0].trim());
                     predefinedIntentUtterances.setUtterance(cols[1].trim());
+                    predefinedIntentUtterances.setOwner(this.accountService.getAuthenticatedUser());
                     predefinedIntentUtterancesList.add(predefinedIntentUtterances);
                 }
                 this.predefinedIntentService.saveAll(predefinedIntentUtterancesList);

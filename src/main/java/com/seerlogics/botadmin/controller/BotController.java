@@ -95,6 +95,12 @@ public class BotController extends BaseController implements ApplicationListener
         return this.botService.stopBot(botId);
     }
 
+    @GetMapping(value = "/restart/{id}")
+    @ResponseBody
+    public Bot restart(@PathVariable("id") Long botId) {
+        return this.botService.restartBot(botId);
+    }
+
     @GetMapping(value = "/terminate/{id}")
     @ResponseBody
     public Boolean terminate(@PathVariable("id") Long botId) {

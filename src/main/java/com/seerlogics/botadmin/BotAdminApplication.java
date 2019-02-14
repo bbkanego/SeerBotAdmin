@@ -61,4 +61,15 @@ public class BotAdminApplication {
         executor.initialize();
         return executor;
     }
+
+    @Bean(name = "restartBotTaskExecutor")
+    public Executor restartBotTaskExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(2);
+        executor.setMaxPoolSize(2);
+        executor.setQueueCapacity(500);
+        executor.setThreadNamePrefix("RestartBot");
+        executor.initialize();
+        return executor;
+    }
 }

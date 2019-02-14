@@ -5,6 +5,8 @@
       "pageHeadingCustom": "Add Custom Intent",
       "intentLabel": "Intent",
       "utteranceLabel": "Utterance",
+      "responseLabel": "Response",
+      "responseTypeLabel": "Response Type",
       "categoryLabel": "Category",
       "enterIntent": "Enter Intents",
       "uploadIntents": "Upload Intents File",
@@ -15,6 +17,8 @@
       "pageHeadingCustom": "Edit Custom Intent",
       "pageHeading": "Edit Intent",
       "intentLabel": "Intent",
+      "responseLabel": "Response",
+      "responseTypeLabel": "Response Type",
       "utteranceLabel": "Utterance",
       "categoryLabel": "Category"
     }

@@ -7,10 +7,9 @@ import com.seerlogics.botadmin.model.PredefinedIntentUtterances;
 import com.seerlogics.botadmin.repository.PredefinedPredefinedIntentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import org.springframework.transaction.annotation.Transactional;
-import java.util.Collection;
-import java.util.List;
+
+import java.util.*;
 
 /**
  * Created by bkane on 11/3/18.
@@ -35,7 +34,9 @@ public class PredefinedIntentService extends BaseServiceImpl<PredefinedIntentUtt
 
     @Override
     public PredefinedIntentUtterances getSingle(Long id) {
-        return predefinedIntentRepository.getOne(id);
+        PredefinedIntentUtterances predefinedIntentUtterances = predefinedIntentRepository.getOne(id);
+        addReferenceData(predefinedIntentUtterances);
+        return predefinedIntentUtterances;
     }
 
     @Override
@@ -71,9 +72,23 @@ public class PredefinedIntentService extends BaseServiceImpl<PredefinedIntentUtt
         return predefinedIntentRepository.findIntentsAndUtterances(searchIntents);
     }
 
+    private void addReferenceData(PredefinedIntentUtterances predefinedIntentUtterances) {
+        predefinedIntentUtterances.getReferenceData().put("categories", categoryService.getAll());
+        List<Map<String, String>> responseTypes = new ArrayList<>();
+        Map<String, String> dynamicResponseType = new HashMap<>();
+        dynamicResponseType.put("code", PredefinedIntentUtterances.RESPONSE_TYPE.DYNAMIC.name());
+        dynamicResponseType.put("name", "Dynamic");
+        Map<String, String> staticResponseType = new HashMap<>();
+        staticResponseType.put("code", PredefinedIntentUtterances.RESPONSE_TYPE.STATIC.name());
+        staticResponseType.put("name", "Static");
+        responseTypes.add(dynamicResponseType);
+        responseTypes.add(staticResponseType);
+        predefinedIntentUtterances.getReferenceData().put("responseTypes", responseTypes);
+    }
+
     public PredefinedIntentUtterances initPredefinedIntentUtterance() {
         PredefinedIntentUtterances predefinedIntentUtterances = new PredefinedIntentUtterances();
-        predefinedIntentUtterances.getReferenceData().put("categories", categoryService.getAll());
+        this.addReferenceData(predefinedIntentUtterances);
         predefinedIntentUtterances.setOwner(accountService.getAuthenticatedUser());
         return predefinedIntentUtterances;
     }

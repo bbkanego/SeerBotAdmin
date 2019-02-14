@@ -7,4 +7,6 @@ echo $MAVEN_HOME
 # The & symbol, switches the program to run in the background. --server.port=8020
 nohup java -jar -Dspring.profiles.active=local target/chatbot-0.0.1-SNAPSHOT.jar > ~/nohup.out 2> ~/nohup.err < /dev/null &
 #rm -rf target
+# echo the PID
+echo $!
 echo "======================================Launching the BOT complete======================================"

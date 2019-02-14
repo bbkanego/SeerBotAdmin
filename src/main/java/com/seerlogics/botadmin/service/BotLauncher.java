@@ -4,6 +4,9 @@ import com.lingoace.util.RunScript;
 import com.seerlogics.botadmin.config.AppProperties;
 import com.seerlogics.botadmin.dto.LaunchModel;
 import com.seerlogics.botadmin.event.InstanceLaunchedEvent;
+import com.seerlogics.botadmin.event.InstanceRestartedEvent;
+import com.seerlogics.botadmin.event.InstanceStoppedEvent;
+import com.seerlogics.botadmin.exception.LaunchBotException;
 import com.seerlogics.botadmin.model.Bot;
 import com.seerlogics.botadmin.model.Configuration;
 import com.seerlogics.botadmin.model.Status;
@@ -27,7 +30,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ResourceUtils;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 
 /**
  * Created by bkane on 12/30/18.
@@ -69,6 +71,20 @@ public class BotLauncher {
         } else {
             this.stopBotAsyncCloud(id);
         }
+        InstanceStoppedEvent instanceStoppedEvent = new InstanceStoppedEvent(this, "Instance Published");
+        applicationEventPublisher.publishEvent(instanceStoppedEvent);
+    }
+
+    @Async("restartBotTaskExecutor")
+    @Transactional
+    public void restartBotAsync(Long id) {
+        if ("local".equals(appProperties.getRunEnvironment())) {
+            this.restartBotAsyncLocal(id);
+        } else {
+            this.restartBotAsyncCloud(id);
+        }
+        InstanceRestartedEvent instanceRestartedEvent = new InstanceRestartedEvent(this, "Bot Restarted");
+        applicationEventPublisher.publishEvent(instanceRestartedEvent);
     }
 
     @Async("launchBotTaskExecutor")
@@ -79,10 +95,43 @@ public class BotLauncher {
         } else {
             this.launchBotAsyncCloud(launchModel);
         }
+
+        InstanceLaunchedEvent instanceLaunchedEvent = new InstanceLaunchedEvent(this, "Bot Launched");
+        applicationEventPublisher.publishEvent(instanceLaunchedEvent);
     }
 
     private void stopBotAsyncLocal(Long id) {
-        RunScript.runCommand("kill -9 $(lsof -i tcp:4300 | grep 'node' | awk '$8 == \"TCP\" { print $2 }')");
+        try {
+            // get the bot and model to use
+            Bot bot = this.botRepository.getOne(id);
+            // kill the bot
+            File killBotScript = ResourceUtils.getFile("classpath:" + appProperties.getKillBotScript());
+            RunScript.runCommand(killBotScript.getAbsolutePath());
+
+            bot.setStatus(statusService.findByCode(Status.STATUS_CODES.DRAFT.name()));
+            bot.getConfigurations().clear();
+            this.botRepository.save(bot);
+        } catch (Exception e) {
+            throw new LaunchBotException(e);
+        }
+    }
+
+    private void restartBotAsyncLocal(Long id) {
+        try {
+            // kill the bot
+            File killBotScript = ResourceUtils.getFile("classpath:" + appProperties.getKillBotScript());
+            RunScript.runCommand(killBotScript.getAbsolutePath());
+
+            // next launch the bot
+            File launchBotScript = ResourceUtils.getFile("classpath:" + appProperties.getLaunchBotScript());
+            RunScript.runCommand(launchBotScript.getAbsolutePath());
+        } catch (Exception e) {
+            throw new LaunchBotException(e);
+        }
+    }
+
+    private void restartBotAsyncCloud(Long id) {
+
     }
 
     private void stopBotAsyncCloud(Long id) {
@@ -96,6 +145,11 @@ public class BotLauncher {
 
         LOGGER.debug("Launching the bot now >>>>>>>>>>>>>>>>>>>>>>");
         try {
+
+            // Since this is local, only one bot can run at a time. So kill any other bots.
+            File killBotScript = ResourceUtils.getFile("classpath:" + appProperties.getKillBotScript());
+            RunScript.runCommand(killBotScript.getAbsolutePath());
+
             // first clean build the bot
             File cleanBuildScript = ResourceUtils.getFile("classpath:" + appProperties.getCleanBuildScript());
             RunScript.runCommand("chmod +x " + cleanBuildScript.getAbsolutePath());
@@ -123,8 +177,9 @@ public class BotLauncher {
             LOGGER.debug("Launching the bot done. Upload succeeded >>>>>>>>>>>>>>>>>> ");
             InstanceLaunchedEvent instanceLaunchedEvent = new InstanceLaunchedEvent(this, "Instance Published");
             applicationEventPublisher.publishEvent(instanceLaunchedEvent);
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            throw new LaunchBotException(e);
         }
     }
 
@@ -187,7 +242,5 @@ public class BotLauncher {
 
         this.botRepository.save(bot);
         LOGGER.debug("Launching the bot done. Upload succeeded >>>>>>>>>>>>>>>>>> ");
-        InstanceLaunchedEvent instanceLaunchedEvent = new InstanceLaunchedEvent(this, "Instance Published");
-        applicationEventPublisher.publishEvent(instanceLaunchedEvent);
     }
 }

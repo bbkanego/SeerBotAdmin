@@ -19,6 +19,7 @@ public class AppProperties {
     private String awsCredentialProfileName;
     private String cleanBuildScript;
     private String launchBotScript;
+    private String killBotScript;
     private String botArtifactName;
     private String botArtifactType;
     private String botArtifactLocation;
@@ -32,6 +33,14 @@ public class AppProperties {
     private String instanceRole;
     private String securityGroup;
     private String runEnvironment;
+
+    public String getKillBotScript() {
+        return killBotScript;
+    }
+
+    public void setKillBotScript(String killBotScript) {
+        this.killBotScript = killBotScript;
+    }
 
     public String getLaunchBotScript() {
         return launchBotScript;

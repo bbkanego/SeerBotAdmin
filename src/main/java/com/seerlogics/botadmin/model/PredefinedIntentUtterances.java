@@ -16,6 +16,11 @@ import javax.persistence.*;
         uniqueConstraints = @UniqueConstraint(columnNames = "utterance",
                 name = "acc_utterance"))
 public class PredefinedIntentUtterances extends BaseModel {
+
+    public enum RESPONSE_TYPE {
+        STATIC, DYNAMIC
+    }
+
     @Column(nullable = false, length = 150)
     private String intent;
 
@@ -29,6 +34,39 @@ public class PredefinedIntentUtterances extends BaseModel {
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
     @JoinColumn(name = "owner_account_id", nullable = false)
     private Account owner;
+
+    @Column(nullable = false, length = 8)
+    private String locale = "en_us";
+
+    @Column(nullable = false, length = 3000)
+    private String response = "Please define response!";
+
+    @Column(nullable = false, length = 20)
+    private String responseType = RESPONSE_TYPE.STATIC.name();
+
+    public String getLocale() {
+        return locale;
+    }
+
+    public void setLocale(String locale) {
+        this.locale = locale;
+    }
+
+    public String getResponse() {
+        return response;
+    }
+
+    public void setResponse(String response) {
+        this.response = response;
+    }
+
+    public String getResponseType() {
+        return responseType;
+    }
+
+    public void setResponseType(String responseType) {
+        this.responseType = responseType;
+    }
 
     public String getIntent() {
         return intent;

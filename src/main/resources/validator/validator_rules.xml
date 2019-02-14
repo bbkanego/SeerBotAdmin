@@ -51,19 +51,26 @@
         </form>
 
         <form name="validateIntentRule" classType="com.seerlogics.botadmin.model.PredefinedIntentUtterances">
-            <field id="personName" property="intent" depends="required,validateMaxLength">
+            <field id="intent" property="intent" depends="required,validateMaxLength">
                 <var>
                     <var-name>maxLength</var-name>
                     <var-value>150</var-value>
                 </var>
             </field>
-            <field id="firstName" property="utterance" depends="required,validateMaxLength">
+            <field id="utterance" property="utterance" depends="required,validateMaxLength">
                 <var>
                     <var-name>maxLength</var-name>
                     <var-value>300</var-value>
                 </var>
             </field>
+            <field id="repsonse" property="repsonse" depends="required,validateMaxLength">
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>3000</var-value>
+                </var>
+            </field>
             <field id="intentCat" property="category" depends="required"/>
+            <field id="responseType" property="responseType" depends="required"/>
         </form>
 
         <form name="validateTrainModelRule" classType="com.seerlogics.botadmin.model.TrainedModel">

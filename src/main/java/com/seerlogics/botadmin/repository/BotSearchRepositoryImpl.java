@@ -46,6 +46,9 @@ public class BotSearchRepositoryImpl implements BotSearchRepository {
         if (searchBots.getCategory() != null) {
             predicates.add(criteriaBuilder.equal(botRoot.get("category"), searchBots.getCategory()));
         }
+        if (StringUtils.isNotBlank(searchBots.getStatusCode())) {
+            predicates.add(criteriaBuilder.equal(botRoot.get("status").get("code"), searchBots.getStatusCode()));
+        }
 
         criteriaQuery.where(predicates.toArray(new Predicate[predicates.size()]));
         return em.createQuery(criteriaQuery).getResultList();

@@ -13,13 +13,14 @@ import java.util.List;
 
 /**
  * Created by bkane on 5/7/18.
+ * TODO --Remove
  */
 public class WebAppInitializer implements WebApplicationInitializer {
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
 
         servletContext.addFilter("corsFilter", corsFilter())
-                .addMappingForUrlPatterns(null, false, "/*");
+                .addMappingForUrlPatterns(null, false, "");
 
         AnnotationConfigWebApplicationContext ctx = new AnnotationConfigWebApplicationContext();
         ctx.register(SpringConfig.class);
@@ -31,7 +32,7 @@ public class WebAppInitializer implements WebApplicationInitializer {
 
     public CORSFilter corsFilter() {
         CORSFilter corsFilter = new CORSFilter();
-        List<String> allowedOrigins = Arrays.asList("http://localhost:4200",
+        List<String> allowedOrigins = Arrays.asList("http://localhost:4200", "http://localhost:4300",
                 "file://", "http://localhost:8000", "http://localhost:8080",
                 "http://eventgenie.lingoace.com.s3-website.us-east-2.amazonaws.com", "http://eventgenie.lingoace.com");
         corsFilter.setAllowedOrigins(allowedOrigins);

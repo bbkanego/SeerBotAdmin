@@ -2,7 +2,6 @@ package com.seerlogics.botadmin.service;
 
 import com.lingoace.exception.jpa.UnknownTypeException;
 import com.lingoace.spring.service.BaseServiceImpl;
-import com.lingoace.util.RunScript;
 import com.seerlogics.botadmin.dto.LaunchModel;
 import com.seerlogics.botadmin.dto.SearchBots;
 import com.seerlogics.botadmin.model.*;
@@ -11,9 +10,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import org.springframework.transaction.annotation.Transactional;
-import java.util.ArrayList;
+
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -115,15 +113,10 @@ public class BotService extends BaseServiceImpl<Bot> {
         return bot;
     }
 
-    public Bot stopBotOld(Long id) {
+    public Bot restartBot(Long id) {
         Bot bot = this.botRepository.getOne(id);
-        List<Configuration> configs = new ArrayList<>(bot.getConfigurations());
-        RunScript.runCommand("chmod +x /home/bkane/svn/code/java/BotAdmin/src/main/resources/scripts/stopBot.sh");
-        RunScript.runCommandWithArgs("/home/bkane/svn/code/java/BotAdmin/src/main/resources/scripts/stopBot.sh",
-                String.valueOf(configs.get(0).getPort()));
-        bot.setStatus(statusService.findByCode(Status.STATUS_CODES.STOPPED.name()));
-        bot.getConfigurations().clear();
-        return this.save(bot);
+        botLauncher.restartBotAsync(id);
+        return bot;
     }
 
     public SearchBots initSearchBots() {

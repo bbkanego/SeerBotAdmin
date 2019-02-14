@@ -6,6 +6,7 @@ import com.lingoace.validation.Validate;
 import com.seerlogics.botadmin.dto.SearchIntents;
 import com.seerlogics.botadmin.model.Category;
 import com.seerlogics.botadmin.model.CustomIntentUtterance;
+import com.seerlogics.botadmin.service.AccountService;
 import com.seerlogics.botadmin.service.CategoryService;
 import com.seerlogics.botadmin.service.CustomIntentService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,9 @@ public class CustomIntentController extends BaseController implements CrudContro
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private AccountService accountService;
 
     @PostMapping(value = {"", "/",})
     @ResponseBody
@@ -74,7 +78,7 @@ public class CustomIntentController extends BaseController implements CrudContro
         return customIntentService.findIntentsByCategory(category);
     }
 
-    @PostMapping("/upload")
+    @PostMapping(value = "/upload")
     public Boolean uploadIntentsFromFile(@RequestPart("intentsData") MultipartFile file,
                                          @RequestPart("category") String categoryCode) {
         if (!file.isEmpty()) {
@@ -91,6 +95,7 @@ public class CustomIntentController extends BaseController implements CrudContro
                     customIntentUtterance.setCategory(category);
                     customIntentUtterance.setIntent(cols[0].trim());
                     customIntentUtterance.setUtterance(cols[1].trim());
+                    customIntentUtterance.setOwner(this.accountService.getAuthenticatedUser());
                     customIntentUtteranceList.add(customIntentUtterance);
                 }
                 this.customIntentService.saveAll(customIntentUtteranceList);

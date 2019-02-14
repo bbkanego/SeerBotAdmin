@@ -11,7 +11,8 @@ import java.util.Set;
  * Created by bkane on 10/27/17.
  */
 @Entity
-@Table(name = "account", uniqueConstraints = @UniqueConstraint(columnNames = "user_name", name = "acc_unique_user_name"))
+@Table(name = "account", uniqueConstraints = @UniqueConstraint(columnNames = "user_name",
+                        name = "acc_unique_user_name"))
 public class Account extends BaseModel {
 
     // Since this is FK we DO NOT have CascadeType.PERSIST here. Since we do not want to persist the "detached" entity
