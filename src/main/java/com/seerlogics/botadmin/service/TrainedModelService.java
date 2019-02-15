@@ -1,5 +1,6 @@
 package com.seerlogics.botadmin.service;
 
+import com.seerlogics.botadmin.model.CustomIntentUtterance;
 import com.seerlogics.botadmin.model.PredefinedIntentUtterances;
 import com.seerlogics.botadmin.model.TrainedModel;
 import com.seerlogics.botadmin.repository.TrainedModelRepository;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ResourceUtils;
 
 import org.springframework.transaction.annotation.Transactional;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -30,6 +32,9 @@ public class TrainedModelService extends BaseServiceImpl<TrainedModel> {
 
     @Autowired
     private PredefinedIntentService predefinedIntentService;
+
+    @Autowired
+    private CustomIntentService customIntentService;
 
     @Autowired
     private CategoryService categoryService;
@@ -67,18 +72,31 @@ public class TrainedModelService extends BaseServiceImpl<TrainedModel> {
     public void trainModel(TrainedModel trainedModel) {
         /**
          * get all the standard intents for the category
-         * //todo include the custom intents also here.
          */
-        List<PredefinedIntentUtterances> predefinedIntentUtterancesList
-                = this.predefinedIntentService.findIntentsByCategory(trainedModel.getCategory().getCode());
         StringBuilder buffer = new StringBuilder();
-        for (int i = 0; i < predefinedIntentUtterancesList.size(); i++) {
-            PredefinedIntentUtterances predefinedIntentUtterances = predefinedIntentUtterancesList.get(i);
-            buffer.append(predefinedIntentUtterances.getIntent());
-            buffer.append(" ");
-            buffer.append(predefinedIntentUtterances.getUtterance());
-            if (i < (predefinedIntentUtterancesList.size() - 1)) {
-                buffer.append(System.lineSeparator());
+        if (TrainedModel.MODEL_TYPE.PREDEFINED.name().equals(trainedModel.getType())) {
+            List<PredefinedIntentUtterances> predefinedIntentUtterancesList
+                    = this.predefinedIntentService.findIntentsByCategory(trainedModel.getCategory().getCode());
+            for (int i = 0; i < predefinedIntentUtterancesList.size(); i++) {
+                PredefinedIntentUtterances predefinedIntentUtterances = predefinedIntentUtterancesList.get(i);
+                buffer.append(predefinedIntentUtterances.getIntent());
+                buffer.append(" ");
+                buffer.append(predefinedIntentUtterances.getUtterance());
+                if (i < (predefinedIntentUtterancesList.size() - 1)) {
+                    buffer.append(System.lineSeparator());
+                }
+            }
+        } else {
+            List<CustomIntentUtterance> customIntentUtteranceList
+                    = this.customIntentService.findIntentsByCategory(trainedModel.getCategory().getCode());
+            for (int i = 0; i < customIntentUtteranceList.size(); i++) {
+                CustomIntentUtterance predefinedIntentUtterances = customIntentUtteranceList.get(i);
+                buffer.append(predefinedIntentUtterances.getIntent());
+                buffer.append(" ");
+                buffer.append(predefinedIntentUtterances.getUtterance());
+                if (i < (customIntentUtteranceList.size() - 1)) {
+                    buffer.append(System.lineSeparator());
+                }
             }
         }
         ByteArrayOutputStream outStream = NLPModelTrainer.trainDoccatModel(buffer);
@@ -99,10 +117,10 @@ public class TrainedModelService extends BaseServiceImpl<TrainedModel> {
             try {
                 fileUrl = ResourceUtils.getURL(ResourceUtils.CLASSPATH_URL_PREFIX + fileToWrite);
                 FileUtils.writeByteArrayToFile(new File(fileUrl.toString().replace("file:", "").trim()), trainedModel.getFile());
-            } catch(FileNotFoundException e) {
+            } catch (FileNotFoundException e) {
                 File newFile = new File(ResourceUtils.getURL(ResourceUtils.CLASSPATH_URL_PREFIX).toString()
                         .replace("file:", "").trim() + fileToWrite);
-                if(newFile.createNewFile()) {
+                if (newFile.createNewFile()) {
                     FileUtils.writeByteArrayToFile(newFile, trainedModel.getFile());
                 }
             }

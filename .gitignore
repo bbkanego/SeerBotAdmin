@@ -27,3 +27,4 @@
 *.lock.db
 *.trace.db
 .mvn
+*.log

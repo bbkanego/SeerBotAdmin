@@ -13,8 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 
@@ -32,6 +31,19 @@ public class CustomIntentController extends BaseController implements CrudContro
 
     @Autowired
     private AccountService accountService;
+
+    /**
+     * This method allows you to select categtory and copy standard intents to your custom intent table.
+     */
+    @ResponseBody
+    public Collection<Category> initCopyStandardIntents() {
+        return categoryService.getAll();
+    }
+
+    @RequestMapping("/copy-standard-intents/{catCode}")
+    public Collection<CustomIntentUtterance> copyStandardIntents(@PathVariable("catCode") String catCode) {
+        return this.customIntentService.copyStandardIntents(catCode);
+    }
 
     @PostMapping(value = {"", "/",})
     @ResponseBody
@@ -83,26 +95,11 @@ public class CustomIntentController extends BaseController implements CrudContro
                                          @RequestPart("category") String categoryCode) {
         if (!file.isEmpty()) {
             try {
-                String fileContent = new String(file.getBytes(), StandardCharsets.UTF_8);
-                String[] rows = fileContent.split("\n");
-                List<CustomIntentUtterance> customIntentUtteranceList = new ArrayList<>();
-                Collection<Category> categories = this.categoryService.getAll();
-                Category category = categories.stream().filter(categoryOne -> categoryCode.equals(categoryOne.getCode())).findAny().orElse(null);
-                for (String row : rows) {
-                    String[] cols = row.split(" ", 2);
-                    LOGGER.debug(String.format("intent: %s, utterance: %s", cols[0], cols[1]));
-                    CustomIntentUtterance customIntentUtterance = new CustomIntentUtterance();
-                    customIntentUtterance.setCategory(category);
-                    customIntentUtterance.setIntent(cols[0].trim());
-                    customIntentUtterance.setUtterance(cols[1].trim());
-                    customIntentUtterance.setOwner(this.accountService.getAuthenticatedUser());
-                    customIntentUtteranceList.add(customIntentUtterance);
-                }
-                this.customIntentService.saveAll(customIntentUtteranceList);
-            } catch (Exception e) {
+                return this.customIntentService.saveIntentsFromFile(file.getBytes(), categoryCode);
+            } catch (IOException e) {
+                e.printStackTrace();
                 return false;
             }
-            return true;
         }
         return false;
     }
@@ -116,7 +113,7 @@ public class CustomIntentController extends BaseController implements CrudContro
     @PostMapping("/search")
     @ResponseBody
     public List<CustomIntentUtterance> searchIntents(@Validate("validateSearchIntentRule")
-                                                              @RequestBody SearchIntents searchIntents) {
+                                                     @RequestBody SearchIntents searchIntents) {
         return customIntentService.findIntentsAndUtterances(searchIntents);
     }
 }

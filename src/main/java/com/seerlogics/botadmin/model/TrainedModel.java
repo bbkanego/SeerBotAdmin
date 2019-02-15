@@ -6,8 +6,15 @@ import com.lingoace.model.BaseModel;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "trained_model", uniqueConstraints = {@UniqueConstraint(columnNames = "name", name = "model_unique_name")})
+@Table(name = "trained_model",
+        uniqueConstraints = {@UniqueConstraint(columnNames = "name", name = "model_unique_name")})
 public class TrainedModel extends BaseModel {
+
+    public enum MODEL_TYPE {
+        PREDEFINED, CUSTOM
+    }
+
+
     @Column(length = 300, nullable = false)
     private String name;
 
@@ -28,6 +35,22 @@ public class TrainedModel extends BaseModel {
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category;
+
+    /**
+     * The type will be either standard or custom.
+     * when the type is standard then only standard intents will be used.
+     * when the type is custom, then standard and custom intents will be used.
+     */
+    @Column(length = 20, nullable = false)
+    private String type;
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
 
     public Category getCategory() {
         return category;
