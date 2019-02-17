@@ -184,6 +184,42 @@
 					"response": []
 				},
 				{
+					"name": "Copy Standard Intents",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{BearerKey}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:8091/api/v1/custom-intent/copy-standard-intents/EVENT_BOT",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8091",
+							"path": [
+								"api",
+								"v1",
+								"custom-intent",
+								"copy-standard-intents",
+								"EVENT_BOT"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "Search Intents",
 					"request": {
 						"method": "POST",
@@ -1403,8 +1439,53 @@
 			"item": [
 				{
 					"name": "Train Model",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
-						"method": "POST",
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Authorization",
+								"value": "{{BearerKey}}"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n\t\"name\": \"Trained Category Model2\",\n\t\"description\": \"Trained Category Model2\",\n\t\"category\": {\n        \"id\": 15,\n        \"creationDate\": \"11/15/2018 01:12:46\",\n        \"lastUpdateDate\": \"11/15/2018 01:12:46\",\n        \"referenceData\": {},\n        \"code\": \"CREDIT_CARD_BOT\",\n        \"name\": \"Credit Card Bot\",\n        \"description\": \"Credit Card Bot\"\n    }\n}"
+						},
+						"url": {
+							"raw": "http://localhost:8091/api/v1/model/train/init/predefined",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8091",
+							"path": [
+								"api",
+								"v1",
+								"model",
+								"train",
+								"init",
+								"predefined"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Train Model Copy",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
 						"header": [
 							{
 								"key": "Content-Type",
@@ -1608,7 +1689,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n\t\"message\": \"Initiate\",\n\t\"accountId\": \"ChatBot\",\n\t\"chatSessionId\": \"dsfdsf234adsasdasd23sdasd\"\n}"
+							"raw": "{\n\t\"message\": \"Initiate\",\n\t\"accountId\": \"ChatBot2323\",\n\t\"chatSessionId\": \"dsfdsf234adsasdasd23sdasd\"\n}"
 						},
 						"url": {
 							"raw": "http://localhost:8099/chatbot/api/chats",

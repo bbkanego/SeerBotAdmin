@@ -40,7 +40,7 @@ public class CustomIntentController extends BaseController implements CrudContro
         return categoryService.getAll();
     }
 
-    @RequestMapping("/copy-standard-intents/{catCode}")
+    @GetMapping(value = "/copy-standard-intents/{catCode}")
     public Collection<CustomIntentUtterance> copyStandardIntents(@PathVariable("catCode") String catCode) {
         return this.customIntentService.copyStandardIntents(catCode);
     }

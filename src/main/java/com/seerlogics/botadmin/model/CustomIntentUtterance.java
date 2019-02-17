@@ -7,7 +7,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "custom_intent_utterance",
         uniqueConstraints = @UniqueConstraint(columnNames = "utterance",
-                name = "acc_utterance"))
+                name = "ci_utterance"))
 public class CustomIntentUtterance extends BaseModel {
 
     enum RESPONSE_TYPE {

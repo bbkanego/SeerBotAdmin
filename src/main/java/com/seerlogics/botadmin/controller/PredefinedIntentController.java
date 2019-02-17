@@ -9,6 +9,7 @@ import com.seerlogics.botadmin.service.CategoryService;
 import com.seerlogics.botadmin.service.PredefinedIntentService;
 import com.lingoace.spring.controller.BaseController;
 import com.lingoace.spring.controller.CrudController;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -81,7 +82,7 @@ public class PredefinedIntentController extends BaseController implements CrudCo
     @PostMapping(value = "/upload")
     public Boolean uploadIntentsFromFile(@RequestPart("intentsData") MultipartFile file,
                                          @RequestPart("category") String categoryCode) {
-        if (!file.isEmpty()) {
+        if (!file.isEmpty() && StringUtils.isNotBlank(categoryCode)) {
             try {
                 String fileContent = new String(file.getBytes(), StandardCharsets.UTF_8);
                 String[] rows = fileContent.split("\n");
@@ -95,6 +96,7 @@ public class PredefinedIntentController extends BaseController implements CrudCo
                     predefinedIntentUtterances.setCategory(category);
                     predefinedIntentUtterances.setIntent(cols[0].trim());
                     predefinedIntentUtterances.setUtterance(cols[1].trim());
+                    predefinedIntentUtterances.setResponse(cols[1].trim());
                     predefinedIntentUtterances.setOwner(this.accountService.getAuthenticatedUser());
                     predefinedIntentUtterancesList.add(predefinedIntentUtterances);
                 }

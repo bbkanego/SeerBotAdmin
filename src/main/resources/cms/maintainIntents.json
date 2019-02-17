@@ -10,6 +10,8 @@
       "categoryLabel": "Category",
       "enterIntent": "Enter Intents",
       "uploadIntents": "Upload Intents File",
+      "copyIntents": "Copy Predefined Intents",
+      "copyIntentsMsg": "Select category to copy predefined intents from.",
       "uploadIntentsDetails": "The intents file should have intent and utterance separated by a space. Each intent/utterance combination should be on a separate line"
     },
     "editIntent": {

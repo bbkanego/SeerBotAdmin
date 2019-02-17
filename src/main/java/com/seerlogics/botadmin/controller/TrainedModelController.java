@@ -21,13 +21,15 @@ public class TrainedModelController extends BaseController implements CrudContro
     @Autowired
     private TrainedModelService trainedModelService;
 
-    @GetMapping(value = "/train/init")
+    @GetMapping(value = "/train/init/{modelType}")
     @ResponseBody
-    public TrainedModel initTrainModel() {
-        return trainedModelService.initTrainedModel();
+    public TrainedModel initTrainModel(@PathVariable("modelType") String modelType) {
+        return trainedModelService.initTrainedModel(modelType);
     }
+
     /**
      * This will get utterance for a specific category and train the model for you.
+     *
      * @param trainedModel
      * @return
      */

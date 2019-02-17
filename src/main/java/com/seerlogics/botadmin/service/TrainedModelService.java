@@ -139,8 +139,12 @@ public class TrainedModelService extends BaseServiceImpl<TrainedModel> {
         }
     }
 
-    public TrainedModel initTrainedModel() {
+    public TrainedModel initTrainedModel(String modelType) {
         TrainedModel trainedModel = new TrainedModel();
+        if (TrainedModel.MODEL_TYPE.valueOf(modelType.toUpperCase()) == null) {
+            throw new TrainModelException("The model type defined is incorrect: " + modelType);
+        }
+        trainedModel.setType(modelType.toUpperCase());
         trainedModel.getReferenceData().put("categories", this.categoryService.getAll());
         return trainedModel;
     }

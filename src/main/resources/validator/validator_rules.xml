@@ -87,6 +87,7 @@
                 </var>
             </field>
             <field id="modelCategory" property="category" depends="required"/>
+            <field id="modelType" property="type" depends="required"/>
         </form>
 
         <form name="validateLaunchBotRule" classType="com.seerlogics.botadmin.dto.LaunchModel">
