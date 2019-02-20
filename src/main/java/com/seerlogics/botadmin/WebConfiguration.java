@@ -1,5 +1,6 @@
 package com.seerlogics.botadmin;
 
+import com.seerlogics.botadmin.exception.GlobalExceptionHandler;
 import com.seerlogics.cloud.ManageDataStore;
 import com.seerlogics.cloud.ManageInstance;
 import com.seerlogics.cloud.ManageLoadBalancer;
@@ -9,7 +10,6 @@ import com.seerlogics.cloud.aws.s3.ManageDataStoreImpl;
 import com.lingoace.cms.CmsClasspathResourceBootstraper;
 import com.lingoace.cms.CmsResource;
 import com.lingoace.common.ExposedResourceMessageBundleSource;
-import com.lingoace.common.GlobalExceptionHandler;
 import com.lingoace.spring.controller.CmsController;
 import com.lingoace.spring.controller.ValidationController;
 import com.lingoace.spring.interceptor.HandlerInterceptor;
@@ -89,10 +89,10 @@ public class WebConfiguration implements WebMvcConfigurer, ResourceLoaderAware {
         return validatorFactory;
     }
 
-    @Bean
+    /*@Bean
     public GlobalExceptionHandler globalExceptionHandler() {
         return new GlobalExceptionHandler();
-    }
+    }*/
 
     @Bean
     public ValidationHandler getValidationHandlerImpl() {

@@ -8,4 +8,5 @@ public final class ErrorCodes {
     public static String SENT_MODEL_NOT_FOUND = "SBA-10001";
     public static String TOKENIZER_MODEL_NOT_FOUND = "SBA-10002";
     public static String MODEL_INITIALIZATION_ERROR = "SBA-10003";
+    public static String TRAIN_MODEL_INSUFFICIENT_DATA = "SBA-10004";
 }
