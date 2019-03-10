@@ -38,6 +38,17 @@ public class Configuration extends BaseModel {
     @Column(length = 500)
     private String publicIps;
 
+    @Column(length = 500)
+    private String workingFolder;
+
+    public String getWorkingFolder() {
+        return workingFolder;
+    }
+
+    public void setWorkingFolder(String workingFolder) {
+        this.workingFolder = workingFolder;
+    }
+
     public String getPublicDns() {
         return publicDns;
     }

@@ -72,17 +72,19 @@ public class SpringConfig implements WebMvcConfigurer {
 
     /**
      * https://spring.io/blog/2015/06/08/cors-support-in-spring-framework#javaconfig
+     *
      * @param registry
      */
     @Override
     public void addCorsMappings(CorsRegistry registry) {
-        String[] allowedOrigins = new String[]{"http://localhost:4200", "http://localhost:4300",
+        String[] allowedOrigins = new String[]{"http://localhost:4200", "http://localhost:4320",
+                "http://localhost:4300",
                 "file://", "http://localhost:8000", "http://localhost:8080",
                 "http://eventgenie.lingoace.com.s3-website.us-east-2.amazonaws.com", "http://eventgenie.lingoace.com"};
         registry.addMapping("/**")
                 .allowedOrigins(allowedOrigins)
-                //.allowedHeaders("Authorization, Content-Type")
-                //.exposedHeaders("Authorization, Content-Type")
+                        //.allowedHeaders("Authorization, Content-Type")
+                        //.exposedHeaders("Authorization, Content-Type")
                 .allowedMethods("PUT", "DELETE", "POST", "GET");
     }
 

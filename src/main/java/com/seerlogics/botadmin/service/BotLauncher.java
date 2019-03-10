@@ -19,6 +19,7 @@ import com.seerlogics.cloud.ManageLoadBalancer;
 import com.seerlogics.cloud.aws.ec2.AwsInstanceConfiguration;
 import com.seerlogics.cloud.aws.elb.AwsLoadBalancerConfiguration;
 import com.seerlogics.cloud.aws.model.LaunchLoadBalancerResult;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -30,6 +31,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ResourceUtils;
 
 import java.io.File;
+import java.io.IOException;
+import java.util.UUID;
 
 /**
  * Created by bkane on 12/30/18.
@@ -104,6 +107,7 @@ public class BotLauncher {
         try {
             // get the bot and model to use
             Bot bot = this.botRepository.getOne(id);
+            Configuration configuration = (Configuration)bot.getConfigurations().toArray()[0];
             // kill the bot
             File killBotScript = ResourceUtils.getFile("classpath:" + appProperties.getKillBotScript());
             RunScript.runCommand(killBotScript.getAbsolutePath());
@@ -111,6 +115,8 @@ public class BotLauncher {
             bot.setStatus(statusService.findByCode(Status.STATUS_CODES.DRAFT.name()));
             bot.getConfigurations().clear();
             this.botRepository.save(bot);
+            File workingFolder = new File(configuration.getWorkingFolder());
+            FileUtils.deleteDirectory(workingFolder);
         } catch (Exception e) {
             throw new LaunchBotException(e);
         }
@@ -138,7 +144,89 @@ public class BotLauncher {
 
     }
 
+    /**
+     * https://stackoverflow.com/questions/21059085/how-can-i-create-a-file-in-the-current-users-home-directory-using-java
+     * @param launchModel
+     */
     private void launchBotAsyncLocal(LaunchModel launchModel) {
+        TrainedModel trainedModel = trainedModelService.getSingle(launchModel.getTrainedModelId());
+
+        String folderName = UUID.randomUUID().toString();
+        String referenceBotPath =
+                System.getProperty("user.home") + File.separator + "seerBots" + File.separator
+                                                + "referenceBot" + File.separator + "chatbot";
+        String botBuildDirParent = System.getProperty("user.home") + File.separator + "seerBots"
+                                    + File.separator + folderName;
+        String botBuildDirPath = botBuildDirParent + File.separator + "chatbot";
+        File botBuildDir = new File(botBuildDirPath);
+        if (!botBuildDir.exists()) {
+            if (botBuildDir.mkdirs()) {
+                LOGGER.debug(">>>> Directory created: " + botBuildDir.getAbsolutePath());
+                // copy reference bot to the temp dir
+                File srcDir = new File(referenceBotPath);
+                File destDir = new File(botBuildDir.getAbsolutePath());
+                try {
+                    FileUtils.copyDirectory(srcDir, destDir);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    throw new LaunchBotException(e);
+                }
+            }
+        }
+
+        // get the bot and model to use
+        Bot bot = this.botRepository.getOne(launchModel.getBot().getId());
+
+        LOGGER.debug("Launching the bot now >>>>>>>>>>>>>>>>>>>>>>");
+
+        try {
+            String modelCopyPath = botBuildDirPath + "/src/main/resources/nlp/models/custom/";
+            String destFileName = "en-cat-eventgenie-intents-dynamic.bin";
+            File destinationFile = new File(modelCopyPath + destFileName);
+            // delete the existing file first.
+            destinationFile.delete();
+            FileUtils.writeByteArrayToFile(destinationFile, trainedModel.getFile());
+
+            // Since this is local, only one bot can run at a time. So kill any other bots.
+            File killBotScript = ResourceUtils.getFile("classpath:" + appProperties.getKillBotScript());
+            RunScript.runCommand(killBotScript.getAbsolutePath());
+
+            // first clean build the bot
+            File cleanBuildScript = ResourceUtils.getFile("classpath:" + appProperties.getCleanBuildScript());
+            RunScript.runCommand("chmod +x " + cleanBuildScript.getAbsolutePath());
+            RunScript.runCommandWithArgs(cleanBuildScript.getAbsolutePath(), botBuildDir.getAbsolutePath());
+
+            // next launch the bot
+            File launchBotScript = ResourceUtils.getFile("classpath:" + appProperties.getLaunchBotScript());
+            RunScript.runCommandWithArgs(launchBotScript.getAbsolutePath(), botBuildDir.getAbsolutePath(),
+                                botBuildDirParent);
+
+            bot.setStatus(statusService.findByCode(Status.STATUS_CODES.LAUNCHED.name()));
+            if (bot.getConfigurations().size() == 0) {
+                Configuration configuration = new Configuration();
+                configuration.setTrainedModel(trainedModel);
+                configuration.setEnvironment(Status.STATUS_CODES.LAUNCHED.name());
+                configuration.setUrl("http://localhost:8099/chatbot/api/chats");
+                configuration.setPort(8099);
+                configuration.setWorkingFolder(botBuildDirParent);
+                configuration.setImageIds("localhost");
+                configuration.setInstanceIds("localhost");
+                configuration.setPublicDns("localhost");
+                bot.getConfigurations().add(configuration);
+            }
+
+            this.botRepository.save(bot);
+            LOGGER.debug("Launching the bot done. Upload succeeded >>>>>>>>>>>>>>>>>> ");
+            InstanceLaunchedEvent instanceLaunchedEvent = new InstanceLaunchedEvent(this, "Instance Published");
+            applicationEventPublisher.publishEvent(instanceLaunchedEvent);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new LaunchBotException(e);
+        }
+    }
+
+    private void launchBotAsyncLocalOld(LaunchModel launchModel) {
         String contextPath = appProperties.getBotAppContext();
         // get the bot and model to use
         Bot bot = this.botRepository.getOne(launchModel.getBot().getId());
