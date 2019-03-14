@@ -1,10 +1,11 @@
 package com.seerlogics.chatbot.service;
 
-import com.seerlogics.chatbot.model.ChatData;
+import com.rabidgremlin.mutters.core.IntentMatch;
+import com.seerlogics.chatbot.model.chat.ChatData;
 import com.seerlogics.chatbot.mutters.EventGenieBot;
 import com.seerlogics.chatbot.noggin.ChatSession;
-import com.seerlogics.chatbot.repository.ChatRepository;
-import com.rabidgremlin.mutters.core.IntentMatch;
+import com.seerlogics.chatbot.repository.botadmin.CustomPredefinedIntentRepository;
+import com.seerlogics.chatbot.repository.chat.ChatRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
@@ -31,6 +32,9 @@ public class ChatNLPService {
 
     @Autowired
     private MessageSource messageSource;
+
+    @Autowired
+    private CustomPredefinedIntentRepository customPredefinedIntentRepository;
 
     public ChatData generateChatBotResponse(ChatData inputChatRequest, ChatSession chatSession) {
         // Save the incoming message
@@ -70,7 +74,7 @@ public class ChatNLPService {
             String responseKey = chatSession.getCurrentStateMachineHandler().getCurrentState();
             outChatData.setResponse(convertToVelocityResponse(getMessage(responseKey)));
         } else {
-            outChatData.setResponse(convertToVelocityResponse(getMessage(match != null ? match.getIntent().getName() : "confused")));
+            outChatData.setResponse(convertToVelocityResponse(getMessage(match)));
         }
 
         outChatData.setAccountId("ChatBot");
@@ -100,6 +104,11 @@ public class ChatNLPService {
         chatSession.setSessionId(chatSessionId);
         chatRepository.save(initiateResponse);
         return initiateResponse;
+    }
+
+    private String getMessage(IntentMatch intent) {
+        return customPredefinedIntentRepository.findResponseForIntentAndUtterance(intent.getUtterance(),
+                intent.getIntent().getName()).get(0).getResponse();
     }
 
     private String getMessage(String key) {

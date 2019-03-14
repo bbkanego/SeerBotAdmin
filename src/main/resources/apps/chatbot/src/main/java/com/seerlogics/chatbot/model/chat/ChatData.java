@@ -1,4 +1,4 @@
-package com.seerlogics.chatbot.model;
+package com.seerlogics.chatbot.model.chat;
 
 import com.lingoace.model.BaseModel;
 
@@ -17,7 +17,7 @@ public class ChatData extends BaseModel {
     @Column(name = "ACCOUNT_ID")
     private String accountId;
 
-    @Column(nullable = false)
+    @Column(name="CHAT_SESSION_ID", nullable = false)
     private String chatSessionId;
 
     @Transient
@@ -31,6 +31,7 @@ public class ChatData extends BaseModel {
     private ChatData previousChat;
 
     // this can be used to pass auth keys such as JWT/oAuth keys
+    @Column(name= "AUTH_CODE")
     private String authCode;
 
     @Column(nullable = true, length = 3000)

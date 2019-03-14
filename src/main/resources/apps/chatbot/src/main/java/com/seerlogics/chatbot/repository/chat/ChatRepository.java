@@ -1,6 +1,6 @@
-package com.seerlogics.chatbot.repository;
+package com.seerlogics.chatbot.repository.chat;
 
-import com.seerlogics.chatbot.model.ChatData;
+import com.seerlogics.chatbot.model.chat.ChatData;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

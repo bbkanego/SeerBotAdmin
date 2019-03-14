@@ -46,6 +46,8 @@
       "intent": "CancelEventDelete"
     },{
       "intent": "HaveLogInIssues"
+    },{
+      "intent": "GoHome"
     }
   ],
   "inkStory": "bot/ink/eventGenie.ink.json",

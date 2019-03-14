@@ -2,14 +2,15 @@ package com.seerlogics.chatbot.mutters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lingoace.common.NLPProcessingException;
-import com.seerlogics.chatbot.service.ChatDataFetchService;
-import com.seerlogics.chatbot.service.ChatNLPService;
 import com.rabidgremlin.mutters.bot.ink.StoryUtils;
 import com.rabidgremlin.mutters.core.Intent;
 import com.rabidgremlin.mutters.core.IntentMatcher;
 import com.rabidgremlin.mutters.opennlp.intent.OpenNLPTokenizer;
 import com.rabidgremlin.mutters.opennlp.ner.OpenNLPSlotMatcher;
-import com.rabidgremlin.mutters.slots.LiteralSlot;
+import com.seerlogics.chatbot.model.botadmin.CustomIntentUtterance;
+import com.seerlogics.chatbot.repository.botadmin.CustomPredefinedIntentRepository;
+import com.seerlogics.chatbot.service.ChatDataFetchService;
+import com.seerlogics.chatbot.service.ChatNLPService;
 import opennlp.tools.sentdetect.SentenceDetectorME;
 import opennlp.tools.sentdetect.SentenceModel;
 import opennlp.tools.tokenize.Tokenizer;
@@ -36,6 +37,9 @@ public class EventGenieBotConfiguration {
 
     @Autowired
     private ChatDataFetchService chatDataFetchService;
+
+    @Autowired
+    private CustomPredefinedIntentRepository customPredefinedIntentRepository;
 
     @Autowired
     private ChatNLPService chatNLPService;
@@ -117,21 +121,29 @@ public class EventGenieBotConfiguration {
                         slotMatcher, Float.parseFloat(botConfiguration.getNlpIntentMatcher().getMinMatchScore()),
                         Float.parseFloat(botConfiguration.getNlpIntentMatcher().getMaybeMatchScore()));
 
-        List<com.seerlogics.chatbot.mutters.Intent> intents = botConfiguration.getIntents();
-        for (com.seerlogics.chatbot.mutters.Intent intent : intents) {
+        // List<com.seerlogics.chatbot.mutters.Intent> intents = botConfiguration.getIntents();
+        List<CustomIntentUtterance> customIntentUtterances =
+                            customPredefinedIntentRepository.findIntentsByCategoryCodeAndAccount("EVENT_BOT", "admin");
+        for (CustomIntentUtterance customIntentUtterance : customIntentUtterances) {
+            Intent currentIntent = new Intent(customIntentUtterance.getIntent());
+            matcher.addIntent(currentIntent);
+            /*List<String> slots = intent.getSlots();
+            for (String slot : slots) {
+                currentIntent.addSlot(new LiteralSlot(slot));
+            }*/
+        }
+        /*for (com.seerlogics.chatbot.mutters.Intent intent : intents) {
             Intent currentIntent = new Intent(intent.getIntent());
             matcher.addIntent(currentIntent);
             List<String> slots = intent.getSlots();
             for (String slot : slots) {
                 currentIntent.addSlot(new LiteralSlot(slot));
             }
-        }
+        }*/
 
         this.intentMatcher = matcher;
 
         this.chatBotStory = StoryUtils.loadStoryJsonFromClassPath(botConfiguration.getInkStory());
-
-
     }
 
     public SentenceDetectorME getSentenceDetector() {

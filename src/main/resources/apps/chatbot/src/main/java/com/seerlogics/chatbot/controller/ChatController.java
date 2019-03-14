@@ -1,6 +1,6 @@
 package com.seerlogics.chatbot.controller;
 
-import com.seerlogics.chatbot.model.ChatData;
+import com.seerlogics.chatbot.model.chat.ChatData;
 import com.seerlogics.chatbot.noggin.ChatSession;
 import com.seerlogics.chatbot.service.ChatNLPService;
 import org.apache.log4j.Logger;
