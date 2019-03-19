@@ -55,7 +55,7 @@ public class TrainedModelService extends BaseServiceImpl<TrainedModel> {
     }
 
     @Override
-    public List<TrainedModel> saveAll(List<TrainedModel> object) {
+    public List<TrainedModel> saveAll(Collection<TrainedModel> object) {
         return trainedModelRepository.saveAll(object);
     }
 

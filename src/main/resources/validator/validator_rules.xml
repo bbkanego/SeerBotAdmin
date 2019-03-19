@@ -50,27 +50,55 @@
             </field>
         </form>
 
-        <form name="validateIntentRule" classType="com.seerlogics.botadmin.model.PredefinedIntentUtterances">
+        <form name="validateIntentRule" classType="com.seerlogics.botadmin.model.Intent">
             <field id="intent" property="intent" depends="required,validateMaxLength">
                 <var>
                     <var-name>maxLength</var-name>
                     <var-value>150</var-value>
                 </var>
             </field>
-            <field id="utterance" property="utterance" depends="required,validateMaxLength">
-                <var>
-                    <var-name>maxLength</var-name>
-                    <var-value>300</var-value>
-                </var>
+            <field property="utterances" classType="java.util.Set" id="utterances" depends="required">
+                <arg key="label.utterances" position="0"/>
+                <field property="utterance" id="utterances_utterance" depends="required,validateMaxLength">
+                    <arg key="label.utterance" position="0"/>
+                    <var>
+                        <var-name>maxLength</var-name>
+                        <var-value>300</var-value>
+                    </var>
+                </field>
+                <field property="locale" id="utterances_locale" depends="required,validateMaxLength">
+                    <arg key="label.locale" position="0"/>
+                    <var>
+                        <var-name>maxLength</var-name>
+                        <var-value>10</var-value>
+                    </var>
+                </field>
             </field>
-            <field id="repsonse" property="repsonse" depends="required,validateMaxLength">
-                <var>
-                    <var-name>maxLength</var-name>
-                    <var-value>3000</var-value>
-                </var>
+            <field property="responses" classType="java.util.Set" id="address" depends="required">
+                <arg key="label.responses" position="0"/>
+                <field property="response" id="responses_response" depends="required,validateMaxLength">
+                    <arg key="label.response" position="0"/>
+                    <var>
+                        <var-name>maxLength</var-name>
+                        <var-value>300</var-value>
+                    </var>
+                </field>
+                <field property="locale" id="responses_locale" depends="required,validateMaxLength">
+                    <arg key="label.locale" position="0"/>
+                    <var>
+                        <var-name>maxLength</var-name>
+                        <var-value>10</var-value>
+                    </var>
+                </field>
+                <field property="responseType" id="responses_responseType" depends="required,validateMaxLength">
+                    <arg key="label.responseType" position="0"/>
+                    <var>
+                        <var-name>maxLength</var-name>
+                        <var-value>20</var-value>
+                    </var>
+                </field>
             </field>
             <field id="intentCat" property="category" depends="required"/>
-            <field id="responseType" property="responseType" depends="required"/>
         </form>
 
         <form name="validateTrainModelRule" classType="com.seerlogics.botadmin.model.TrainedModel">

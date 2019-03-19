@@ -61,13 +61,17 @@ public class GlobalExceptionHandler extends com.lingoace.common.GlobalExceptionH
 
     private Map<String, String> convertException(Exception e) {
         if (e instanceof com.lingoace.exception.nlp.TrainModelException) {
-            com.lingoace.exception.nlp.TrainModelException trainModelException = (com.lingoace.exception.nlp.TrainModelException)e;
+            com.lingoace.exception.nlp.TrainModelException trainModelException =
+                    (com.lingoace.exception.nlp.TrainModelException) e;
             if (trainModelException.getCause() instanceof InsufficientTrainingDataException) {
                 return buildKnownErrorCodeAndMessageResponse(ErrorCodes.TRAIN_MODEL_INSUFFICIENT_DATA,
-                                            "Insufficient training data to create model", e);
+                        "Insufficient training data to create model", e);
             } else {
                 return buildUnknownErrorMessageResponse(e);
             }
+        } else if (e instanceof BaseRuntimeException) {
+            return buildKnownErrorCodeAndMessageResponse(((BaseRuntimeException) e).getErrorCode(),
+                    "This will get message drom DB", e);
         } else {
             return buildUnknownErrorMessageResponse(e);
         }

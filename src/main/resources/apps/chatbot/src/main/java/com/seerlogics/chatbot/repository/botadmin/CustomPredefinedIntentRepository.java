@@ -22,8 +22,6 @@ public interface CustomPredefinedIntentRepository extends JpaRepository<CustomIn
     List<CustomIntentUtterance> findIntentsByCategoryCodeAndAccount(@Param("code") String code,
                                                                     @Param("userName") String userName);
 
-    @Query("select pu from CustomIntentUtterance pu where pu.intent = :intent " +
-            "and pu.utterance = :utterance")
-    List<CustomIntentUtterance> findResponseForIntentAndUtterance(@Param("utterance") String utterance,
-                                                                    @Param("intent") String intent);
+    @Query("select pu from CustomIntentUtterance pu where pu.intent = :intent ")
+    List<CustomIntentUtterance> findResponseForIntentAndUtterance(@Param("intent") String intent);
 }

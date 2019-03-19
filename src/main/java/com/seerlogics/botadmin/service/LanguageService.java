@@ -41,7 +41,7 @@ public class LanguageService extends BaseServiceImpl<Language> {
     }
 
     @Override
-    public List<Language> saveAll(List<Language> languages) {
+    public List<Language> saveAll(Collection<Language> languages) {
         return languageRepository.saveAll(languages);
     }
 }

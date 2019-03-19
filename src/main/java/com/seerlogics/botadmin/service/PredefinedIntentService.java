@@ -50,7 +50,7 @@ public class PredefinedIntentService extends BaseServiceImpl<PredefinedIntentUtt
     }
 
     @Override
-    public List<PredefinedIntentUtterances> saveAll(List<PredefinedIntentUtterances> predefinedIntentUtterances1) {
+    public List<PredefinedIntentUtterances> saveAll(Collection<PredefinedIntentUtterances> predefinedIntentUtterances1) {
         return predefinedIntentRepository.saveAll(predefinedIntentUtterances1);
     }
 

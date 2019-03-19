@@ -56,7 +56,7 @@ public class CustomIntentService extends BaseServiceImpl<CustomIntentUtterance> 
     }
 
     @Override
-    public List<CustomIntentUtterance> saveAll(List<CustomIntentUtterance> predefinedIntentUtterances1) {
+    public List<CustomIntentUtterance> saveAll(Collection<CustomIntentUtterance> predefinedIntentUtterances1) {
         return customPredefinedIntentRepository.saveAll(predefinedIntentUtterances1);
     }
 

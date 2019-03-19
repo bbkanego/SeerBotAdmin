@@ -1,21 +1,15 @@
 package com.seerlogics.botadmin.controller;
 
-import com.lingoace.validation.Validate;
-import com.seerlogics.botadmin.dto.SearchIntents;
-import com.seerlogics.botadmin.model.Category;
-import com.seerlogics.botadmin.model.PredefinedIntentUtterances;
-import com.seerlogics.botadmin.service.AccountService;
-import com.seerlogics.botadmin.service.CategoryService;
-import com.seerlogics.botadmin.service.PredefinedIntentService;
 import com.lingoace.spring.controller.BaseController;
 import com.lingoace.spring.controller.CrudController;
-import org.apache.commons.lang3.StringUtils;
+import com.lingoace.validation.Validate;
+import com.seerlogics.botadmin.dto.SearchIntents;
+import com.seerlogics.botadmin.model.Intent;
+import com.seerlogics.botadmin.service.IntentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -24,39 +18,33 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(value = "/api/v1/predefined-intent")
-public class PredefinedIntentController extends BaseController implements CrudController<PredefinedIntentUtterances> {
+public class PredefinedIntentController extends BaseController implements CrudController<Intent> {
     @Autowired
-    private PredefinedIntentService predefinedIntentService;
-
-    @Autowired
-    private CategoryService categoryService;
-
-    @Autowired
-    private AccountService accountService;
+    private IntentService predefinedIntentService;
 
     @PostMapping(value = {"", "/",})
     @ResponseBody
-    public Boolean save(@RequestBody PredefinedIntentUtterances utterances) {
+    public Boolean save(@RequestBody Intent utterances) {
         this.predefinedIntentService.save(utterances);
         return true;
     }
 
     @PostMapping(value = {"/save-all"})
     @ResponseBody
-    public Boolean save(@RequestBody List<PredefinedIntentUtterances> intentUtterances) {
+    public Boolean save(@RequestBody List<Intent> intentUtterances) {
         this.predefinedIntentService.saveAll(intentUtterances);
         return true;
     }
 
     @GetMapping(value = {"", "/",})
     @ResponseBody
-    public Collection<PredefinedIntentUtterances> getAll() {
+    public Collection<Intent> getAll() {
         return this.predefinedIntentService.getAll();
     }
 
     @GetMapping(value = "/{id}")
     @ResponseBody
-    public PredefinedIntentUtterances getById(@PathVariable("id") Long id) {
+    public Intent getById(@PathVariable("id") Long id) {
         return this.predefinedIntentService.getSingle(id);
     }
 
@@ -69,44 +57,20 @@ public class PredefinedIntentController extends BaseController implements CrudCo
 
     @GetMapping(value = "/init")
     @ResponseBody
-    public PredefinedIntentUtterances init() {
-        return predefinedIntentService.initPredefinedIntentUtterance();
+    public Intent init() {
+        return predefinedIntentService.initPredefinedIntent();
     }
 
     @GetMapping(value = "/search/{category}")
     @ResponseBody
-    public List<PredefinedIntentUtterances> searchByCat(@PathVariable("category") String category) {
+    public List<Intent> searchByCat(@PathVariable("category") String category) {
         return predefinedIntentService.findIntentsByCategory(category);
     }
 
     @PostMapping(value = "/upload")
     public Boolean uploadIntentsFromFile(@RequestPart("intentsData") MultipartFile file,
                                          @RequestPart("category") String categoryCode) {
-        if (!file.isEmpty() && StringUtils.isNotBlank(categoryCode)) {
-            try {
-                String fileContent = new String(file.getBytes(), StandardCharsets.UTF_8);
-                String[] rows = fileContent.split("\n");
-                List<PredefinedIntentUtterances> predefinedIntentUtterancesList = new ArrayList<>();
-                Collection<Category> categories = this.categoryService.getAll();
-                Category category = categories.stream().filter(categoryOne -> categoryCode.equals(categoryOne.getCode())).findAny().orElse(null);
-                for (String row : rows) {
-                    String[] cols = row.split(" ", 2);
-                    LOGGER.debug(String.format("intent: %s, utterance: %s", cols[0], cols[1]));
-                    PredefinedIntentUtterances predefinedIntentUtterances = new PredefinedIntentUtterances();
-                    predefinedIntentUtterances.setCategory(category);
-                    predefinedIntentUtterances.setIntent(cols[0].trim());
-                    predefinedIntentUtterances.setUtterance(cols[1].trim());
-                    predefinedIntentUtterances.setResponse(cols[1].trim());
-                    predefinedIntentUtterances.setOwner(this.accountService.getAuthenticatedUser());
-                    predefinedIntentUtterancesList.add(predefinedIntentUtterances);
-                }
-                this.predefinedIntentService.saveAll(predefinedIntentUtterancesList);
-            } catch (Exception e) {
-                return false;
-            }
-            return true;
-        }
-        return false;
+        return predefinedIntentService.uploadIntentsFromFile(file, categoryCode, Intent.INTENT_TYPE.PREDEFINED);
     }
 
     @GetMapping("/search/init")
@@ -117,7 +81,7 @@ public class PredefinedIntentController extends BaseController implements CrudCo
 
     @PostMapping("/search")
     @ResponseBody
-    public List<PredefinedIntentUtterances> searchIntents(@Validate("validateSearchIntentRule")
+    public List<Intent> searchIntents(@Validate("validateSearchIntentRule")
                                                               @RequestBody SearchIntents searchIntents) {
         return predefinedIntentService.findIntentsAndUtterances(searchIntents);
     }

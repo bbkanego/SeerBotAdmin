@@ -41,7 +41,7 @@ public class StatusService extends BaseServiceImpl<Status> {
     }
 
     @Override
-    public List<Status> saveAll(List<Status> languages) {
+    public List<Status> saveAll(Collection<Status> languages) {
         return statusRepository.saveAll(languages);
     }
 
