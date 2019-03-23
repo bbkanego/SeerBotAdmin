@@ -2,10 +2,7 @@ package com.seerlogics.botadmin.model;
 
 import com.lingoace.model.BaseModel;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
 
 /**
  * Created by bkane on 10/27/17.
@@ -16,6 +13,28 @@ import javax.persistence.UniqueConstraint;
                 @UniqueConstraint(columnNames = "role", name = "role_unique_role")})
 public class Role extends BaseModel {
 
+    public enum ROLE_TYPE {
+        /**
+         * Admin for a company account
+         */
+        ACCT_ADMIN,
+        /**
+         * USER defined by admin to manage account
+         */
+        ACCT_USER,
+        /**
+         * USER defined by admin to view account
+         */
+        ACCT_VIEW,
+        /**
+         * Uber Adiminstrator who will have "root" access to the Bot Admin application
+         * entitilents: READ,WRITE,UPDATE,DELETE,UBER_ADMIN
+         */
+        UBER_ADMIN
+    }
+
+    @Transient
+    private String name;
     @Column(nullable = false, length = 50)
     private String code;
     @Column(nullable = true, length = 1000)
@@ -24,6 +43,14 @@ public class Role extends BaseModel {
     private String role;
     @Column(nullable = false, length = 200)
     private String entitlements;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getRole() {
         return role;

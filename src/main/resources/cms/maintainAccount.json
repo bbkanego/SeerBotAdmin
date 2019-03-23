@@ -1,0 +1,22 @@
+{
+  "maintainAccount": {
+    "createAccount": "Create Account",
+    "updateAccount": "Update Account",
+    "userName": "User Name",
+    "password": "Password",
+    "passwordRenter": "Renter Password",
+    "roles": "Roles",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "address": {
+      "street": "Street",
+      "city": "City",
+      "country": "Country",
+      "state": "State",
+      "zip": "Zip"
+    },
+    "accountDetailsHeading": "Account Details",
+    "personInfoHeading": "Personal Information",
+    "addressInfoHeading": "Address Information"
+  }
+}

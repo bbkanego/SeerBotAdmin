@@ -50,6 +50,77 @@
             </field>
         </form>
 
+        <form name="validateAccountRule" classType="com.seerlogics.botadmin.model.Account">
+            <field id="userName" property="userName" depends="required,validateMaxLength">
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>50</var-value>
+                </var>
+            </field>
+            <field id="passwordCaptureReenter" property="passwordCaptureReenter" depends="required,validateMaxLength">
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>50</var-value>
+                </var>
+            </field>
+            <field id="passwordCapture" property="passwordCapture" depends="required,validateMaxLength">
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>50</var-value>
+                </var>
+            </field>
+            <field property="roles" classType="java.util.Set" id="roles" depends="required"/>
+            <field property="owner" classType="com.seerlogics.botadmin.model.Person" id="personOwner"
+                   depends="required">
+                <arg key="label.person" position="0"/>
+                <field property="firstName" id="personOwner_firstName" depends="required,validateMaxLength">
+                    <arg key="label.firstName" position="0"/>
+                    <var>
+                        <var-name>maxLength</var-name>
+                        <var-value>50</var-value>
+                    </var>
+                </field>
+                <field property="lastName" id="personOwner_lastName" depends="required,validateMaxLength">
+                    <arg key="label.lastName" position="0"/>
+                    <var>
+                        <var-name>maxLength</var-name>
+                        <var-value>50</var-value>
+                    </var>
+                </field>
+                <field property="contactModes" classType="java.util.Set" id="personOwner_contactModes" depends="required">
+                    <arg key="label.utterances" position="0"/>
+                    <field property="street" id="personOwner_contactModes_street" depends="required,validateMaxLength">
+                        <arg key="label.street" position="0"/>
+                        <var>
+                            <var-name>maxLength</var-name>
+                            <var-value>50</var-value>
+                        </var>
+                    </field>
+                    <field property="city" id="personOwner_contactModes_city" depends="required,validateMaxLength">
+                        <arg key="label.city" position="0"/>
+                        <var>
+                            <var-name>maxLength</var-name>
+                            <var-value>50</var-value>
+                        </var>
+                    </field>
+                    <field property="state" id="personOwner_contactModes_state" depends="required,validateMaxLength">
+                        <arg key="label.state" position="0"/>
+                        <var>
+                            <var-name>maxLength</var-name>
+                            <var-value>50</var-value>
+                        </var>
+                    </field>
+                    <field property="zip" id="personOwner_contactModes_zip" depends="required,validateMaxLength">
+                        <arg key="label.zip" position="0"/>
+                        <var>
+                            <var-name>maxLength</var-name>
+                            <var-value>20</var-value>
+                        </var>
+                    </field>
+                </field>
+            </field>
+        </form>
+
         <form name="validateIntentRule" classType="com.seerlogics.botadmin.model.Intent">
             <field id="intent" property="intent" depends="required,validateMaxLength">
                 <var>

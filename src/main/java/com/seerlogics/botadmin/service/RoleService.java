@@ -38,4 +38,9 @@ public class RoleService extends BaseServiceImpl<Role> {
     public void delete(Long id) {
         roleRepository.deleteById(id);
     }
+
+    @Override
+    public Role findByCode(String code) {
+        return roleRepository.findByCode(code);
+    }
 }

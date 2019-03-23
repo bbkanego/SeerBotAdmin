@@ -77,7 +77,9 @@ public class MultiHttpSecurityConfig {
         @Override
         public void configure(WebSecurity web) throws Exception {
             // "/**" will allow ALL requests.
-            web.ignoring().antMatchers("/api/**/generate-token", "/error", "/api/**/signup");
+            web.ignoring().antMatchers("/api/**/generate-token", "/error", "/metadata/validation/**",
+                    "/api/v1/account/signup", "/metadata/messages",
+                    "/api/v1/account/init/**", "/api/cms/all-content");
         }
 
         /**

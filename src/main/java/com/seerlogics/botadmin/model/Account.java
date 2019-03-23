@@ -28,6 +28,12 @@ public class Account extends BaseModel {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
+    @Transient
+    private String passwordCapture;
+
+    @Transient
+    private String passwordCaptureReenter;
+
     /**
      * http://www.java2s.com/Tutorials/Java/JPA/0820__JPA_OneToMany_Unidirectional.htm
      */
@@ -36,6 +42,22 @@ public class Account extends BaseModel {
             joinColumns = @JoinColumn(name = "account_id"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Role> roles = new HashSet<>();
+
+    public String getPasswordCaptureReenter() {
+        return passwordCaptureReenter;
+    }
+
+    public void setPasswordCaptureReenter(String passwordCaptureReenter) {
+        this.passwordCaptureReenter = passwordCaptureReenter;
+    }
+
+    public String getPasswordCapture() {
+        return passwordCapture;
+    }
+
+    public void setPasswordCapture(String passwordCapture) {
+        this.passwordCapture = passwordCapture;
+    }
 
     public Party getOwner() {
         return owner;

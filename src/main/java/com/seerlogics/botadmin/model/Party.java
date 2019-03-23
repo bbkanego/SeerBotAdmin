@@ -42,6 +42,10 @@ public class Party extends BaseModel {
         this.contactModes = contactModes;
     }
 
+    public void addContactMode(ContactMode contactMode) {
+        this.contactModes.add(contactMode);
+    }
+
     public String getType() {
         return type.toLowerCase();
     }
