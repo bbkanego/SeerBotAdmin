@@ -1,4 +1,4 @@
-package com.seerlogics.botadmin.model;
+package com.seerlogics.chatbot.model.botadmin;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.lingoace.model.BaseModel;

@@ -76,7 +76,7 @@ public class PredefinedIntentController extends BaseController implements CrudCo
     @GetMapping("/search/init")
     @ResponseBody
     public SearchIntents initSearchIntents() {
-        return predefinedIntentService.initSearchIntentsCriteria();
+        return predefinedIntentService.initSearchIntentsCriteria(Intent.INTENT_TYPE.PREDEFINED.name());
     }
 
     @PostMapping("/search")

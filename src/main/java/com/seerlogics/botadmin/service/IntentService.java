@@ -86,8 +86,13 @@ public class IntentService extends BaseServiceImpl<Intent> {
         return intentRepository.findIntentsByCodeAndType(catCode, intentType);
     }
 
-    public SearchIntents initSearchIntentsCriteria() {
+    public List<Intent> findIntentsByCategoryTypeAndOwner(String catCode, String intentType) {
+        return intentRepository.findIntentsByCodeTypeAndOwner(catCode, intentType, accountService.getAuthenticatedUser());
+    }
+
+    public SearchIntents initSearchIntentsCriteria(String type) {
         SearchIntents searchIntents = new SearchIntents();
+        searchIntents.setIntentType(type);
         searchIntents.getReferenceData().put("categories", categoryService.getAll());
         return searchIntents;
     }

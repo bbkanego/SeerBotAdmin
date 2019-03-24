@@ -1,18 +1,17 @@
 package com.seerlogics.botadmin.service;
 
-import com.seerlogics.botadmin.model.CustomIntentUtterance;
-import com.seerlogics.botadmin.model.PredefinedIntentUtterances;
-import com.seerlogics.botadmin.model.TrainedModel;
-import com.seerlogics.botadmin.repository.TrainedModelRepository;
 import com.lingoace.exception.nlp.TrainModelException;
 import com.lingoace.nlp.opennlp.NLPModelTrainer;
 import com.lingoace.spring.service.BaseServiceImpl;
+import com.seerlogics.botadmin.model.Intent;
+import com.seerlogics.botadmin.model.IntentUtterance;
+import com.seerlogics.botadmin.model.TrainedModel;
+import com.seerlogics.botadmin.repository.TrainedModelRepository;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.ResourceUtils;
-
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.ResourceUtils;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -20,6 +19,7 @@ import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -31,10 +31,7 @@ public class TrainedModelService extends BaseServiceImpl<TrainedModel> {
     private AccountService accountService;
 
     @Autowired
-    private PredefinedIntentService predefinedIntentService;
-
-    @Autowired
-    private CustomIntentService customIntentService;
+    private IntentService intentService;
 
     @Autowired
     private CategoryService categoryService;
@@ -42,6 +39,10 @@ public class TrainedModelService extends BaseServiceImpl<TrainedModel> {
     @Override
     public Collection<TrainedModel> getAll() {
         return trainedModelRepository.findAll();
+    }
+
+    public Collection<TrainedModel> findModelByOwner() {
+        return trainedModelRepository.findByOwner(accountService.getAuthenticatedUser());
     }
 
     @Override
@@ -74,27 +75,18 @@ public class TrainedModelService extends BaseServiceImpl<TrainedModel> {
          * get all the standard intents for the category
          */
         StringBuilder buffer = new StringBuilder();
-        if (TrainedModel.MODEL_TYPE.PREDEFINED.name().equals(trainedModel.getType())) {
-            List<PredefinedIntentUtterances> predefinedIntentUtterancesList
-                    = this.predefinedIntentService.findIntentsByCategory(trainedModel.getCategory().getCode());
-            for (int i = 0; i < predefinedIntentUtterancesList.size(); i++) {
-                PredefinedIntentUtterances predefinedIntentUtterances = predefinedIntentUtterancesList.get(i);
-                buffer.append(predefinedIntentUtterances.getIntent());
+        List<Intent> intents
+                = this.intentService.findIntentsByCategoryTypeAndOwner(trainedModel.getCategory().getCode(),
+                                        trainedModel.getType());
+        for (Intent currentIntent : intents) {
+            Set<IntentUtterance> intentUtterances = currentIntent.getUtterances();
+            int j = 0;
+            for (IntentUtterance intentUtterance : intentUtterances) {
+                j++;
+                buffer.append(currentIntent.getIntent());
                 buffer.append(" ");
-                buffer.append(predefinedIntentUtterances.getUtterance());
-                if (i < (predefinedIntentUtterancesList.size() - 1)) {
-                    buffer.append(System.lineSeparator());
-                }
-            }
-        } else {
-            List<CustomIntentUtterance> customIntentUtteranceList
-                    = this.customIntentService.findIntentsByCategory(trainedModel.getCategory().getCode());
-            for (int i = 0; i < customIntentUtteranceList.size(); i++) {
-                CustomIntentUtterance predefinedIntentUtterances = customIntentUtteranceList.get(i);
-                buffer.append(predefinedIntentUtterances.getIntent());
-                buffer.append(" ");
-                buffer.append(predefinedIntentUtterances.getUtterance());
-                if (i < (customIntentUtteranceList.size() - 1)) {
+                buffer.append(intentUtterance.getUtterance());
+                if (j < (intentUtterances.size() - 1)) {
                     buffer.append(System.lineSeparator());
                 }
             }

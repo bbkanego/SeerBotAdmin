@@ -1,15 +1,17 @@
 package com.seerlogics.chatbot.service;
 
 import com.rabidgremlin.mutters.core.IntentMatch;
+import com.seerlogics.chatbot.model.botadmin.Intent;
 import com.seerlogics.chatbot.model.chat.ChatData;
 import com.seerlogics.chatbot.mutters.EventGenieBot;
 import com.seerlogics.chatbot.noggin.ChatSession;
-import com.seerlogics.chatbot.repository.botadmin.CustomPredefinedIntentRepository;
+import com.seerlogics.chatbot.repository.botadmin.IntentRepository;
 import com.seerlogics.chatbot.repository.chat.ChatRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
@@ -30,11 +32,17 @@ public class ChatNLPService {
     @Autowired
     private VelocityEngine velocityEngine;
 
+    /**
+     * This needs to provided as a Java arg like "-Dseerchat.bottype=EVENT_BOT"
+     */
+    @Value("seerchat.bottype")
+    private String botType;
+
     @Autowired
     private MessageSource messageSource;
 
     @Autowired
-    private CustomPredefinedIntentRepository customPredefinedIntentRepository;
+    private IntentRepository intentRepository;
 
     public ChatData generateChatBotResponse(ChatData inputChatRequest, ChatSession chatSession) {
         // Save the incoming message
@@ -106,9 +114,12 @@ public class ChatNLPService {
         return initiateResponse;
     }
 
+    //todo fix logic here.
     private String getMessage(IntentMatch intent) {
-        return customPredefinedIntentRepository.findResponseForIntentAndUtterance(intent.getUtterance(),
-                intent.getIntent().getName()).get(0).getResponse();
+        Intent dbIntent = intentRepository.findIntentsByUtterance(botType, Intent.INTENT_TYPE.CUSTOM.name(), intent.getUtterance(),
+                "");
+        dbIntent.getResponses();
+        return "";
     }
 
     private String getMessage(String key) {

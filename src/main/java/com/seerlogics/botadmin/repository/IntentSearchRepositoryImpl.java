@@ -41,6 +41,9 @@ public class IntentSearchRepositoryImpl implements IntentSearchRepository {
         if (searchIntents.getCategory() != null) {
             predicates.add(criteriaBuilder.equal(intentRoot.get("category"), searchIntents.getCategory()));
         }
+        if (searchIntents.getIntentType() != null) {
+            predicates.add(criteriaBuilder.equal(intentRoot.get("intentType"), searchIntents.getIntentType()));
+        }
 
         criteriaQuery.where(predicates.toArray(new Predicate[predicates.size()]));
         return em.createQuery(criteriaQuery).getResultList();

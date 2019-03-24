@@ -1,8 +1,8 @@
-package com.seerlogics.botadmin.repository;
+package com.seerlogics.chatbot.repository.botadmin;
 
-import com.seerlogics.botadmin.model.Account;
-import com.seerlogics.botadmin.model.Category;
-import com.seerlogics.botadmin.model.Intent;
+import com.seerlogics.chatbot.model.botadmin.Account;
+import com.seerlogics.chatbot.model.botadmin.Category;
+import com.seerlogics.chatbot.model.botadmin.Intent;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -14,7 +14,7 @@ import java.util.List;
  * Created by bkane on 3/14/19.
  */
 @Repository
-public interface IntentRepository extends JpaRepository<Intent, Long>, IntentSearchRepository {
+public interface IntentRepository extends JpaRepository<Intent, Long> {
     List<Intent> findByCategory(Category cat);
 
     @Query("select pu from Intent pu where pu.category.code = :code")
@@ -27,4 +27,11 @@ public interface IntentRepository extends JpaRepository<Intent, Long>, IntentSea
             "and pu.owner = :owner")
     List<Intent> findIntentsByCodeTypeAndOwner(@Param("code") String code, @Param("intentType") String intentType,
                                                @Param("owner") Account owner);
+
+
+    @Query("select pu from Intent pu where pu.category.code = :botTypeCode and pu.intentType = :intentType " +
+            "and pu.utterances.locale = :locale and pu.utterances.utterance = :utterance")
+    Intent findIntentsByUtterance(@Param("botTypeCode") String botTypeCode, @Param("intentType") String intentType,
+                                        @Param("utterance") String utterance,
+                                        @Param("locale") String locale);
 }

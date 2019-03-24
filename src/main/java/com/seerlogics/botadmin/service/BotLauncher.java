@@ -152,6 +152,10 @@ public class BotLauncher {
         TrainedModel trainedModel = trainedModelService.getSingle(launchModel.getTrainedModelId());
 
         String folderName = UUID.randomUUID().toString();
+        /**
+         * Locate the reference bot which you will copy for the customer and run in a custom location.
+         * reference location: /Users/bkane/seerBots/referenceBot/chatbot
+         */
         String referenceBotPath =
                 System.getProperty("user.home") + File.separator + "seerBots" + File.separator
                                                 + "referenceBot" + File.separator + "chatbot";
@@ -191,15 +195,27 @@ public class BotLauncher {
             File killBotScript = ResourceUtils.getFile("classpath:" + appProperties.getKillBotScript());
             RunScript.runCommand(killBotScript.getAbsolutePath());
 
-            // first clean build the bot
+            /**
+             * First go to the custom build directory and do a clean build. This will create a target dir with
+             * chatbot jar
+             */
             File cleanBuildScript = ResourceUtils.getFile("classpath:" + appProperties.getCleanBuildScript());
             RunScript.runCommand("chmod +x " + cleanBuildScript.getAbsolutePath());
-            RunScript.runCommandWithArgs(cleanBuildScript.getAbsolutePath(), botBuildDir.getAbsolutePath());
+            // run the clean build with 2 args.
+            RunScript.runCommandWithArgs(cleanBuildScript.getAbsolutePath(),
+                            botBuildDir.getAbsolutePath(), "-Dspring.profiles.active=local");
 
-            // next launch the bot
+            /**
+             * Next launch the bot by going to the custom build directory.
+             * Args provided to script:
+             * 1. Path to absolute path to the custom bot.
+             * 2. Profile of the chatbot
+             * 3. Category Type of the bot.
+             */
             File launchBotScript = ResourceUtils.getFile("classpath:" + appProperties.getLaunchBotScript());
             RunScript.runCommandWithArgs(launchBotScript.getAbsolutePath(), botBuildDir.getAbsolutePath(),
-                                botBuildDirParent);
+                    "-Dspring.profiles.active=local",
+                    "-Dseerchat.bottype=" + launchModel.getBot().getCategory().getCode());
 
             bot.setStatus(statusService.findByCode(Status.STATUS_CODES.LAUNCHED.name()));
             if (bot.getConfigurations().size() == 0) {
