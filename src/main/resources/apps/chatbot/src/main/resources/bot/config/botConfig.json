@@ -12,44 +12,6 @@
     "minMatchScore": "0.60f",
     "maybeMatchScore": "0.15f"
   },
-  "intents": [
-    {
-      "intent": "SearchEvents"
-    },{
-      "intent": "MaybeSearchEvents"
-    },{
-      "intent": "DeleteEventYesNo"
-    },{
-      "intent": "PerformEventDelete"
-    },{
-      "intent": "EventDeleted"
-    },{
-      "intent": "SearchEventsNear"
-    },{
-      "intent": "SearchRoles"
-    },{
-      "intent": "ValidateAddress"
-    },{
-      "intent": "GaveAddress",
-      "slots": ["Address"]
-    },{
-      "intent": "Stop"
-    },{
-      "intent": "Help"
-    },{
-      "intent": "Hi"
-    },{
-      "intent": "AddRoles"
-    },{
-      "intent": "ThankYou"
-    },{
-      "intent": "CancelEventDelete"
-    },{
-      "intent": "HaveLogInIssues"
-    },{
-      "intent": "GoHome"
-    }
-  ],
   "inkStory": "bot/ink/eventGenie.ink.json",
   "globalIntents": [
     {"intentName": "Stop", "knotName": "stop"},

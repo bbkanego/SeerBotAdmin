@@ -20,18 +20,13 @@ public interface IntentRepository extends JpaRepository<Intent, Long> {
     @Query("select pu from Intent pu where pu.category.code = :code")
     List<Intent> findIntentsByCode(@Param("code") String code);
 
-    @Query("select pu from Intent pu where pu.category.code = :code and pu.intentType = :intentType")
-    List<Intent> findIntentsByCodeAndType(@Param("code") String code, @Param("intentType") String intentType);
+    @Query("select pu from Intent pu where pu.category.code = :code and pu.intentType = :intentType " +
+            "and pu.owner.id = :ownerId")
+    List<Intent> findIntentsByCodeAndType(@Param("code") String code, @Param("intentType") String intentType,
+                                          @Param("ownerId") Long ownerId);
 
     @Query("select pu from Intent pu where pu.category.code = :code and pu.intentType = :intentType " +
             "and pu.owner = :owner")
     List<Intent> findIntentsByCodeTypeAndOwner(@Param("code") String code, @Param("intentType") String intentType,
                                                @Param("owner") Account owner);
-
-
-    @Query("select pu from Intent pu where pu.category.code = :botTypeCode and pu.intentType = :intentType " +
-            "and pu.utterances.locale = :locale and pu.utterances.utterance = :utterance")
-    Intent findIntentsByUtterance(@Param("botTypeCode") String botTypeCode, @Param("intentType") String intentType,
-                                        @Param("utterance") String utterance,
-                                        @Param("locale") String locale);
 }

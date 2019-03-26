@@ -2,6 +2,7 @@ package com.seerlogics.chatbot.service;
 
 import com.rabidgremlin.mutters.core.IntentMatch;
 import com.seerlogics.chatbot.model.botadmin.Intent;
+import com.seerlogics.chatbot.model.botadmin.IntentResponse;
 import com.seerlogics.chatbot.model.chat.ChatData;
 import com.seerlogics.chatbot.mutters.EventGenieBot;
 import com.seerlogics.chatbot.noggin.ChatSession;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.StringWriter;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Created by bkane on 4/15/18.
@@ -37,6 +39,12 @@ public class ChatNLPService {
      */
     @Value("seerchat.bottype")
     private String botType;
+
+    /**
+     * This needs to provided as a Java arg like "-Dseerchat.botOwnerId=354243"
+     */
+    @Value("seerchat.botOwnerId")
+    private String botOwnerId;
 
     @Autowired
     private MessageSource messageSource;
@@ -114,12 +122,22 @@ public class ChatNLPService {
         return initiateResponse;
     }
 
-    //todo fix logic here.
+    /**
+     * // todo fix this
+     * Here we will provide the matching intent. That may be a "MayBe" intent also.
+     * Now based on that utterance we
+     * @param intent
+     * @return
+     */
     private String getMessage(IntentMatch intent) {
-        Intent dbIntent = intentRepository.findIntentsByUtterance(botType, Intent.INTENT_TYPE.CUSTOM.name(), intent.getUtterance(),
-                "");
-        dbIntent.getResponses();
-        return "";
+        com.seerlogics.chatbot.mutters.Intent muttersIntent = (com.seerlogics.chatbot.mutters.Intent)intent.getIntent();
+        com.seerlogics.chatbot.model.botadmin.Intent dbIntent = muttersIntent.getDbIntent();
+        List<IntentResponse> intentResponses =
+                    dbIntent.getResponses().stream().filter(intentResponse -> intentResponse.getLocale().contains("en")).collect(Collectors.toList());
+        if (intentResponses.size() > 0) {
+            throw new IllegalStateException("Multiple responses found...");
+        }
+        return intentResponses.get(0).getResponse();
     }
 
     private String getMessage(String key) {

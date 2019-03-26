@@ -47,7 +47,7 @@ public class Intent extends BaseModel {
     @JsonManagedReference
     private Set<IntentResponse> responses = new HashSet<>();
 
-    @Column(nullable = false, length = 20)
+    @Column(name = "intent_type", nullable = false, length = 20)
     private String intentType = INTENT_TYPE.PREDEFINED.name();
 
     public String getIntentType() {

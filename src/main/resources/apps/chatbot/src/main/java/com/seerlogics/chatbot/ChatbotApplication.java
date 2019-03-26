@@ -1,5 +1,9 @@
 package com.seerlogics.chatbot;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.actuate.autoconfigure.security.servlet.ManagementWebSecurityAutoConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
@@ -12,6 +16,8 @@ import org.springframework.boot.autoconfigure.jms.activemq.ActiveMQAutoConfigura
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+
+import java.util.Arrays;
 
 /**
  * READ THESE LINKS to understant @SpringBootApplication:
@@ -32,8 +38,24 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
         SecurityAutoConfiguration.class,
         ManagementWebSecurityAutoConfiguration.class})
 @EnableTransactionManagement
-public class ChatbotApplication {
+public class ChatbotApplication implements ApplicationRunner {
+    protected static final Logger LOGGER = LoggerFactory.getLogger(ChatbotApplication.class);
+    
     public static void main(String[] args) {
         SpringApplication.run(ChatbotApplication.class, args);
+    }
+
+    @Override
+    public void run(ApplicationArguments args) throws Exception {
+        LOGGER.info("Application started with command-line arguments: {}", Arrays.toString(args.getSourceArgs()));
+        LOGGER.info("NonOptionArgs: {}", args.getNonOptionArgs());
+        LOGGER.info("OptionNames: {}", args.getOptionNames());
+
+        for (String name : args.getOptionNames()){
+            LOGGER.info("arg-" + name + "=" + args.getOptionValues(name));
+        }
+
+        boolean containsOption = args.containsOption("seerchat.bottype");
+        LOGGER.info("Contains seerchat.bottype: " + containsOption);
     }
 }

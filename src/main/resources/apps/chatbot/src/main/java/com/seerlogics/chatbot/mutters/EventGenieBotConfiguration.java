@@ -3,12 +3,10 @@ package com.seerlogics.chatbot.mutters;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lingoace.common.NLPProcessingException;
 import com.rabidgremlin.mutters.bot.ink.StoryUtils;
-import com.rabidgremlin.mutters.core.Intent;
 import com.rabidgremlin.mutters.core.IntentMatcher;
 import com.rabidgremlin.mutters.opennlp.intent.OpenNLPTokenizer;
 import com.rabidgremlin.mutters.opennlp.ner.OpenNLPSlotMatcher;
-import com.seerlogics.chatbot.model.botadmin.CustomIntentUtterance;
-import com.seerlogics.chatbot.repository.botadmin.CustomPredefinedIntentRepository;
+import com.seerlogics.chatbot.repository.botadmin.IntentRepository;
 import com.seerlogics.chatbot.service.ChatDataFetchService;
 import com.seerlogics.chatbot.service.ChatNLPService;
 import opennlp.tools.sentdetect.SentenceDetectorME;
@@ -18,6 +16,7 @@ import opennlp.tools.tokenize.TokenizerME;
 import opennlp.tools.tokenize.TokenizerModel;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Component;
 
@@ -39,10 +38,22 @@ public class EventGenieBotConfiguration {
     private ChatDataFetchService chatDataFetchService;
 
     @Autowired
-    private CustomPredefinedIntentRepository customPredefinedIntentRepository;
+    private IntentRepository intentRepository;
 
     @Autowired
     private ChatNLPService chatNLPService;
+
+    /**
+     * This needs to provided as a Java arg like "-Dseerchat.bottype=EVENT_BOT"
+     */
+    @Value("${seerchat.bottype}")
+    private String botType;
+
+    /**
+     * This needs to provided as a Java arg like "-Dseerchat.botOwnerId=354243"
+     */
+    @Value("${seerchat.botOwnerId}")
+    private String botOwnerId;
 
     private IntentMatcher intentMatcher;
 
@@ -122,24 +133,14 @@ public class EventGenieBotConfiguration {
                         Float.parseFloat(botConfiguration.getNlpIntentMatcher().getMaybeMatchScore()));
 
         // List<com.seerlogics.chatbot.mutters.Intent> intents = botConfiguration.getIntents();
-        List<CustomIntentUtterance> customIntentUtterances =
-                            customPredefinedIntentRepository.findIntentsByCategoryCodeAndAccount("EVENT_BOT", "admin");
-        for (CustomIntentUtterance customIntentUtterance : customIntentUtterances) {
-            Intent currentIntent = new Intent(customIntentUtterance.getIntent());
+        List<com.seerlogics.chatbot.model.botadmin.Intent> customIntentUtterances =
+                            intentRepository.findIntentsByCodeAndType(this.botType,
+                                    com.seerlogics.chatbot.model.botadmin.Intent.INTENT_TYPE.CUSTOM.name(),
+                                    Long.parseLong(this.botOwnerId));
+        for (com.seerlogics.chatbot.model.botadmin.Intent customIntentUtterance : customIntentUtterances) {
+            Intent currentIntent = new Intent(customIntentUtterance.getIntent(), customIntentUtterance);
             matcher.addIntent(currentIntent);
-            /*List<String> slots = intent.getSlots();
-            for (String slot : slots) {
-                currentIntent.addSlot(new LiteralSlot(slot));
-            }*/
         }
-        /*for (com.seerlogics.chatbot.mutters.Intent intent : intents) {
-            Intent currentIntent = new Intent(intent.getIntent());
-            matcher.addIntent(currentIntent);
-            List<String> slots = intent.getSlots();
-            for (String slot : slots) {
-                currentIntent.addSlot(new LiteralSlot(slot));
-            }
-        }*/
 
         this.intentMatcher = matcher;
 

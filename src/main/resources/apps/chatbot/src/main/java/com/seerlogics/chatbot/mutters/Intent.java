@@ -3,25 +3,16 @@ package com.seerlogics.chatbot.mutters;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Intent {
+public class Intent extends com.rabidgremlin.mutters.core.Intent {
 
-    private String intent;
-    private List<String> slots = new ArrayList<>();
+    private com.seerlogics.chatbot.model.botadmin.Intent dbIntent;
 
-    public String getIntent() {
-        return intent;
+    public Intent(String name, com.seerlogics.chatbot.model.botadmin.Intent dbIntent) {
+        super(name);
+        this.dbIntent = dbIntent;
     }
 
-    public void setIntent(String intent) {
-        this.intent = intent;
+    public com.seerlogics.chatbot.model.botadmin.Intent getDbIntent() {
+        return dbIntent;
     }
-
-    public List<String> getSlots() {
-        return slots;
-    }
-
-    public void setSlots(List<String> slots) {
-        this.slots = slots;
-    }
-
 }
