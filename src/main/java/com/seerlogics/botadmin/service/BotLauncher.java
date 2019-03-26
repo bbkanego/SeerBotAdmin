@@ -212,11 +212,12 @@ public class BotLauncher {
              * 2. Profile of the chatbot
              * 3. Category Type of the bot.
              */
-            String args = "-Dspring.profiles.active=local" +
-                    " --seerchat.bottype=" + launchModel.getBot().getCategory().getCode() +
+            String args1 = botBuildDir.getAbsolutePath();
+            String args2 = "-Dspring.profiles.active=local";
+            String args3 = " --seerchat.bottype=" + launchModel.getBot().getCategory().getCode() +
                     " --seerchat.botOwnerId=" + launchModel.getBot().getOwner().getId();
             File launchBotScript = ResourceUtils.getFile("classpath:" + appProperties.getLaunchBotScript());
-            RunScript.runCommandWithArgs(launchBotScript.getAbsolutePath(), botBuildDir.getAbsolutePath(), args);
+            RunScript.runCommandWithArgs(launchBotScript.getAbsolutePath(), args1, args2, args3);
 
             bot.setStatus(statusService.findByCode(Status.STATUS_CODES.LAUNCHED.name()));
             if (bot.getConfigurations().size() == 0) {

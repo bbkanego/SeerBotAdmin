@@ -10,6 +10,11 @@ This profile allows you to deploy the Bot on AWS EC2 instance and test it.
 1. Main class: com.seerlogics.botadmin.BotAdminApplication
 2. Java args: -DdepProfile=dev -DconfigLoc=/opt/installs/tomcat/8.5.9 -Dspring.profiles.active=local
 
+## How to run chatbot locally
+```
+java -jar -Dspring.profiles.active=local chatbot-0.0.1-SNAPSHOT.jar --seerchat.bottype=EVENT_BOT --seerchat.botOwnerId=2903
+```
+
 ## Possible Errors
 ```
 Error Desc: Caused by: org.hibernate.PersistentObjectException: detached entity passed to persist: com.paulsanwald.Account

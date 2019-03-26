@@ -93,6 +93,8 @@ public class EventGenieBotConfiguration {
             }
         }
 
+        LOGGER.debug("\n*********Set up tokenizer\n");
+
         OpenNLPTokenizer openNLPTokenizer = null;
         String tokenizerModel = botConfiguration.getTokenizerModel();
         if (tokenizerModel != null) {
@@ -115,6 +117,8 @@ public class EventGenieBotConfiguration {
             throw new NLPProcessingException("Config Error: No Tokenizer model defined");
         }
 
+        LOGGER.debug("\n*********Set getSlotMatcherModels\n");
+
         // use OpenNLP NER for slot matching
         List<SlotMatcherModel> slotMatcherModels = botConfiguration.getSlotMatcherModels();
         OpenNLPSlotMatcher slotMatcher = new OpenNLPSlotMatcher(openNLPTokenizer);
@@ -132,6 +136,8 @@ public class EventGenieBotConfiguration {
                         slotMatcher, Float.parseFloat(botConfiguration.getNlpIntentMatcher().getMinMatchScore()),
                         Float.parseFloat(botConfiguration.getNlpIntentMatcher().getMaybeMatchScore()));
 
+        LOGGER.debug("\n*********get customIntentUtterances\n");
+
         // List<com.seerlogics.chatbot.mutters.Intent> intents = botConfiguration.getIntents();
         List<com.seerlogics.chatbot.model.botadmin.Intent> customIntentUtterances =
                             intentRepository.findIntentsByCodeAndType(this.botType,
@@ -141,6 +147,8 @@ public class EventGenieBotConfiguration {
             Intent currentIntent = new Intent(customIntentUtterance.getIntent(), customIntentUtterance);
             matcher.addIntent(currentIntent);
         }
+
+        LOGGER.debug("\n*********Done******\n");
 
         this.intentMatcher = matcher;
 
