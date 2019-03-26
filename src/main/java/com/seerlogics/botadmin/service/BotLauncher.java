@@ -203,7 +203,7 @@ public class BotLauncher {
             RunScript.runCommand("chmod +x " + cleanBuildScript.getAbsolutePath());
             // run the clean build with 2 args.
             RunScript.runCommandWithArgs(cleanBuildScript.getAbsolutePath(),
-                            botBuildDir.getAbsolutePath(), "-Dspring.profiles.active=local");
+                            botBuildDir.getAbsolutePath(), " -DskipTests -Dspring.profiles.active=local");
 
             /**
              * Next launch the bot by going to the custom build directory.
@@ -212,10 +212,11 @@ public class BotLauncher {
              * 2. Profile of the chatbot
              * 3. Category Type of the bot.
              */
+            String args = "-Dspring.profiles.active=local" +
+                    " --seerchat.bottype=" + launchModel.getBot().getCategory().getCode() +
+                    " --seerchat.botOwnerId=" + launchModel.getBot().getOwner().getId();
             File launchBotScript = ResourceUtils.getFile("classpath:" + appProperties.getLaunchBotScript());
-            RunScript.runCommandWithArgs(launchBotScript.getAbsolutePath(), botBuildDir.getAbsolutePath(),
-                    "-Dspring.profiles.active=local",
-                    "-Dseerchat.bottype=" + launchModel.getBot().getCategory().getCode());
+            RunScript.runCommandWithArgs(launchBotScript.getAbsolutePath(), botBuildDir.getAbsolutePath(), args);
 
             bot.setStatus(statusService.findByCode(Status.STATUS_CODES.LAUNCHED.name()));
             if (bot.getConfigurations().size() == 0) {

@@ -49,6 +49,9 @@ public class BotSearchRepositoryImpl implements BotSearchRepository {
         if (StringUtils.isNotBlank(searchBots.getStatusCode())) {
             predicates.add(criteriaBuilder.equal(botRoot.get("status").get("code"), searchBots.getStatusCode()));
         }
+        if (searchBots.getOwnerAccount() != null) {
+            predicates.add(criteriaBuilder.equal(botRoot.get("owner"), searchBots.getOwnerAccount()));
+        }
 
         criteriaQuery.where(predicates.toArray(new Predicate[predicates.size()]));
         return em.createQuery(criteriaQuery).getResultList();

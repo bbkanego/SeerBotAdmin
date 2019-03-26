@@ -1,5 +1,6 @@
 package com.seerlogics.botadmin.dto;
 
+import com.seerlogics.botadmin.model.Account;
 import com.seerlogics.botadmin.model.Category;
 
 /**
@@ -10,6 +11,15 @@ public class SearchBots extends BaseDto {
     private String displayName;
     private String description;
     private Category category;
+    private Account ownerAccount;
+
+    public Account getOwnerAccount() {
+        return ownerAccount;
+    }
+
+    public void setOwnerAccount(Account ownerAccount) {
+        this.ownerAccount = ownerAccount;
+    }
 
     public String getName() {
         return name;

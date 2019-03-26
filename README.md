@@ -6,6 +6,10 @@ This profile allows you run the Bot locally in dev mode and deploy the bot local
 2. AWS/Production
 This profile allows you to deploy the Bot on AWS EC2 instance and test it.
 
+## How to run application locally
+1. Main class: com.seerlogics.botadmin.BotAdminApplication
+2. Java args: -DdepProfile=dev -DconfigLoc=/opt/installs/tomcat/8.5.9 -Dspring.profiles.active=local
+
 ## Possible Errors
 ```
 Error Desc: Caused by: org.hibernate.PersistentObjectException: detached entity passed to persist: com.paulsanwald.Account

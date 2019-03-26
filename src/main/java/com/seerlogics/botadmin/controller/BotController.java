@@ -3,6 +3,7 @@ package com.seerlogics.botadmin.controller;
 import com.seerlogics.botadmin.dto.LaunchModel;
 import com.seerlogics.botadmin.dto.SearchBots;
 import com.seerlogics.botadmin.event.InstanceLaunchedEvent;
+import com.seerlogics.botadmin.model.Account;
 import com.seerlogics.botadmin.model.Bot;
 import com.seerlogics.botadmin.model.Configuration;
 import com.seerlogics.botadmin.service.AccountService;
@@ -70,7 +71,7 @@ public class BotController extends BaseController implements ApplicationListener
     public LaunchModel startLaunch(@PathVariable("id") Long botId) {
         LaunchModel launchModel = new LaunchModel();
         launchModel.setBot(this.botService.getSingle(botId));
-        launchModel.getReferenceData().put("trainedModels", this.trainedModelService.getAll());
+        launchModel.getReferenceData().put("trainedModels", this.trainedModelService.findModelByOwner());
         return launchModel;
     }
 
@@ -133,6 +134,8 @@ public class BotController extends BaseController implements ApplicationListener
     @PostMapping(value = "/search")
     @ResponseBody
     public List<Bot> searchBots(@Validate("validateSearchBotsRule") @RequestBody SearchBots searchBots) {
+        Account account = accountService.getAuthenticatedUser();
+        searchBots.setOwnerAccount(account);
         return botService.findBots(searchBots);
     }
 }
