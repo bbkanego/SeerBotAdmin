@@ -33,6 +33,24 @@ public class AppProperties {
     private String instanceRole;
     private String securityGroup;
     private String runEnvironment;
+    private String botReferencebotLocation;
+    private String botArtifact;
+
+    public String getBotArtifact() {
+        return botArtifact;
+    }
+
+    public void setBotArtifact(String botArtifact) {
+        this.botArtifact = botArtifact;
+    }
+
+    public String getBotReferencebotLocation() {
+        return botReferencebotLocation;
+    }
+
+    public void setBotReferencebotLocation(String botReferencebotLocation) {
+        this.botReferencebotLocation = botReferencebotLocation;
+    }
 
     public String getKillBotScript() {
         return killBotScript;

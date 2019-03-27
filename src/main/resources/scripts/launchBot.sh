@@ -4,12 +4,17 @@ echo "======================================Launching the BOT now===============
 cd $1
 echo $M2_HOME
 echo $MAVEN_HOME
+echo "Arg 1 =" $1
+echo "Arg 2 =" $2
+echo "Arg 3 =" $3
+echo "Arg 4 =" $4
+echo "Arg 5 =" $5
 # The nohup utility makes the command passed as an argument run in the background even after you log out.
 # The & symbol, switches the program to run in the background. --server.port=8020
-cp target/chatbot-0.0.1-SNAPSHOT.jar ..
+cp target/$3 ..
 cd ..
-nohup java -jar $2 chatbot-0.0.1-SNAPSHOT.jar $3 > ~/nohup.out 2> ~/nohup.err < /dev/null &
-# java -jar -Dspring.profiles.active=local target/chatbot-0.0.1-SNAPSHOT.jar
+#example: java -jar -Dspring.profiles.active=local target/chatbot-0.0.1-SNAPSHOT.jar
+nohup java -jar $2 $3 $4 $5 > ~/nohup.out 2> ~/nohup.err < /dev/null &
 
 until [ "`curl --silent --show-error --connect-timeout 1 -I http://localhost:8099 | grep '404'`" != "" ];
 do

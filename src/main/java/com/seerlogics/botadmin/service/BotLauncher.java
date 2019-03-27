@@ -32,7 +32,6 @@ import org.springframework.util.ResourceUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.UUID;
 
 /**
  * Created by bkane on 12/30/18.
@@ -151,16 +150,14 @@ public class BotLauncher {
     private void launchBotAsyncLocal(LaunchModel launchModel) {
         TrainedModel trainedModel = trainedModelService.getSingle(launchModel.getTrainedModelId());
 
-        String folderName = UUID.randomUUID().toString();
         /**
          * Locate the reference bot which you will copy for the customer and run in a custom location.
-         * reference location: /Users/bkane/seerBots/referenceBot/chatbot
+         * reference location: ~/svn/code/java/SeerLogicsReferenceBot
          */
-        String referenceBotPath =
-                System.getProperty("user.home") + File.separator + "seerBots" + File.separator
-                                                + "referenceBot" + File.separator + "chatbot";
+        String referenceBotPath = System.getProperty("user.home") + appProperties.getBotReferencebotLocation();
+        String accountSpecificFolderName = "account_" + trainedModel.getOwner().getId();
         String botBuildDirParent = System.getProperty("user.home") + File.separator + "seerBots"
-                                    + File.separator + folderName;
+                                    + File.separator + accountSpecificFolderName;
         String botBuildDirPath = botBuildDirParent + File.separator + "chatbot";
         File botBuildDir = new File(botBuildDirPath);
         if (!botBuildDir.exists()) {
@@ -184,12 +181,16 @@ public class BotLauncher {
         LOGGER.debug("Launching the bot now >>>>>>>>>>>>>>>>>>>>>>");
 
         try {
+            /**
+             * Next create account specific model based on the trained model chosen by the customer.
+             */
             String modelCopyPath = botBuildDirPath + "/src/main/resources/nlp/models/custom/";
             String destFileName = "en-cat-eventgenie-intents-dynamic.bin";
             File destinationFile = new File(modelCopyPath + destFileName);
             // delete the existing file first.
-            destinationFile.delete();
-            FileUtils.writeByteArrayToFile(destinationFile, trainedModel.getFile());
+            if (destinationFile.delete()) {
+                FileUtils.writeByteArrayToFile(destinationFile, trainedModel.getFile());
+            }
 
             // Since this is local, only one bot can run at a time. So kill any other bots.
             File killBotScript = ResourceUtils.getFile("classpath:" + appProperties.getKillBotScript());
@@ -201,9 +202,10 @@ public class BotLauncher {
              */
             File cleanBuildScript = ResourceUtils.getFile("classpath:" + appProperties.getCleanBuildScript());
             RunScript.runCommand("chmod +x " + cleanBuildScript.getAbsolutePath());
+            String chatbotArtifact = appProperties.getBotArtifact();
             // run the clean build with 2 args.
-            RunScript.runCommandWithArgs(cleanBuildScript.getAbsolutePath(),
-                            botBuildDir.getAbsolutePath(), " -DskipTests -Dspring.profiles.active=local");
+            String buildArgs = " -Djar.finalName=" + chatbotArtifact + " -DskipTests -Dspring.profiles.active=local";
+            RunScript.runCommandWithArgs(cleanBuildScript.getAbsolutePath(), botBuildDir.getAbsolutePath(), buildArgs);
 
             /**
              * Next launch the bot by going to the custom build directory.
@@ -214,10 +216,10 @@ public class BotLauncher {
              */
             String args1 = botBuildDir.getAbsolutePath();
             String args2 = "-Dspring.profiles.active=local";
-            String args3 = " --seerchat.bottype=" + launchModel.getBot().getCategory().getCode() +
-                    " --seerchat.botOwnerId=" + launchModel.getBot().getOwner().getId();
+            String args4 = "--seerchat.bottype=" + launchModel.getBot().getCategory().getCode();
+            String args5 = "--seerchat.botOwnerId=" + launchModel.getBot().getOwner().getId();
             File launchBotScript = ResourceUtils.getFile("classpath:" + appProperties.getLaunchBotScript());
-            RunScript.runCommandWithArgs(launchBotScript.getAbsolutePath(), args1, args2, args3);
+            RunScript.runCommandWithArgs(launchBotScript.getAbsolutePath(), args1, args2, chatbotArtifact, args4, args5);
 
             bot.setStatus(statusService.findByCode(Status.STATUS_CODES.LAUNCHED.name()));
             if (bot.getConfigurations().size() == 0) {
