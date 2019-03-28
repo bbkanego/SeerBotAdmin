@@ -150,12 +150,16 @@ public class BotLauncher {
     private void launchBotAsyncLocal(LaunchModel launchModel) {
         TrainedModel trainedModel = trainedModelService.getSingle(launchModel.getTrainedModelId());
 
+        // get the bot and model to use
+        Bot bot = this.botRepository.getOne(launchModel.getBot().getId());
+
         /**
          * Locate the reference bot which you will copy for the customer and run in a custom location.
          * reference location: ~/svn/code/java/SeerLogicsReferenceBot
          */
         String referenceBotPath = System.getProperty("user.home") + appProperties.getBotReferencebotLocation();
-        String accountSpecificFolderName = "account_" + trainedModel.getOwner().getId();
+        String accountSpecificFolderName = "account_" + trainedModel.getOwner().getId() + File.separator +
+                                            "bot_" + bot.getId();
         String botBuildDirParent = System.getProperty("user.home") + File.separator + "seerBots"
                                     + File.separator + accountSpecificFolderName;
         String botBuildDirPath = botBuildDirParent + File.separator + "chatbot";
@@ -174,9 +178,6 @@ public class BotLauncher {
                 }
             }
         }
-
-        // get the bot and model to use
-        Bot bot = this.botRepository.getOne(launchModel.getBot().getId());
 
         LOGGER.debug("Launching the bot now >>>>>>>>>>>>>>>>>>>>>>");
 

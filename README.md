@@ -15,12 +15,6 @@ This profile allows you to deploy the Bot on AWS EC2 instance and test it.
 java -jar -Dspring.profiles.active=local chatbot-0.0.1-SNAPSHOT.jar --seerchat.bottype=EVENT_BOT --seerchat.botOwnerId=2903
 ```
 
-## Create a Run configuration to run the reference bot in Intellij
-1. In Main class enter: com.seerlogics.chatbot.ChatbotApplication
-2. In VM Arg enter: -Dspring.profiles.active=local
-3. In Program args enter: --seerchat.bottype=EVENT_BOT --seerchat.botOwnerId=2903
-4. In "Use classpath of module" select: "SeerlogicsReferenceBot" module
-
 ## Possible Errors
 ```
 Error Desc: Caused by: org.hibernate.PersistentObjectException: detached entity passed to persist: com.paulsanwald.Account
