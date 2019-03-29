@@ -106,7 +106,7 @@ public class BotLauncher {
         try {
             // get the bot and model to use
             Bot bot = this.botRepository.getOne(id);
-            Configuration configuration = (Configuration)bot.getConfigurations().toArray()[0];
+            Configuration configuration = (Configuration) bot.getConfigurations().toArray()[0];
             // kill the bot
             File killBotScript = ResourceUtils.getFile("classpath:" + appProperties.getKillBotScript());
             RunScript.runCommand(killBotScript.getAbsolutePath());
@@ -145,6 +145,7 @@ public class BotLauncher {
 
     /**
      * https://stackoverflow.com/questions/21059085/how-can-i-create-a-file-in-the-current-users-home-directory-using-java
+     *
      * @param launchModel
      */
     private void launchBotAsyncLocal(LaunchModel launchModel) {
@@ -159,24 +160,28 @@ public class BotLauncher {
          */
         String referenceBotPath = System.getProperty("user.home") + appProperties.getBotReferencebotLocation();
         String accountSpecificFolderName = "account_" + trainedModel.getOwner().getId() + File.separator +
-                                            "bot_" + bot.getId();
-        String botBuildDirParent = System.getProperty("user.home") + File.separator + "seerBots"
-                                    + File.separator + accountSpecificFolderName;
-        String botBuildDirPath = botBuildDirParent + File.separator + "chatbot";
-        File botBuildDir = new File(botBuildDirPath);
-        if (!botBuildDir.exists()) {
-            if (botBuildDir.mkdirs()) {
-                LOGGER.debug(">>>> Directory created: " + botBuildDir.getAbsolutePath());
-                // copy reference bot to the temp dir
-                File srcDir = new File(referenceBotPath);
-                File destDir = new File(botBuildDir.getAbsolutePath());
-                try {
+                "bot_" + bot.getId();
+        String accountSpecificBotBuildDirParent = System.getProperty("user.home") + File.separator + "seerBots"
+                + File.separator + accountSpecificFolderName;
+        String accountSpecificBotBuildDirPath = accountSpecificBotBuildDirParent + File.separator + "chatbot";
+        File botBuildDir = new File(accountSpecificBotBuildDirPath);
+        try {
+            // remove existing content if any
+            if (botBuildDir.exists()) {
+                FileUtils.cleanDirectory(botBuildDir);
+            }
+            if (!botBuildDir.exists()) {
+                if (botBuildDir.mkdirs()) {
+                    LOGGER.debug(">>>> Directory created: " + botBuildDir.getAbsolutePath());
+                    // copy reference bot to the temp dir
+                    File srcDir = new File(referenceBotPath);
+                    File destDir = new File(botBuildDir.getAbsolutePath());
                     FileUtils.copyDirectory(srcDir, destDir);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                    throw new LaunchBotException(e);
                 }
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new LaunchBotException(e);
         }
 
         LOGGER.debug("Launching the bot now >>>>>>>>>>>>>>>>>>>>>>");
@@ -185,13 +190,14 @@ public class BotLauncher {
             /**
              * Next create account specific model based on the trained model chosen by the customer.
              */
-            String modelCopyPath = botBuildDirPath + "/src/main/resources/nlp/models/custom/";
-            String destFileName = "en-cat-eventgenie-intents-dynamic.bin";
+            String modelCopyPath = accountSpecificBotBuildDirPath + "/src/main/resources/nlp/models/custom/";
+            String destFileName = "en-max-ent-model.bin";
             File destinationFile = new File(modelCopyPath + destFileName);
             // delete the existing file first.
-            if (destinationFile.delete()) {
-                FileUtils.writeByteArrayToFile(destinationFile, trainedModel.getFile());
+            if (destinationFile.exists()) {
+                destinationFile.delete();
             }
+            FileUtils.writeByteArrayToFile(destinationFile, trainedModel.getFile());
 
             // Since this is local, only one bot can run at a time. So kill any other bots.
             File killBotScript = ResourceUtils.getFile("classpath:" + appProperties.getKillBotScript());
@@ -229,7 +235,7 @@ public class BotLauncher {
                 configuration.setEnvironment(Status.STATUS_CODES.LAUNCHED.name());
                 configuration.setUrl("http://localhost:8099/chatbot/api/chats");
                 configuration.setPort(8099);
-                configuration.setWorkingFolder(botBuildDirParent);
+                configuration.setWorkingFolder(accountSpecificBotBuildDirParent);
                 configuration.setImageIds("localhost");
                 configuration.setInstanceIds("localhost");
                 configuration.setPublicDns("localhost");
