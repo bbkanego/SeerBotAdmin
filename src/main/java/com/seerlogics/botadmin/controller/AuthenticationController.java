@@ -1,9 +1,9 @@
 package com.seerlogics.botadmin.controller;
 
-import com.seerlogics.botadmin.config.AppProperties;
 import com.lingoace.model.AuthToken;
 import com.lingoace.model.Login;
 import com.lingoace.spring.authentication.JWTTokenProvider;
+import com.seerlogics.botadmin.config.AppProperties;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

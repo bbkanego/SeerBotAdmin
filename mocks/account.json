@@ -12,14 +12,16 @@
   },
   "userName": "admin",
   "password": "12345678",
-  "roles": [{
-    "id": 3,
-    "creationDate": "11/04/2018 12:37:00",
-    "lastUpdateDate": "11/04/2018 12:37:00",
-    "referenceData": {},
-    "code": "ADMIN",
-    "description": "This person is an admin!",
-    "role": "Administrator",
-    "entitlements": "READ,WRITE,UPDATE,DELETE"
-  }]
+  "roles": [
+    {
+      "id": 3,
+      "creationDate": "11/04/2018 12:37:00",
+      "lastUpdateDate": "11/04/2018 12:37:00",
+      "referenceData": {},
+      "code": "ADMIN",
+      "description": "This person is an admin!",
+      "role": "Administrator",
+      "entitlements": "READ,WRITE,UPDATE,DELETE"
+    }
+  ]
 }

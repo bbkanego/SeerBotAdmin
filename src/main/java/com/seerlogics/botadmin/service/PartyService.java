@@ -1,15 +1,15 @@
 package com.seerlogics.botadmin.service;
 
-import com.seerlogics.botadmin.model.Organization;
-import com.seerlogics.botadmin.model.Party;
-import com.seerlogics.botadmin.model.Person;
-import com.seerlogics.botadmin.repository.PartyRepository;
 import com.lingoace.exception.jpa.UnknownTypeException;
 import com.lingoace.spring.service.BaseServiceImpl;
+import com.seerlogics.commons.model.Organization;
+import com.seerlogics.commons.model.Party;
+import com.seerlogics.commons.model.Person;
+import com.seerlogics.commons.repository.PartyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Collection;
 
 /**

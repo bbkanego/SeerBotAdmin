@@ -6,10 +6,6 @@ package com.seerlogics.botadmin.exception;
 public class BaseRuntimeException extends RuntimeException {
     private String errorCode;
 
-    public String getErrorCode() {
-        return errorCode;
-    }
-
     /**
      * Constructs a new runtime exception with the specified detail message.
      * The cause is not initialized, and may subsequently be initialized by a
@@ -25,5 +21,9 @@ public class BaseRuntimeException extends RuntimeException {
 
     public BaseRuntimeException(String errorCode) {
         this.errorCode = errorCode;
+    }
+
+    public String getErrorCode() {
+        return errorCode;
     }
 }

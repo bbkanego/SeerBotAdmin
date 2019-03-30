@@ -38,9 +38,9 @@ public class GlobalExceptionHandler extends com.lingoace.common.GlobalExceptionH
         errorResponse.put("referenceCode", errorId);
 
         LOGGER.error("Known error occurred. ReferenceId = " + errorId +
-        "\n=================================================\n"
-        + ExceptionUtils.getStackTrace(e) +
-        "\n=================================================\n");
+                "\n=================================================\n"
+                + ExceptionUtils.getStackTrace(e) +
+                "\n=================================================\n");
 
         return errorResponse;
     }

@@ -1,5 +1,5 @@
 {
-  "searchIntents":{
+  "searchIntents": {
     "pageHeading": "Search Intents",
     "pageHeadingPredefined": "Search Predefined Intents",
     "pageHeadingCustom": "Search Custom Intents",

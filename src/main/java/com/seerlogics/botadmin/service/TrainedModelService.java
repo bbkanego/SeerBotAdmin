@@ -3,10 +3,10 @@ package com.seerlogics.botadmin.service;
 import com.lingoace.exception.nlp.TrainModelException;
 import com.lingoace.nlp.opennlp.NLPModelTrainer;
 import com.lingoace.spring.service.BaseServiceImpl;
-import com.seerlogics.botadmin.model.Intent;
-import com.seerlogics.botadmin.model.IntentUtterance;
-import com.seerlogics.botadmin.model.TrainedModel;
-import com.seerlogics.botadmin.repository.TrainedModelRepository;
+import com.seerlogics.commons.model.Intent;
+import com.seerlogics.commons.model.IntentUtterance;
+import com.seerlogics.commons.model.TrainedModel;
+import com.seerlogics.commons.repository.TrainedModelRepository;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -77,7 +77,7 @@ public class TrainedModelService extends BaseServiceImpl<TrainedModel> {
         StringBuilder buffer = new StringBuilder();
         List<Intent> intents
                 = this.intentService.findIntentsByCategoryTypeAndOwner(trainedModel.getCategory().getCode(),
-                                        trainedModel.getType());
+                trainedModel.getType());
         for (Intent currentIntent : intents) {
             Set<IntentUtterance> intentUtterances = currentIntent.getUtterances();
             int j = 0;

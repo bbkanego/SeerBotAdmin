@@ -1,8 +1,8 @@
 package com.seerlogics.botadmin.service;
 
 import com.lingoace.spring.service.BaseServiceImpl;
-import com.seerlogics.botadmin.model.*;
-import com.seerlogics.botadmin.repository.AccountRepository;
+import com.seerlogics.commons.model.*;
+import com.seerlogics.commons.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -49,7 +49,7 @@ public class AccountService extends BaseServiceImpl<Account> implements UserDeta
             account.setPassword(account.getPasswordCapture());
         }
         account.setPassword(bCryptPasswordEncoder.encode(account.getPassword()));
-        Role selectedRole = (Role)account.getRoles().toArray()[0];
+        Role selectedRole = (Role) account.getRoles().toArray()[0];
         Role matchingRole = roleService.findByCode(selectedRole.getCode());
         account.getRoles().clear();
         account.getRoles().add(matchingRole);

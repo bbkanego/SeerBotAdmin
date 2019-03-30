@@ -5,7 +5,7 @@
 
 <form-validation>
     <formset>
-        <form name="validateBotRule" classType="com.seerlogics.botadmin.model.Bot">
+        <form name="validateBotRule" classType="com.seerlogics.commons.model.Bot">
             <field id="botName" property="name" depends="required,validateMaxLength">
                 <var>
                     <var-name>maxLength</var-name>
@@ -29,7 +29,7 @@
             <field id="botSupportedLanguages" property="supportedLanguages" depends="required"/>
         </form>
 
-        <form name="validatePersonRule" classType="com.seerlogics.botadmin.model.Party">
+        <form name="validatePersonRule" classType="com.seerlogics.commons.model.Party">
             <field id="personName" property="name" depends="required,validateMaxLength">
                 <var>
                     <var-name>maxLength</var-name>
@@ -50,7 +50,7 @@
             </field>
         </form>
 
-        <form name="validateAccountRule" classType="com.seerlogics.botadmin.model.Account">
+        <form name="validateAccountRule" classType="com.seerlogics.commons.model.Account">
             <field id="userName" property="userName" depends="required,validateMaxLength">
                 <var>
                     <var-name>maxLength</var-name>
@@ -70,7 +70,7 @@
                 </var>
             </field>
             <field property="roles" classType="java.util.Set" id="roles" depends="required"/>
-            <field property="owner" classType="com.seerlogics.botadmin.model.Person" id="personOwner"
+            <field property="owner" classType="com.seerlogics.commons.model.Person" id="personOwner"
                    depends="required">
                 <arg key="label.person" position="0"/>
                 <field property="firstName" id="personOwner_firstName" depends="required,validateMaxLength">
@@ -87,7 +87,8 @@
                         <var-value>50</var-value>
                     </var>
                 </field>
-                <field property="contactModes" classType="java.util.Set" id="personOwner_contactModes" depends="required">
+                <field property="contactModes" classType="java.util.Set" id="personOwner_contactModes"
+                       depends="required">
                     <arg key="label.utterances" position="0"/>
                     <field property="street" id="personOwner_contactModes_street" depends="required,validateMaxLength">
                         <arg key="label.street" position="0"/>
@@ -121,7 +122,7 @@
             </field>
         </form>
 
-        <form name="validateIntentRule" classType="com.seerlogics.botadmin.model.Intent">
+        <form name="validateIntentRule" classType="com.seerlogics.commons.model.Intent">
             <field id="intent" property="intent" depends="required,validateMaxLength">
                 <var>
                     <var-name>maxLength</var-name>
@@ -172,7 +173,7 @@
             <field id="intentCat" property="category" depends="required"/>
         </form>
 
-        <form name="validateTrainModelRule" classType="com.seerlogics.botadmin.model.TrainedModel">
+        <form name="validateTrainModelRule" classType="com.seerlogics.commons.model.TrainedModel">
             <field id="modelName" property="name" depends="required,validateMaxLength">
                 <var>
                     <var-name>maxLength</var-name>
@@ -189,16 +190,16 @@
             <field id="modelType" property="type" depends="required"/>
         </form>
 
-        <form name="validateLaunchBotRule" classType="com.seerlogics.botadmin.dto.LaunchModel">
+        <form name="validateLaunchBotRule" classType="com.seerlogics.commons.dto.LaunchModel">
             <field id="botToLaunch" property="bot" depends="required"/>
             <field id="modelToUse" property="trainedModelId" depends="required,validateLong"/>
         </form>
 
-        <form name="validateSearchIntentRule" classType="com.seerlogics.botadmin.dto.SearchIntents">
+        <form name="validateSearchIntentRule" classType="com.seerlogics.commons.dto.SearchIntents">
             <field id="intentCategory" property="category" depends="required"/>
         </form>
 
-        <form name="validateSearchBotsRule" classType="com.seerlogics.botadmin.dto.SearchBots">
+        <form name="validateSearchBotsRule" classType="com.seerlogics.commons.dto.SearchBots">
             <field id="botCategory" property="category" depends="required"/>
         </form>
 

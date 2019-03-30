@@ -1,10 +1,10 @@
 package com.seerlogics.botadmin.controller;
 
-import com.seerlogics.botadmin.model.TrainedModel;
-import com.seerlogics.botadmin.service.TrainedModelService;
 import com.lingoace.spring.controller.BaseController;
 import com.lingoace.spring.controller.CrudController;
 import com.lingoace.validation.Validate;
+import com.seerlogics.botadmin.service.TrainedModelService;
+import com.seerlogics.commons.model.TrainedModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;

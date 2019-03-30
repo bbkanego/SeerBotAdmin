@@ -1,12 +1,5 @@
-package com.seerlogics.botadmin;
+package com.seerlogics.botadmin.config;
 
-import com.seerlogics.botadmin.exception.GlobalExceptionHandler;
-import com.seerlogics.cloud.ManageDataStore;
-import com.seerlogics.cloud.ManageInstance;
-import com.seerlogics.cloud.ManageLoadBalancer;
-import com.seerlogics.cloud.aws.ec2.ManageInstanceImpl;
-import com.seerlogics.cloud.aws.elb.ManageLoadBalancerImpl;
-import com.seerlogics.cloud.aws.s3.ManageDataStoreImpl;
 import com.lingoace.cms.CmsClasspathResourceBootstraper;
 import com.lingoace.cms.CmsResource;
 import com.lingoace.common.ExposedResourceMessageBundleSource;
@@ -17,6 +10,12 @@ import com.lingoace.validation.ValidationHandler;
 import com.lingoace.validation.ValidationHandlerImpl;
 import com.lingoace.validation.ValidatorFactory;
 import com.lingoace.validation.ValidatorFactoryImpl;
+import com.seerlogics.cloud.ManageDataStore;
+import com.seerlogics.cloud.ManageInstance;
+import com.seerlogics.cloud.ManageLoadBalancer;
+import com.seerlogics.cloud.aws.ec2.ManageInstanceImpl;
+import com.seerlogics.cloud.aws.elb.ManageLoadBalancerImpl;
+import com.seerlogics.cloud.aws.s3.ManageDataStoreImpl;
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

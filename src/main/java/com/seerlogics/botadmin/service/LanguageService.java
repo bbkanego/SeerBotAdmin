@@ -1,12 +1,12 @@
 package com.seerlogics.botadmin.service;
 
-import com.seerlogics.botadmin.model.Language;
-import com.seerlogics.botadmin.repository.LanguageRepository;
 import com.lingoace.spring.service.BaseServiceImpl;
+import com.seerlogics.commons.model.Language;
+import com.seerlogics.commons.repository.LanguageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import org.springframework.transaction.annotation.Transactional;
+
 import java.util.Collection;
 import java.util.List;
 

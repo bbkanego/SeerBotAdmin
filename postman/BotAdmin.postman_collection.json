@@ -1,1749 +1,1749 @@
 {
-	"info": {
-		"_postman_id": "7985f158-0308-f735-f0db-f42a7bf824f0",
-		"name": "BotAdmin",
-		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
-	},
-	"item": [
-		{
-			"name": "intents",
-			"item": [
-				{
-					"name": "Create Predefined Intents",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{BearerKey}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "[\n\t{\n\t\t\"intent\": \"SearchCreditCardsDeals\",\n\t\t\"utterance\": \"credit card deals\",\n\t\t\"category\": {\n\t        \"id\": 15,\n\t        \"creationDate\": \"11/15/2018 01:12:46\",\n\t        \"lastUpdateDate\": \"11/15/2018 01:12:46\",\n\t        \"referenceData\": {},\n\t        \"code\": \"CREDIT_CARD_BOT\",\n\t        \"name\": \"Credit Card Bot\",\n\t        \"description\": \"Credit Card Bot\"\n\t    }\n\t},\n\t{\n\t\t\"intent\": \"SearchCreditCardsDeals\",\n\t\t\"utterance\": \"new credit card deals\",\n\t\t\"category\": {\n\t        \"id\": 15,\n\t        \"creationDate\": \"11/15/2018 01:12:46\",\n\t        \"lastUpdateDate\": \"11/15/2018 01:12:46\",\n\t        \"referenceData\": {},\n\t        \"code\": \"CREDIT_CARD_BOT\",\n\t        \"name\": \"Credit Card Bot\",\n\t        \"description\": \"Credit Card Bot\"\n\t    }\n\t}\n]"
-						},
-						"url": {
-							"raw": "http://localhost:8091/api/v1/predefined-intent/save-all",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"api",
-								"v1",
-								"predefined-intent",
-								"save-all"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Predefined Intents",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{BearerKey}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "http://localhost:8091/api/v1/predefined-intent",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"api",
-								"v1",
-								"predefined-intent"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Predefined By Id",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{BearerKey}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "http://localhost:8091/api/v1/predefined-intent/24",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"api",
-								"v1",
-								"predefined-intent",
-								"24"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Predefined Init",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{BearerKey}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "http://localhost:8091/api/v1/predefined-intent/init",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"api",
-								"v1",
-								"predefined-intent",
-								"init"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Search Intents Init",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{BearerKey}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "http://localhost:8091/api/v1/predefined-intent/search/init",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"api",
-								"v1",
-								"predefined-intent",
-								"search",
-								"init"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Copy Standard Intents",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{BearerKey}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "http://localhost:8091/api/v1/custom-intent/copy-standard-intents/EVENT_BOT",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"api",
-								"v1",
-								"custom-intent",
-								"copy-standard-intents",
-								"EVENT_BOT"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Search Intents",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{BearerKey}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"referenceData\": {\n        \"categories\": [\n            {\n                \"id\": 1,\n                \"creationDate\": \"01/28/2019 04:35:17\",\n                \"lastUpdateDate\": \"01/28/2019 04:35:17\",\n                \"referenceData\": {},\n                \"code\": \"SALES_APP\",\n                \"name\": \"Sales App\",\n                \"description\": \"Sales Application\"\n            },\n            {\n                \"id\": 2,\n                \"creationDate\": \"01/28/2019 04:35:58\",\n                \"lastUpdateDate\": \"01/28/2019 04:35:58\",\n                \"referenceData\": {},\n                \"code\": \"MED_BOT\",\n                \"name\": \"Medical Practise Bot\",\n                \"description\": \"Medical Practise Bot\"\n            },\n            {\n                \"id\": 3,\n                \"creationDate\": \"01/28/2019 04:36:39\",\n                \"lastUpdateDate\": \"01/28/2019 04:36:39\",\n                \"referenceData\": {},\n                \"code\": \"DENTAL_PRACTISE_BOT\",\n                \"name\": \"Dental Practise Bot\",\n                \"description\": \"Dental Practise Bot\"\n            },\n            {\n                \"id\": 4,\n                \"creationDate\": \"01/28/2019 04:37:55\",\n                \"lastUpdateDate\": \"01/28/2019 04:37:55\",\n                \"referenceData\": {},\n                \"code\": \"EVENT_BOT\",\n                \"name\": \"Event Management Bot\",\n                \"description\": \"Event Management Bot\"\n            }\n        ]\n    },\n    \"intentName\": \"SearchEvents\",\n    \"utterance\": \"\",\n    \"category\": {\n                \"id\": 4,\n                \"creationDate\": \"01/28/2019 04:37:55\",\n                \"lastUpdateDate\": \"01/28/2019 04:37:55\",\n                \"referenceData\": {},\n                \"code\": \"EVENT_BOT\",\n                \"name\": \"Event Management Bot\",\n                \"description\": \"Event Management Bot\"\n            },\n    \"searchResults\": []\n}"
-						},
-						"url": {
-							"raw": "http://localhost:8091/api/v1/predefined-intent/search",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"api",
-								"v1",
-								"predefined-intent",
-								"search"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Category",
-			"item": [
-				{
-					"name": "Create Category Copy",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{BearerKey}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"code\": \"SALES_APP\",\n\t\"name\": \"Sales App\",\n\t\"description\": \"Sales Application\"\n}"
-						},
-						"url": {
-							"raw": "http://localhost:8091/api/v1/category",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"api",
-								"v1",
-								"category"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get All Categories",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "{{content-type}}"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{BearerKey}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "http://localhost:8091/api/v1/category",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"api",
-								"v1",
-								"category"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Bot",
-			"item": [
-				{
-					"name": "Get All Chatbots",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "{{content-type}}"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{BearerKey}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "http://localhost:8091/api/v1/chatbot",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"api",
-								"v1",
-								"chatbot"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Launch Chatbot Start",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{BearerKey}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "http://localhost:8091/api/v1/chatbot/launch/start/92",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"api",
-								"v1",
-								"chatbot",
-								"launch",
-								"start",
-								"92"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Launch Chatbot",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{BearerKey}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"bot\": {\n        \"type\": \"VOICE_BOT\",\n        \"id\": 92,\n        \"creationDate\": \"11/24/2018 10:02:05\",\n        \"lastUpdateDate\": \"12/10/2018 02:04:36\",\n        \"referenceData\": {\n            \"languages\": [\n                {\n                    \"id\": 17,\n                    \"creationDate\": \"11/15/2018 01:14:32\",\n                    \"lastUpdateDate\": \"11/15/2018 01:14:32\",\n                    \"referenceData\": {},\n                    \"code\": \"en\",\n                    \"name\": \"English\",\n                    \"description\": \"US English\",\n                    \"locale\": \"en_us\"\n                },\n                {\n                    \"id\": 18,\n                    \"creationDate\": \"11/15/2018 01:14:32\",\n                    \"lastUpdateDate\": \"11/15/2018 01:14:32\",\n                    \"referenceData\": {},\n                    \"code\": \"mr\",\n                    \"name\": \"Marathi\",\n                    \"description\": \"Indian Marathi\",\n                    \"locale\": \"mr_in\"\n                },\n                {\n                    \"id\": 19,\n                    \"creationDate\": \"11/15/2018 01:14:32\",\n                    \"lastUpdateDate\": \"11/15/2018 01:14:32\",\n                    \"referenceData\": {},\n                    \"code\": \"de\",\n                    \"name\": \"German\",\n                    \"description\": \"Deutsh German\",\n                    \"locale\": \"de_de\"\n                },\n                {\n                    \"id\": 20,\n                    \"creationDate\": \"11/15/2018 01:14:32\",\n                    \"lastUpdateDate\": \"11/15/2018 01:14:32\",\n                    \"referenceData\": {},\n                    \"code\": \"el\",\n                    \"name\": \"Greek\",\n                    \"description\": \"Greek\",\n                    \"locale\": \"el_gr\"\n                }\n            ],\n            \"categories\": [\n                {\n                    \"id\": 14,\n                    \"creationDate\": \"11/15/2018 01:11:55\",\n                    \"lastUpdateDate\": \"11/15/2018 01:11:55\",\n                    \"referenceData\": {},\n                    \"code\": \"SALES_APP\",\n                    \"name\": \"Sales App\",\n                    \"description\": \"Sales Application\"\n                },\n                {\n                    \"id\": 15,\n                    \"creationDate\": \"11/15/2018 01:12:46\",\n                    \"lastUpdateDate\": \"11/15/2018 01:12:46\",\n                    \"referenceData\": {},\n                    \"code\": \"CREDIT_CARD_BOT\",\n                    \"name\": \"Credit Card Bot\",\n                    \"description\": \"Credit Card Bot\"\n                },\n                {\n                    \"id\": 16,\n                    \"creationDate\": \"11/15/2018 01:13:13\",\n                    \"lastUpdateDate\": \"11/15/2018 01:13:13\",\n                    \"referenceData\": {},\n                    \"code\": \"DENTAL_PRACTICE\",\n                    \"name\": \"Dental Practice\",\n                    \"description\": \"Dental Practice\"\n                }\n            ]\n        },\n        \"name\": \"Credit Card Voice Bot2\",\n        \"displayName\": \"Credit Card Voice Bot2\",\n        \"description\": \"This is a dental voice bot!\",\n        \"category\": {\n            \"id\": 15,\n            \"creationDate\": \"11/15/2018 01:12:46\",\n            \"lastUpdateDate\": \"11/15/2018 01:12:46\",\n            \"referenceData\": {},\n            \"code\": \"CREDIT_CARD_BOT\",\n            \"name\": \"Credit Card Bot\",\n            \"description\": \"Credit Card Bot\"\n        },\n        \"owner\": {\n            \"id\": 8,\n            \"creationDate\": \"11/15/2018 01:00:58\",\n            \"lastUpdateDate\": \"11/15/2018 01:00:58\",\n            \"referenceData\": {},\n            \"owner\": {\n                \"type\": \"person\",\n                \"id\": 9,\n                \"creationDate\": \"11/15/2018 01:00:58\",\n                \"lastUpdateDate\": \"11/15/2018 01:00:58\",\n                \"referenceData\": {},\n                \"name\": \"Bhushan\",\n                \"contactModes\": [\n                    {\n                        \"type\": \"street_address\",\n                        \"id\": 10,\n                        \"creationDate\": \"11/15/2018 01:00:58\",\n                        \"lastUpdateDate\": \"11/15/2018 01:00:58\",\n                        \"referenceData\": {},\n                        \"street\": \"13816 Daltrey Lane\",\n                        \"city\": \"Charlotte\",\n                        \"state\": \"SC\",\n                        \"zip\": \"38277\"\n                    }\n                ],\n                \"firstName\": \"Bhushan\",\n                \"lastName\": \"Kane\"\n            },\n            \"userName\": \"admin\",\n            \"roles\": [\n                {\n                    \"id\": 7,\n                    \"creationDate\": \"11/15/2018 12:50:50\",\n                    \"lastUpdateDate\": \"11/15/2018 12:50:50\",\n                    \"referenceData\": {},\n                    \"code\": \"ADMIN\",\n                    \"description\": \"This person is an admin\",\n                    \"role\": \"Adminstrator\",\n                    \"entitlements\": \"READ,WRITE,UPDATE,DELETE,ADMIN\"\n                }\n            ]\n        },\n        \"status\": {\n            \"id\": 101,\n            \"creationDate\": \"11/25/2018 12:13:25\",\n            \"lastUpdateDate\": \"11/25/2018 12:13:25\",\n            \"referenceData\": {},\n            \"code\": \"STOPPED\",\n            \"description\": \"The Bot has been stopped\",\n            \"name\": \"Stopped\"\n        },\n        \"supportedLanguages\": [\n            {\n                \"id\": 17,\n                \"creationDate\": \"11/15/2018 01:14:32\",\n                \"lastUpdateDate\": \"11/15/2018 01:14:32\",\n                \"referenceData\": {},\n                \"code\": \"en\",\n                \"name\": \"English\",\n                \"description\": \"US English\",\n                \"locale\": \"en_us\"\n            },\n            {\n                \"id\": 18,\n                \"creationDate\": \"11/15/2018 01:14:32\",\n                \"lastUpdateDate\": \"11/15/2018 01:14:32\",\n                \"referenceData\": {},\n                \"code\": \"mr\",\n                \"name\": \"Marathi\",\n                \"description\": \"Indian Marathi\",\n                \"locale\": \"mr_in\"\n            }\n        ],\n        \"configurations\": []\n    },\n    \"trainedModelId\": \"857\"\n}"
-						},
-						"url": {
-							"raw": "http://localhost:8091/api/v1/chatbot/launch",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"api",
-								"v1",
-								"chatbot",
-								"launch"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Change bot status",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "{{content-type}}"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{BearerKey}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "http://localhost:8091/api/v1/chatbot/status/21/DRAFT",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"api",
-								"v1",
-								"chatbot",
-								"status",
-								"21",
-								"DRAFT"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Terminate Chatbot",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "{{content-type}}"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{BearerKey}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "http://localhost:8091/api/v1/chatbot/terminate",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"api",
-								"v1",
-								"chatbot",
-								"terminate"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create Chatbot",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{BearerKey}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"type\": \"chat_bot\",\n\t\"name\": \"Credit Card Voice Bot\",\n\t\"displayName\": \"Credit Card Voice Bot\",\n\t\"category\": {\n        \"id\": 45,\n        \"creationDate\": \"11/09/2018 06:43:13\",\n        \"lastUpdateDate\": \"11/09/2018 06:43:13\",\n        \"referenceData\": {},\n        \"code\": \"DENTAL_PRACTICE\",\n        \"name\": \"Detal Practice\",\n        \"description\": \"Detal Practice\"\n    },\n    \"supportedLanguages\": [\n    \t{\n        \"id\": 46,\n        \"creationDate\": \"11/11/2018 09:53:06\",\n        \"lastUpdateDate\": \"11/11/2018 09:53:06\",\n        \"referenceData\": {},\n        \"code\": \"en\",\n        \"name\": \"English\",\n        \"description\": \"US English\",\n        \"locale\": \"en_us\"\n\t    },\n\t    {\n\t        \"id\": 47,\n\t        \"creationDate\": \"11/11/2018 09:53:06\",\n\t        \"lastUpdateDate\": \"11/11/2018 09:53:06\",\n\t        \"referenceData\": {},\n\t        \"code\": \"mr\",\n\t        \"name\": \"Marathi\",\n\t        \"description\": \"Indian Marathi\",\n\t        \"locale\": \"mr_in\"\n\t    }\n    ],\n\t\"description\": \"This is a dental voice bot!\"\n}"
-						},
-						"url": {
-							"raw": "http://localhost:8091/api/v1/chatbot",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"api",
-								"v1",
-								"chatbot"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Delete Bot",
-					"request": {
-						"method": "DELETE",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{BearerKey}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "http://localhost:8091/api/v1/chatbot/97",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"api",
-								"v1",
-								"chatbot",
-								"97"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create Bot with Config",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{BearerKey}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"type\": \"voice_bot\",\n\t\"name\": \"Credit Card Voice Bot3\",\n\t\"displayName\": \"Credit Card Voice Bot3\",\n\t\"configurations\": [\n\t\t{\n\t\t\t\"port\": 8080,\n\t\t\t\"url\": \"http://localhost:8080/test/me/here\",\n\t\t\t\"environment\": \"UAT\"\n\t\t},\n\t\t{\n\t\t\t\"port\": 8081,\n\t\t\t\"url\": \"http://localhost:8080/test/me/here\",\n\t\t\t\"environment\": \"DEV\"\n\t\t}\n\t],\n\t\"status\": {\n        \"id\": 70,\n        \"creationDate\": \"11/21/2018 02:12:37\",\n        \"lastUpdateDate\": \"11/21/2018 02:12:37\",\n        \"referenceData\": {},\n        \"code\": \"DEV\",\n        \"description\": \"In Dev\",\n        \"name\": \"In Development\"\n    },\n\t\"category\": {\n        \"id\": 15,\n        \"creationDate\": \"11/15/2018 01:12:46\",\n        \"lastUpdateDate\": \"11/15/2018 01:12:46\",\n        \"referenceData\": {},\n        \"code\": \"CREDIT_CARD_BOT\",\n        \"name\": \"Credit Card Bot\",\n        \"description\": \"Credit Card Bot\"\n    },\n    \"supportedLanguages\": [\n    \t{\n        \"id\": 17,\n        \"creationDate\": \"11/15/2018 01:14:32\",\n        \"lastUpdateDate\": \"11/15/2018 01:14:32\",\n        \"referenceData\": {},\n        \"code\": \"en\",\n        \"name\": \"English\",\n        \"description\": \"US English\",\n        \"locale\": \"en_us\"\n\t    },\n\t    {\n\t        \"id\": 18,\n\t        \"creationDate\": \"11/15/2018 01:14:32\",\n\t        \"lastUpdateDate\": \"11/15/2018 01:14:32\",\n\t        \"referenceData\": {},\n\t        \"code\": \"mr\",\n\t        \"name\": \"Marathi\",\n\t        \"description\": \"Indian Marathi\",\n\t        \"locale\": \"mr_in\"\n\t    }\n    ],\n\t\"description\": \"This is a dental voice bot!\"\n}"
-						},
-						"url": {
-							"raw": "http://localhost:8091/api/v1/chatbot",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"api",
-								"v1",
-								"chatbot"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Init Chatbot",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "{{content-type}}"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{BearerKey}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "http://localhost:8091/api/v1/chatbot/init/voice_bot",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"api",
-								"v1",
-								"chatbot",
-								"init",
-								"voice_bot"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Init Bot",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "http://localhost:8091/api/v1/chatbot/init",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"api",
-								"v1",
-								"chatbot",
-								"init"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Bots",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "{{content-type}}"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{BearerKey}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "http://localhost:8091/api/v1/chatbot",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"api",
-								"v1",
-								"chatbot"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Search Bots Init",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "{{content-type}}"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{BearerKey}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "http://localhost:8091/api/v1/chatbot/search/init",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"api",
-								"v1",
-								"chatbot",
-								"search",
-								"init"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Search Bots",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{BearerKey}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"referenceData\": {\n        \"category\": [\n            {\n                \"id\": 1,\n                \"creationDate\": \"01/28/2019 04:35:17\",\n                \"lastUpdateDate\": \"01/28/2019 04:35:17\",\n                \"referenceData\": {},\n                \"code\": \"SALES_APP\",\n                \"name\": \"Sales App\",\n                \"description\": \"Sales Application\"\n            },\n            {\n                \"id\": 2,\n                \"creationDate\": \"01/28/2019 04:35:58\",\n                \"lastUpdateDate\": \"01/28/2019 04:35:58\",\n                \"referenceData\": {},\n                \"code\": \"MED_BOT\",\n                \"name\": \"Medical Practise Bot\",\n                \"description\": \"Medical Practise Bot\"\n            },\n            {\n                \"id\": 3,\n                \"creationDate\": \"01/28/2019 04:36:39\",\n                \"lastUpdateDate\": \"01/28/2019 04:36:39\",\n                \"referenceData\": {},\n                \"code\": \"DENTAL_PRACTISE_BOT\",\n                \"name\": \"Dental Practise Bot\",\n                \"description\": \"Dental Practise Bot\"\n            },\n            {\n                \"id\": 4,\n                \"creationDate\": \"01/28/2019 04:37:55\",\n                \"lastUpdateDate\": \"01/28/2019 04:37:55\",\n                \"referenceData\": {},\n                \"code\": \"EVENT_BOT\",\n                \"name\": \"Event Management Bot\",\n                \"description\": \"Event Management Bot\"\n            }\n        ]\n    },\n    \"searchResults\": [],\n    \"name\": null,\n    \"displayName\": null,\n    \"description\": null,\n    \"category\": {\n                \"id\": 4,\n                \"creationDate\": \"01/28/2019 04:37:55\",\n                \"lastUpdateDate\": \"01/28/2019 04:37:55\",\n                \"referenceData\": {},\n                \"code\": \"EVENT_BOT\",\n                \"name\": \"Event Management Bot\",\n                \"description\": \"Event Management Bot\"\n            }\n}"
-						},
-						"url": {
-							"raw": "http://localhost:8091/api/v1/chatbot/search",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"api",
-								"v1",
-								"chatbot",
-								"search"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Person",
-			"item": [
-				{
-					"name": "Ceate Person",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{BearerKey}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"type\": \"person\",\n\t\"firstName\": \"\",\n\t\"lastName\": \"Spellman\",\n\t\"contactModes\": [{\n\t\t\"type\": \"street_address\",\n\t\t\"street\": \"13812 Daltrey Lane\",\n\t\t\"city\": \"Charlotte\",\n\t\t\"state\": \"North Carolina\",\n\t\t\"zip\": \"28277\"\n\t}]\n}"
-						},
-						"url": {
-							"raw": "http://localhost:8091/api/v1/party",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"api",
-								"v1",
-								"party"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Person",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "{{content-type}}"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{BearerKey}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "http://localhost:8091/api/v1/party",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"api",
-								"v1",
-								"party"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Init Person",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "{{content-type}}"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{BearerKey}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "http://localhost:8091/api/v1/party/init/organization",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"api",
-								"v1",
-								"party",
-								"init",
-								"organization"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "languages",
-			"item": [
-				{
-					"name": "Create Languages",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{BearerKey}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "[\n\t{\n\t\t\"name\": \"English\",\n\t\t\"code\": \"en\",\n\t\t\"description\": \"US English\",\n\t\t\"locale\": \"en_us\"\n\t},\n\t{\n\t\t\"name\": \"Marathi\",\n\t\t\"code\": \"mr\",\n\t\t\"description\": \"Indian Marathi\",\n\t\t\"locale\": \"mr_IN\"\n\t},\n\t{\n\t\t\"name\": \"German\",\n\t\t\"code\": \"de\",\n\t\t\"description\": \"Deutsh German\",\n\t\t\"locale\": \"de_DE\"\n\t},\n\t{\n\t\t\"name\": \"Greek\",\n\t\t\"code\": \"el\",\n\t\t\"description\": \"Greek\",\n\t\t\"locale\": \"el_GR\"\n\t}\n]"
-						},
-						"url": {
-							"raw": "http://localhost:8091/api/v1/lang/save-all",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"api",
-								"v1",
-								"lang",
-								"save-all"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Languages",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{BearerKey}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "http://localhost:8091/api/v1/lang",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"api",
-								"v1",
-								"lang"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Roles",
-			"item": [
-				{
-					"name": "Create Role",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "{{content-type}}"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{BearerKey}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"code\": \"ADMIN\",\n\t\"role\": \"Adminstrator\",\n\t\"entitlements\": \"READ,WRITE,UPDATE,DELETE,ADMIN\",\n\t\"description\": \"This person is an admin\"\n}"
-						},
-						"url": {
-							"raw": "http://localhost:8091/api/v1/role",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"api",
-								"v1",
-								"role"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Roles",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "{{content-type}}"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{BearerKey}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "http://localhost:8091/api/v1/role",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"api",
-								"v1",
-								"role"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Accounts",
-			"item": [
-				{
-					"name": "Get Accounts",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "{{content-type}}"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{BearerKey}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "http://localhost:8091/api/v1/account",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"api",
-								"v1",
-								"account"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Accounts ById",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "{{content-type}}"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{BearerKey}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "http://localhost:8091/api/v1/account/6",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"api",
-								"v1",
-								"account",
-								"6"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Accounts ByUserName",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "{{content-type}}"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{BearerKey}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "http://localhost:8091/api/v1/account/username/admin",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"api",
-								"v1",
-								"account",
-								"username",
-								"admin"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Create ADMIN Account",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"owner\": {\n        \"type\": \"person\",\n        \"name\": \"Bhushan\",\n        \"contactModes\": [\n            {\n                \"type\": \"street_address\",\n                \"street\": \"13816 Daltrey Lane\",\n                \"city\": \"Charlotte\",\n                \"state\": \"SC\",\n                \"zip\": \"38277\"\n            }\n        ],\n        \"firstName\": \"Bhushan\",\n        \"lastName\": \"Kane\"\n    },\n  \"userName\": \"admin\",\n  \"password\": \"12345678\",\n  \"roles\": [{\n        \"id\": 7,\n        \"creationDate\": \"11/15/2018 12:50:50\",\n        \"lastUpdateDate\": \"11/15/2018 12:50:50\",\n        \"referenceData\": {},\n        \"code\": \"ADMIN\",\n        \"description\": \"This person is an admin\",\n        \"role\": \"Adminstrator\",\n        \"entitlements\": \"READ,WRITE,UPDATE,DELETE,ADMIN\"\n    }]\n}"
-						},
-						"url": {
-							"raw": "http://localhost:8091/api/v1/account/signup",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"api",
-								"v1",
-								"account",
-								"signup"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Status",
-			"item": [
-				{
-					"name": "Create Status'",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{BearerKey}}",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "[\n\t{\n\t\t\"code\": \"STOPPED\",\n\t\t\"name\": \"Stopped\",\n\t\t\"description\": \"The Bot has been stopped\"\n\t},\n\t{\n\t\t\"code\": \"DRAFT\",\n\t\t\"name\": \"Draft\",\n\t\t\"description\": \"The Bot in Draft Status\"\n\t},\n\t{\n\t\t\"code\": \"LAUNCHED\",\n\t\t\"name\": \"Launched\",\n\t\t\"description\": \"The Bot in Launched Status\"\n\t},\n\t{\n\t\t\"code\": \"DEV\",\n\t\t\"name\": \"Development\",\n\t\t\"description\": \"The Bot in Development Status\"\n\t},\n\t{\n\t\t\"code\": \"UAT\",\n\t\t\"name\": \"User Acceptance Testing\",\n\t\t\"description\": \"The Bot in UAT Status\"\n\t}\n]"
-						},
-						"url": {
-							"raw": "http://localhost:8091/api/v1/status/save-all",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"api",
-								"v1",
-								"status",
-								"save-all"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get Status",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "{{content-type}}"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{BearerKey}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "http://localhost:8091/api/v1/status",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"api",
-								"v1",
-								"status"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "General",
-			"item": [
-				{
-					"name": "Validation Rule",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "{{content-type}}"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{BearerKey}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "http://localhost:8091/metadata/validation/validateBotRule",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"metadata",
-								"validation",
-								"validateBotRule"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get All Messages",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "{{content-type}}"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{BearerKey}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "http://localhost:8091/metadata/messages",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"metadata",
-								"messages"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get All CMS Content",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "{{content-type}}"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{BearerKey}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "http://localhost:8091/api/cms/all-content",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"api",
-								"cms",
-								"all-content"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Login",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\"userName\": \"admin\", \"password\": \"12345678\"}"
-						},
-						"url": {
-							"raw": "http://localhost:8091/api/doLogin",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"api",
-								"doLogin"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Generate Token",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n  \"userName\": \"admin\",\n  \"password\": \"12345678\"\n}"
-						},
-						"url": {
-							"raw": "http://localhost:8091/api/v1/auth/generate-token",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"api",
-								"v1",
-								"auth",
-								"generate-token"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Model",
-			"item": [
-				{
-					"name": "Train Model",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{BearerKey}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"name\": \"Trained Category Model2\",\n\t\"description\": \"Trained Category Model2\",\n\t\"category\": {\n        \"id\": 15,\n        \"creationDate\": \"11/15/2018 01:12:46\",\n        \"lastUpdateDate\": \"11/15/2018 01:12:46\",\n        \"referenceData\": {},\n        \"code\": \"CREDIT_CARD_BOT\",\n        \"name\": \"Credit Card Bot\",\n        \"description\": \"Credit Card Bot\"\n    }\n}"
-						},
-						"url": {
-							"raw": "http://localhost:8091/api/v1/model/train/init/predefined",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"api",
-								"v1",
-								"model",
-								"train",
-								"init",
-								"predefined"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Train Model Copy",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{BearerKey}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"name\": \"Trained Category Model2\",\n\t\"description\": \"Trained Category Model2\",\n\t\"category\": {\n        \"id\": 15,\n        \"creationDate\": \"11/15/2018 01:12:46\",\n        \"lastUpdateDate\": \"11/15/2018 01:12:46\",\n        \"referenceData\": {},\n        \"code\": \"CREDIT_CARD_BOT\",\n        \"name\": \"Credit Card Bot\",\n        \"description\": \"Credit Card Bot\"\n    }\n}"
-						},
-						"url": {
-							"raw": "http://localhost:8091/api/model/v1/train",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"api",
-								"model",
-								"v1",
-								"train"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Get All Trained Models",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"type": "text",
-								"value": "application/json"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{BearerKey}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "http://localhost:8091/api/model/v1",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"api",
-								"model",
-								"v1"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Download Model",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "{{content-type}}"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{BearerKey}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "http://localhost:8091/api/model/v1/download/856",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"api",
-								"model",
-								"v1",
-								"download",
-								"856"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Write To File",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"value": "{{content-type}}"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{BearerKey}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": ""
-						},
-						"url": {
-							"raw": "http://localhost:8091/api/model/v1/write/856",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8091",
-							"path": [
-								"api",
-								"model",
-								"v1",
-								"write",
-								"856"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Chatbot_local_test",
-			"item": [
-				{
-					"name": "Get-All-Chats",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{BearerKey}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"name\": \"Trained Category Model2\",\n\t\"description\": \"Trained Category Model2\",\n\t\"category\": {\n        \"id\": 15,\n        \"creationDate\": \"11/15/2018 01:12:46\",\n        \"lastUpdateDate\": \"11/15/2018 01:12:46\",\n        \"referenceData\": {},\n        \"code\": \"CREDIT_CARD_BOT\",\n        \"name\": \"Credit Card Bot\",\n        \"description\": \"Credit Card Bot\"\n    }\n}"
-						},
-						"url": {
-							"raw": "http://localhost:8099/chatbot/api/chats",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8099",
-							"path": [
-								"chatbot",
-								"api",
-								"chats"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Chat-Initiate",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{BearerKey}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"message\": \"Initiate\",\n\t\"accountId\": \"ChatBot2323\",\n\t\"chatSessionId\": \"dsfdsf234adsasdasd23sdasd\"\n}"
-						},
-						"url": {
-							"raw": "http://localhost:8099/chatbot/api/chats",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8099",
-							"path": [
-								"chatbot",
-								"api",
-								"chats"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Chat-not-initiate",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/json",
-								"type": "text"
-							},
-							{
-								"key": "Authorization",
-								"value": "{{BearerKey}}"
-							}
-						],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n\t\"message\": \"Initiate 22323\",\n\t\"accountId\": \"ChatBot 32323\",\n\t\"chatSessionId\": \"dsfdsf234adsasdasd23sdasd\"\n}"
-						},
-						"url": {
-							"raw": "http://localhost:8099/chatbot/api/chats",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8099",
-							"path": [
-								"chatbot",
-								"api",
-								"chats"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		}
-	]
+  "info": {
+    "_postman_id": "7985f158-0308-f735-f0db-f42a7bf824f0",
+    "name": "BotAdmin",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "intents",
+      "item": [
+        {
+          "name": "Create Predefined Intents",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{BearerKey}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n\t{\n\t\t\"intent\": \"SearchCreditCardsDeals\",\n\t\t\"utterance\": \"credit card deals\",\n\t\t\"category\": {\n\t        \"id\": 15,\n\t        \"creationDate\": \"11/15/2018 01:12:46\",\n\t        \"lastUpdateDate\": \"11/15/2018 01:12:46\",\n\t        \"referenceData\": {},\n\t        \"code\": \"CREDIT_CARD_BOT\",\n\t        \"name\": \"Credit Card Bot\",\n\t        \"description\": \"Credit Card Bot\"\n\t    }\n\t},\n\t{\n\t\t\"intent\": \"SearchCreditCardsDeals\",\n\t\t\"utterance\": \"new credit card deals\",\n\t\t\"category\": {\n\t        \"id\": 15,\n\t        \"creationDate\": \"11/15/2018 01:12:46\",\n\t        \"lastUpdateDate\": \"11/15/2018 01:12:46\",\n\t        \"referenceData\": {},\n\t        \"code\": \"CREDIT_CARD_BOT\",\n\t        \"name\": \"Credit Card Bot\",\n\t        \"description\": \"Credit Card Bot\"\n\t    }\n\t}\n]"
+            },
+            "url": {
+              "raw": "http://localhost:8091/api/v1/predefined-intent/save-all",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "api",
+                "v1",
+                "predefined-intent",
+                "save-all"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Predefined Intents",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{BearerKey}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8091/api/v1/predefined-intent",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "api",
+                "v1",
+                "predefined-intent"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Predefined By Id",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{BearerKey}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8091/api/v1/predefined-intent/24",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "api",
+                "v1",
+                "predefined-intent",
+                "24"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Predefined Init",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{BearerKey}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8091/api/v1/predefined-intent/init",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "api",
+                "v1",
+                "predefined-intent",
+                "init"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search Intents Init",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{BearerKey}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8091/api/v1/predefined-intent/search/init",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "api",
+                "v1",
+                "predefined-intent",
+                "search",
+                "init"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Copy Standard Intents",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{BearerKey}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8091/api/v1/custom-intent/copy-standard-intents/EVENT_BOT",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "api",
+                "v1",
+                "custom-intent",
+                "copy-standard-intents",
+                "EVENT_BOT"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search Intents",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{BearerKey}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"referenceData\": {\n        \"categories\": [\n            {\n                \"id\": 1,\n                \"creationDate\": \"01/28/2019 04:35:17\",\n                \"lastUpdateDate\": \"01/28/2019 04:35:17\",\n                \"referenceData\": {},\n                \"code\": \"SALES_APP\",\n                \"name\": \"Sales App\",\n                \"description\": \"Sales Application\"\n            },\n            {\n                \"id\": 2,\n                \"creationDate\": \"01/28/2019 04:35:58\",\n                \"lastUpdateDate\": \"01/28/2019 04:35:58\",\n                \"referenceData\": {},\n                \"code\": \"MED_BOT\",\n                \"name\": \"Medical Practise Bot\",\n                \"description\": \"Medical Practise Bot\"\n            },\n            {\n                \"id\": 3,\n                \"creationDate\": \"01/28/2019 04:36:39\",\n                \"lastUpdateDate\": \"01/28/2019 04:36:39\",\n                \"referenceData\": {},\n                \"code\": \"DENTAL_PRACTISE_BOT\",\n                \"name\": \"Dental Practise Bot\",\n                \"description\": \"Dental Practise Bot\"\n            },\n            {\n                \"id\": 4,\n                \"creationDate\": \"01/28/2019 04:37:55\",\n                \"lastUpdateDate\": \"01/28/2019 04:37:55\",\n                \"referenceData\": {},\n                \"code\": \"EVENT_BOT\",\n                \"name\": \"Event Management Bot\",\n                \"description\": \"Event Management Bot\"\n            }\n        ]\n    },\n    \"intentName\": \"SearchEvents\",\n    \"utterance\": \"\",\n    \"category\": {\n                \"id\": 4,\n                \"creationDate\": \"01/28/2019 04:37:55\",\n                \"lastUpdateDate\": \"01/28/2019 04:37:55\",\n                \"referenceData\": {},\n                \"code\": \"EVENT_BOT\",\n                \"name\": \"Event Management Bot\",\n                \"description\": \"Event Management Bot\"\n            },\n    \"searchResults\": []\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8091/api/v1/predefined-intent/search",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "api",
+                "v1",
+                "predefined-intent",
+                "search"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Category",
+      "item": [
+        {
+          "name": "Create Category Copy",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{BearerKey}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"code\": \"SALES_APP\",\n\t\"name\": \"Sales App\",\n\t\"description\": \"Sales Application\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8091/api/v1/category",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "api",
+                "v1",
+                "category"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Categories",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "{{content-type}}"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{BearerKey}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8091/api/v1/category",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "api",
+                "v1",
+                "category"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Bot",
+      "item": [
+        {
+          "name": "Get All Chatbots",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "{{content-type}}"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{BearerKey}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8091/api/v1/chatbot",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "api",
+                "v1",
+                "chatbot"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Launch Chatbot Start",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "name": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{BearerKey}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8091/api/v1/chatbot/launch/start/92",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "api",
+                "v1",
+                "chatbot",
+                "launch",
+                "start",
+                "92"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Launch Chatbot",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "name": "Content-Type",
+                "type": "text",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{BearerKey}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"bot\": {\n        \"type\": \"VOICE_BOT\",\n        \"id\": 92,\n        \"creationDate\": \"11/24/2018 10:02:05\",\n        \"lastUpdateDate\": \"12/10/2018 02:04:36\",\n        \"referenceData\": {\n            \"languages\": [\n                {\n                    \"id\": 17,\n                    \"creationDate\": \"11/15/2018 01:14:32\",\n                    \"lastUpdateDate\": \"11/15/2018 01:14:32\",\n                    \"referenceData\": {},\n                    \"code\": \"en\",\n                    \"name\": \"English\",\n                    \"description\": \"US English\",\n                    \"locale\": \"en_us\"\n                },\n                {\n                    \"id\": 18,\n                    \"creationDate\": \"11/15/2018 01:14:32\",\n                    \"lastUpdateDate\": \"11/15/2018 01:14:32\",\n                    \"referenceData\": {},\n                    \"code\": \"mr\",\n                    \"name\": \"Marathi\",\n                    \"description\": \"Indian Marathi\",\n                    \"locale\": \"mr_in\"\n                },\n                {\n                    \"id\": 19,\n                    \"creationDate\": \"11/15/2018 01:14:32\",\n                    \"lastUpdateDate\": \"11/15/2018 01:14:32\",\n                    \"referenceData\": {},\n                    \"code\": \"de\",\n                    \"name\": \"German\",\n                    \"description\": \"Deutsh German\",\n                    \"locale\": \"de_de\"\n                },\n                {\n                    \"id\": 20,\n                    \"creationDate\": \"11/15/2018 01:14:32\",\n                    \"lastUpdateDate\": \"11/15/2018 01:14:32\",\n                    \"referenceData\": {},\n                    \"code\": \"el\",\n                    \"name\": \"Greek\",\n                    \"description\": \"Greek\",\n                    \"locale\": \"el_gr\"\n                }\n            ],\n            \"categories\": [\n                {\n                    \"id\": 14,\n                    \"creationDate\": \"11/15/2018 01:11:55\",\n                    \"lastUpdateDate\": \"11/15/2018 01:11:55\",\n                    \"referenceData\": {},\n                    \"code\": \"SALES_APP\",\n                    \"name\": \"Sales App\",\n                    \"description\": \"Sales Application\"\n                },\n                {\n                    \"id\": 15,\n                    \"creationDate\": \"11/15/2018 01:12:46\",\n                    \"lastUpdateDate\": \"11/15/2018 01:12:46\",\n                    \"referenceData\": {},\n                    \"code\": \"CREDIT_CARD_BOT\",\n                    \"name\": \"Credit Card Bot\",\n                    \"description\": \"Credit Card Bot\"\n                },\n                {\n                    \"id\": 16,\n                    \"creationDate\": \"11/15/2018 01:13:13\",\n                    \"lastUpdateDate\": \"11/15/2018 01:13:13\",\n                    \"referenceData\": {},\n                    \"code\": \"DENTAL_PRACTICE\",\n                    \"name\": \"Dental Practice\",\n                    \"description\": \"Dental Practice\"\n                }\n            ]\n        },\n        \"name\": \"Credit Card Voice Bot2\",\n        \"displayName\": \"Credit Card Voice Bot2\",\n        \"description\": \"This is a dental voice bot!\",\n        \"category\": {\n            \"id\": 15,\n            \"creationDate\": \"11/15/2018 01:12:46\",\n            \"lastUpdateDate\": \"11/15/2018 01:12:46\",\n            \"referenceData\": {},\n            \"code\": \"CREDIT_CARD_BOT\",\n            \"name\": \"Credit Card Bot\",\n            \"description\": \"Credit Card Bot\"\n        },\n        \"owner\": {\n            \"id\": 8,\n            \"creationDate\": \"11/15/2018 01:00:58\",\n            \"lastUpdateDate\": \"11/15/2018 01:00:58\",\n            \"referenceData\": {},\n            \"owner\": {\n                \"type\": \"person\",\n                \"id\": 9,\n                \"creationDate\": \"11/15/2018 01:00:58\",\n                \"lastUpdateDate\": \"11/15/2018 01:00:58\",\n                \"referenceData\": {},\n                \"name\": \"Bhushan\",\n                \"contactModes\": [\n                    {\n                        \"type\": \"street_address\",\n                        \"id\": 10,\n                        \"creationDate\": \"11/15/2018 01:00:58\",\n                        \"lastUpdateDate\": \"11/15/2018 01:00:58\",\n                        \"referenceData\": {},\n                        \"street\": \"13816 Daltrey Lane\",\n                        \"city\": \"Charlotte\",\n                        \"state\": \"SC\",\n                        \"zip\": \"38277\"\n                    }\n                ],\n                \"firstName\": \"Bhushan\",\n                \"lastName\": \"Kane\"\n            },\n            \"userName\": \"admin\",\n            \"roles\": [\n                {\n                    \"id\": 7,\n                    \"creationDate\": \"11/15/2018 12:50:50\",\n                    \"lastUpdateDate\": \"11/15/2018 12:50:50\",\n                    \"referenceData\": {},\n                    \"code\": \"ADMIN\",\n                    \"description\": \"This person is an admin\",\n                    \"role\": \"Adminstrator\",\n                    \"entitlements\": \"READ,WRITE,UPDATE,DELETE,ADMIN\"\n                }\n            ]\n        },\n        \"status\": {\n            \"id\": 101,\n            \"creationDate\": \"11/25/2018 12:13:25\",\n            \"lastUpdateDate\": \"11/25/2018 12:13:25\",\n            \"referenceData\": {},\n            \"code\": \"STOPPED\",\n            \"description\": \"The Bot has been stopped\",\n            \"name\": \"Stopped\"\n        },\n        \"supportedLanguages\": [\n            {\n                \"id\": 17,\n                \"creationDate\": \"11/15/2018 01:14:32\",\n                \"lastUpdateDate\": \"11/15/2018 01:14:32\",\n                \"referenceData\": {},\n                \"code\": \"en\",\n                \"name\": \"English\",\n                \"description\": \"US English\",\n                \"locale\": \"en_us\"\n            },\n            {\n                \"id\": 18,\n                \"creationDate\": \"11/15/2018 01:14:32\",\n                \"lastUpdateDate\": \"11/15/2018 01:14:32\",\n                \"referenceData\": {},\n                \"code\": \"mr\",\n                \"name\": \"Marathi\",\n                \"description\": \"Indian Marathi\",\n                \"locale\": \"mr_in\"\n            }\n        ],\n        \"configurations\": []\n    },\n    \"trainedModelId\": \"857\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8091/api/v1/chatbot/launch",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "api",
+                "v1",
+                "chatbot",
+                "launch"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Change bot status",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "{{content-type}}"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{BearerKey}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8091/api/v1/chatbot/status/21/DRAFT",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "api",
+                "v1",
+                "chatbot",
+                "status",
+                "21",
+                "DRAFT"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Terminate Chatbot",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "{{content-type}}"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{BearerKey}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8091/api/v1/chatbot/terminate",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "api",
+                "v1",
+                "chatbot",
+                "terminate"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Chatbot",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{BearerKey}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"type\": \"chat_bot\",\n\t\"name\": \"Credit Card Voice Bot\",\n\t\"displayName\": \"Credit Card Voice Bot\",\n\t\"category\": {\n        \"id\": 45,\n        \"creationDate\": \"11/09/2018 06:43:13\",\n        \"lastUpdateDate\": \"11/09/2018 06:43:13\",\n        \"referenceData\": {},\n        \"code\": \"DENTAL_PRACTICE\",\n        \"name\": \"Detal Practice\",\n        \"description\": \"Detal Practice\"\n    },\n    \"supportedLanguages\": [\n    \t{\n        \"id\": 46,\n        \"creationDate\": \"11/11/2018 09:53:06\",\n        \"lastUpdateDate\": \"11/11/2018 09:53:06\",\n        \"referenceData\": {},\n        \"code\": \"en\",\n        \"name\": \"English\",\n        \"description\": \"US English\",\n        \"locale\": \"en_us\"\n\t    },\n\t    {\n\t        \"id\": 47,\n\t        \"creationDate\": \"11/11/2018 09:53:06\",\n\t        \"lastUpdateDate\": \"11/11/2018 09:53:06\",\n\t        \"referenceData\": {},\n\t        \"code\": \"mr\",\n\t        \"name\": \"Marathi\",\n\t        \"description\": \"Indian Marathi\",\n\t        \"locale\": \"mr_in\"\n\t    }\n    ],\n\t\"description\": \"This is a dental voice bot!\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8091/api/v1/chatbot",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "api",
+                "v1",
+                "chatbot"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Bot",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{BearerKey}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8091/api/v1/chatbot/97",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "api",
+                "v1",
+                "chatbot",
+                "97"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create Bot with Config",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{BearerKey}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"type\": \"voice_bot\",\n\t\"name\": \"Credit Card Voice Bot3\",\n\t\"displayName\": \"Credit Card Voice Bot3\",\n\t\"configurations\": [\n\t\t{\n\t\t\t\"port\": 8080,\n\t\t\t\"url\": \"http://localhost:8080/test/me/here\",\n\t\t\t\"environment\": \"UAT\"\n\t\t},\n\t\t{\n\t\t\t\"port\": 8081,\n\t\t\t\"url\": \"http://localhost:8080/test/me/here\",\n\t\t\t\"environment\": \"DEV\"\n\t\t}\n\t],\n\t\"status\": {\n        \"id\": 70,\n        \"creationDate\": \"11/21/2018 02:12:37\",\n        \"lastUpdateDate\": \"11/21/2018 02:12:37\",\n        \"referenceData\": {},\n        \"code\": \"DEV\",\n        \"description\": \"In Dev\",\n        \"name\": \"In Development\"\n    },\n\t\"category\": {\n        \"id\": 15,\n        \"creationDate\": \"11/15/2018 01:12:46\",\n        \"lastUpdateDate\": \"11/15/2018 01:12:46\",\n        \"referenceData\": {},\n        \"code\": \"CREDIT_CARD_BOT\",\n        \"name\": \"Credit Card Bot\",\n        \"description\": \"Credit Card Bot\"\n    },\n    \"supportedLanguages\": [\n    \t{\n        \"id\": 17,\n        \"creationDate\": \"11/15/2018 01:14:32\",\n        \"lastUpdateDate\": \"11/15/2018 01:14:32\",\n        \"referenceData\": {},\n        \"code\": \"en\",\n        \"name\": \"English\",\n        \"description\": \"US English\",\n        \"locale\": \"en_us\"\n\t    },\n\t    {\n\t        \"id\": 18,\n\t        \"creationDate\": \"11/15/2018 01:14:32\",\n\t        \"lastUpdateDate\": \"11/15/2018 01:14:32\",\n\t        \"referenceData\": {},\n\t        \"code\": \"mr\",\n\t        \"name\": \"Marathi\",\n\t        \"description\": \"Indian Marathi\",\n\t        \"locale\": \"mr_in\"\n\t    }\n    ],\n\t\"description\": \"This is a dental voice bot!\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8091/api/v1/chatbot",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "api",
+                "v1",
+                "chatbot"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Init Chatbot",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "{{content-type}}"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{BearerKey}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8091/api/v1/chatbot/init/voice_bot",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "api",
+                "v1",
+                "chatbot",
+                "init",
+                "voice_bot"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Init Bot",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8091/api/v1/chatbot/init",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "api",
+                "v1",
+                "chatbot",
+                "init"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Bots",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "{{content-type}}"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{BearerKey}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8091/api/v1/chatbot",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "api",
+                "v1",
+                "chatbot"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search Bots Init",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "{{content-type}}"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{BearerKey}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8091/api/v1/chatbot/search/init",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "api",
+                "v1",
+                "chatbot",
+                "search",
+                "init"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Search Bots",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "name": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{BearerKey}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"referenceData\": {\n        \"category\": [\n            {\n                \"id\": 1,\n                \"creationDate\": \"01/28/2019 04:35:17\",\n                \"lastUpdateDate\": \"01/28/2019 04:35:17\",\n                \"referenceData\": {},\n                \"code\": \"SALES_APP\",\n                \"name\": \"Sales App\",\n                \"description\": \"Sales Application\"\n            },\n            {\n                \"id\": 2,\n                \"creationDate\": \"01/28/2019 04:35:58\",\n                \"lastUpdateDate\": \"01/28/2019 04:35:58\",\n                \"referenceData\": {},\n                \"code\": \"MED_BOT\",\n                \"name\": \"Medical Practise Bot\",\n                \"description\": \"Medical Practise Bot\"\n            },\n            {\n                \"id\": 3,\n                \"creationDate\": \"01/28/2019 04:36:39\",\n                \"lastUpdateDate\": \"01/28/2019 04:36:39\",\n                \"referenceData\": {},\n                \"code\": \"DENTAL_PRACTISE_BOT\",\n                \"name\": \"Dental Practise Bot\",\n                \"description\": \"Dental Practise Bot\"\n            },\n            {\n                \"id\": 4,\n                \"creationDate\": \"01/28/2019 04:37:55\",\n                \"lastUpdateDate\": \"01/28/2019 04:37:55\",\n                \"referenceData\": {},\n                \"code\": \"EVENT_BOT\",\n                \"name\": \"Event Management Bot\",\n                \"description\": \"Event Management Bot\"\n            }\n        ]\n    },\n    \"searchResults\": [],\n    \"name\": null,\n    \"displayName\": null,\n    \"description\": null,\n    \"category\": {\n                \"id\": 4,\n                \"creationDate\": \"01/28/2019 04:37:55\",\n                \"lastUpdateDate\": \"01/28/2019 04:37:55\",\n                \"referenceData\": {},\n                \"code\": \"EVENT_BOT\",\n                \"name\": \"Event Management Bot\",\n                \"description\": \"Event Management Bot\"\n            }\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8091/api/v1/chatbot/search",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "api",
+                "v1",
+                "chatbot",
+                "search"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Person",
+      "item": [
+        {
+          "name": "Ceate Person",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{BearerKey}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"type\": \"person\",\n\t\"firstName\": \"\",\n\t\"lastName\": \"Spellman\",\n\t\"contactModes\": [{\n\t\t\"type\": \"street_address\",\n\t\t\"street\": \"13812 Daltrey Lane\",\n\t\t\"city\": \"Charlotte\",\n\t\t\"state\": \"North Carolina\",\n\t\t\"zip\": \"28277\"\n\t}]\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8091/api/v1/party",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "api",
+                "v1",
+                "party"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Person",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "{{content-type}}"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{BearerKey}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8091/api/v1/party",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "api",
+                "v1",
+                "party"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Init Person",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "{{content-type}}"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{BearerKey}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8091/api/v1/party/init/organization",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "api",
+                "v1",
+                "party",
+                "init",
+                "organization"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "languages",
+      "item": [
+        {
+          "name": "Create Languages",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{BearerKey}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n\t{\n\t\t\"name\": \"English\",\n\t\t\"code\": \"en\",\n\t\t\"description\": \"US English\",\n\t\t\"locale\": \"en_us\"\n\t},\n\t{\n\t\t\"name\": \"Marathi\",\n\t\t\"code\": \"mr\",\n\t\t\"description\": \"Indian Marathi\",\n\t\t\"locale\": \"mr_IN\"\n\t},\n\t{\n\t\t\"name\": \"German\",\n\t\t\"code\": \"de\",\n\t\t\"description\": \"Deutsh German\",\n\t\t\"locale\": \"de_DE\"\n\t},\n\t{\n\t\t\"name\": \"Greek\",\n\t\t\"code\": \"el\",\n\t\t\"description\": \"Greek\",\n\t\t\"locale\": \"el_GR\"\n\t}\n]"
+            },
+            "url": {
+              "raw": "http://localhost:8091/api/v1/lang/save-all",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "api",
+                "v1",
+                "lang",
+                "save-all"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Languages",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{BearerKey}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8091/api/v1/lang",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "api",
+                "v1",
+                "lang"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Roles",
+      "item": [
+        {
+          "name": "Create Role",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "{{content-type}}"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{BearerKey}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"code\": \"ADMIN\",\n\t\"role\": \"Adminstrator\",\n\t\"entitlements\": \"READ,WRITE,UPDATE,DELETE,ADMIN\",\n\t\"description\": \"This person is an admin\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8091/api/v1/role",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "api",
+                "v1",
+                "role"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Roles",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "{{content-type}}"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{BearerKey}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8091/api/v1/role",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "api",
+                "v1",
+                "role"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Accounts",
+      "item": [
+        {
+          "name": "Get Accounts",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "{{content-type}}"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{BearerKey}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8091/api/v1/account",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "api",
+                "v1",
+                "account"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Accounts ById",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "{{content-type}}"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{BearerKey}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8091/api/v1/account/6",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "api",
+                "v1",
+                "account",
+                "6"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Accounts ByUserName",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "{{content-type}}"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{BearerKey}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8091/api/v1/account/username/admin",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "api",
+                "v1",
+                "account",
+                "username",
+                "admin"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create ADMIN Account",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"owner\": {\n        \"type\": \"person\",\n        \"name\": \"Bhushan\",\n        \"contactModes\": [\n            {\n                \"type\": \"street_address\",\n                \"street\": \"13816 Daltrey Lane\",\n                \"city\": \"Charlotte\",\n                \"state\": \"SC\",\n                \"zip\": \"38277\"\n            }\n        ],\n        \"firstName\": \"Bhushan\",\n        \"lastName\": \"Kane\"\n    },\n  \"userName\": \"admin\",\n  \"password\": \"12345678\",\n  \"roles\": [{\n        \"id\": 7,\n        \"creationDate\": \"11/15/2018 12:50:50\",\n        \"lastUpdateDate\": \"11/15/2018 12:50:50\",\n        \"referenceData\": {},\n        \"code\": \"ADMIN\",\n        \"description\": \"This person is an admin\",\n        \"role\": \"Adminstrator\",\n        \"entitlements\": \"READ,WRITE,UPDATE,DELETE,ADMIN\"\n    }]\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8091/api/v1/account/signup",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "api",
+                "v1",
+                "account",
+                "signup"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Status",
+      "item": [
+        {
+          "name": "Create Status'",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "name": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{BearerKey}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n\t{\n\t\t\"code\": \"STOPPED\",\n\t\t\"name\": \"Stopped\",\n\t\t\"description\": \"The Bot has been stopped\"\n\t},\n\t{\n\t\t\"code\": \"DRAFT\",\n\t\t\"name\": \"Draft\",\n\t\t\"description\": \"The Bot in Draft Status\"\n\t},\n\t{\n\t\t\"code\": \"LAUNCHED\",\n\t\t\"name\": \"Launched\",\n\t\t\"description\": \"The Bot in Launched Status\"\n\t},\n\t{\n\t\t\"code\": \"DEV\",\n\t\t\"name\": \"Development\",\n\t\t\"description\": \"The Bot in Development Status\"\n\t},\n\t{\n\t\t\"code\": \"UAT\",\n\t\t\"name\": \"User Acceptance Testing\",\n\t\t\"description\": \"The Bot in UAT Status\"\n\t}\n]"
+            },
+            "url": {
+              "raw": "http://localhost:8091/api/v1/status/save-all",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "api",
+                "v1",
+                "status",
+                "save-all"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get Status",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "{{content-type}}"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{BearerKey}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8091/api/v1/status",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "api",
+                "v1",
+                "status"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "General",
+      "item": [
+        {
+          "name": "Validation Rule",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "{{content-type}}"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{BearerKey}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8091/metadata/validation/validateBotRule",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "metadata",
+                "validation",
+                "validateBotRule"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Messages",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "{{content-type}}"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{BearerKey}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8091/metadata/messages",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "metadata",
+                "messages"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All CMS Content",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "{{content-type}}"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{BearerKey}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8091/api/cms/all-content",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "api",
+                "cms",
+                "all-content"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\"userName\": \"admin\", \"password\": \"12345678\"}"
+            },
+            "url": {
+              "raw": "http://localhost:8091/api/doLogin",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "api",
+                "doLogin"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Generate Token",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"userName\": \"admin\",\n  \"password\": \"12345678\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8091/api/v1/auth/generate-token",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "api",
+                "v1",
+                "auth",
+                "generate-token"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Model",
+      "item": [
+        {
+          "name": "Train Model",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "name": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{BearerKey}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"name\": \"Trained Category Model2\",\n\t\"description\": \"Trained Category Model2\",\n\t\"category\": {\n        \"id\": 15,\n        \"creationDate\": \"11/15/2018 01:12:46\",\n        \"lastUpdateDate\": \"11/15/2018 01:12:46\",\n        \"referenceData\": {},\n        \"code\": \"CREDIT_CARD_BOT\",\n        \"name\": \"Credit Card Bot\",\n        \"description\": \"Credit Card Bot\"\n    }\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8091/api/v1/model/train/init/predefined",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "api",
+                "v1",
+                "model",
+                "train",
+                "init",
+                "predefined"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Train Model Copy",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "name": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{BearerKey}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"name\": \"Trained Category Model2\",\n\t\"description\": \"Trained Category Model2\",\n\t\"category\": {\n        \"id\": 15,\n        \"creationDate\": \"11/15/2018 01:12:46\",\n        \"lastUpdateDate\": \"11/15/2018 01:12:46\",\n        \"referenceData\": {},\n        \"code\": \"CREDIT_CARD_BOT\",\n        \"name\": \"Credit Card Bot\",\n        \"description\": \"Credit Card Bot\"\n    }\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8091/api/model/v1/train",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "api",
+                "model",
+                "v1",
+                "train"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get All Trained Models",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "name": "Content-Type",
+                "type": "text",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{BearerKey}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8091/api/model/v1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "api",
+                "model",
+                "v1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Download Model",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "{{content-type}}"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{BearerKey}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8091/api/model/v1/download/856",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "api",
+                "model",
+                "v1",
+                "download",
+                "856"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Write To File",
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "{{content-type}}"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{BearerKey}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": ""
+            },
+            "url": {
+              "raw": "http://localhost:8091/api/model/v1/write/856",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8091",
+              "path": [
+                "api",
+                "model",
+                "v1",
+                "write",
+                "856"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Chatbot_local_test",
+      "item": [
+        {
+          "name": "Get-All-Chats",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Content-Type",
+                "name": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{BearerKey}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"name\": \"Trained Category Model2\",\n\t\"description\": \"Trained Category Model2\",\n\t\"category\": {\n        \"id\": 15,\n        \"creationDate\": \"11/15/2018 01:12:46\",\n        \"lastUpdateDate\": \"11/15/2018 01:12:46\",\n        \"referenceData\": {},\n        \"code\": \"CREDIT_CARD_BOT\",\n        \"name\": \"Credit Card Bot\",\n        \"description\": \"Credit Card Bot\"\n    }\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8099/chatbot/api/chats",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8099",
+              "path": [
+                "chatbot",
+                "api",
+                "chats"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Chat-Initiate",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "name": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{BearerKey}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"message\": \"Initiate\",\n\t\"accountId\": \"ChatBot2323\",\n\t\"chatSessionId\": \"dsfdsf234adsasdasd23sdasd\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8099/chatbot/api/chats",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8099",
+              "path": [
+                "chatbot",
+                "api",
+                "chats"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Chat-not-initiate",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "name": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "{{BearerKey}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n\t\"message\": \"Initiate 22323\",\n\t\"accountId\": \"ChatBot 32323\",\n\t\"chatSessionId\": \"dsfdsf234adsasdasd23sdasd\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8099/chatbot/api/chats",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8099",
+              "path": [
+                "chatbot",
+                "api",
+                "chats"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
 }

@@ -1,5 +1,5 @@
 {
-  "maintainIntents":{
+  "maintainIntents": {
     "addIntent": {
       "pageHeadingPredefined": "Add Predefined Intent",
       "pageHeadingCustom": "Add Custom Intent",

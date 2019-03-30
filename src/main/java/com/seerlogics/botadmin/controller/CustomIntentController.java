@@ -3,11 +3,11 @@ package com.seerlogics.botadmin.controller;
 import com.lingoace.spring.controller.BaseController;
 import com.lingoace.spring.controller.CrudController;
 import com.lingoace.validation.Validate;
-import com.seerlogics.botadmin.dto.SearchIntents;
-import com.seerlogics.botadmin.model.Category;
-import com.seerlogics.botadmin.model.Intent;
 import com.seerlogics.botadmin.service.CategoryService;
 import com.seerlogics.botadmin.service.IntentService;
+import com.seerlogics.commons.dto.SearchIntents;
+import com.seerlogics.commons.model.Category;
+import com.seerlogics.commons.model.Intent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -112,7 +112,7 @@ public class CustomIntentController extends BaseController implements CrudContro
     @PostMapping("/search")
     @ResponseBody
     public List<Intent> searchIntents(@Validate("validateSearchIntentRule")
-                                                     @RequestBody SearchIntents searchIntents) {
+                                      @RequestBody SearchIntents searchIntents) {
         return customIntentService.findIntentsAndUtterances(searchIntents);
     }
 }

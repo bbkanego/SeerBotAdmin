@@ -1,14 +1,13 @@
 package com.seerlogics.botadmin.service;
 
 import com.lingoace.spring.service.BaseServiceImpl;
-import com.seerlogics.botadmin.dto.SearchIntents;
-import com.seerlogics.botadmin.model.Category;
-import com.seerlogics.botadmin.model.CustomIntentUtterance;
-import com.seerlogics.botadmin.model.PredefinedIntentUtterances;
-import com.seerlogics.botadmin.repository.CustomPredefinedIntentRepository;
+import com.seerlogics.commons.dto.SearchIntents;
+import com.seerlogics.commons.model.Category;
+import com.seerlogics.commons.model.CustomIntentUtterance;
+import com.seerlogics.commons.model.PredefinedIntentUtterances;
+import com.seerlogics.commons.repository.CustomPredefinedIntentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import org.springframework.transaction.annotation.Transactional;
 
 import java.nio.charset.StandardCharsets;

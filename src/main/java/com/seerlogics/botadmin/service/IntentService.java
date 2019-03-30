@@ -1,11 +1,14 @@
 package com.seerlogics.botadmin.service;
 
 import com.lingoace.spring.service.BaseServiceImpl;
-import com.seerlogics.botadmin.dto.SearchIntents;
 import com.seerlogics.botadmin.exception.BaseRuntimeException;
 import com.seerlogics.botadmin.exception.ErrorCodes;
-import com.seerlogics.botadmin.model.*;
-import com.seerlogics.botadmin.repository.IntentRepository;
+import com.seerlogics.commons.dto.SearchIntents;
+import com.seerlogics.commons.model.Category;
+import com.seerlogics.commons.model.Intent;
+import com.seerlogics.commons.model.IntentResponse;
+import com.seerlogics.commons.model.IntentUtterance;
+import com.seerlogics.commons.repository.IntentRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

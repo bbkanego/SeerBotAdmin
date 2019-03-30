@@ -2,16 +2,10 @@ package com.seerlogics.botadmin.service;
 
 import com.lingoace.util.RunScript;
 import com.seerlogics.botadmin.config.AppProperties;
-import com.seerlogics.botadmin.dto.LaunchModel;
 import com.seerlogics.botadmin.event.InstanceLaunchedEvent;
 import com.seerlogics.botadmin.event.InstanceRestartedEvent;
 import com.seerlogics.botadmin.event.InstanceStoppedEvent;
 import com.seerlogics.botadmin.exception.LaunchBotException;
-import com.seerlogics.botadmin.model.Bot;
-import com.seerlogics.botadmin.model.Configuration;
-import com.seerlogics.botadmin.model.Status;
-import com.seerlogics.botadmin.model.TrainedModel;
-import com.seerlogics.botadmin.repository.BotRepository;
 import com.seerlogics.cloud.BucketConfiguration;
 import com.seerlogics.cloud.ManageDataStore;
 import com.seerlogics.cloud.ManageInstance;
@@ -19,6 +13,12 @@ import com.seerlogics.cloud.ManageLoadBalancer;
 import com.seerlogics.cloud.aws.ec2.AwsInstanceConfiguration;
 import com.seerlogics.cloud.aws.elb.AwsLoadBalancerConfiguration;
 import com.seerlogics.cloud.aws.model.LaunchLoadBalancerResult;
+import com.seerlogics.commons.dto.LaunchModel;
+import com.seerlogics.commons.model.Bot;
+import com.seerlogics.commons.model.Configuration;
+import com.seerlogics.commons.model.Status;
+import com.seerlogics.commons.model.TrainedModel;
+import com.seerlogics.commons.repository.BotRepository;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -31,7 +31,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ResourceUtils;
 
 import java.io.File;
-import java.io.IOException;
 
 /**
  * Created by bkane on 12/30/18.
@@ -188,8 +187,9 @@ public class BotLauncher {
 
         try {
             /**
+             * todo remove.
              * Next create account specific model based on the trained model chosen by the customer.
-             */
+             *//*
             String modelCopyPath = accountSpecificBotBuildDirPath + "/src/main/resources/nlp/models/custom/";
             String destFileName = "en-max-ent-model.bin";
             File destinationFile = new File(modelCopyPath + destFileName);
@@ -197,7 +197,7 @@ public class BotLauncher {
             if (destinationFile.exists()) {
                 destinationFile.delete();
             }
-            FileUtils.writeByteArrayToFile(destinationFile, trainedModel.getFile());
+            FileUtils.writeByteArrayToFile(destinationFile, trainedModel.getFile());*/
 
             // Since this is local, only one bot can run at a time. So kill any other bots.
             File killBotScript = ResourceUtils.getFile("classpath:" + appProperties.getKillBotScript());
@@ -225,8 +225,11 @@ public class BotLauncher {
             String args2 = "-Dspring.profiles.active=local";
             String args4 = "--seerchat.bottype=" + launchModel.getBot().getCategory().getCode();
             String args5 = "--seerchat.botOwnerId=" + launchModel.getBot().getOwner().getId();
+            String args6 = "--seerchat.botId=" + launchModel.getBot().getId();
+            String args7 = "--seerchat.trainedModelId=" + launchModel.getTrainedModelId();
             File launchBotScript = ResourceUtils.getFile("classpath:" + appProperties.getLaunchBotScript());
-            RunScript.runCommandWithArgs(launchBotScript.getAbsolutePath(), args1, args2, chatbotArtifact, args4, args5);
+            RunScript.runCommandWithArgs(launchBotScript.getAbsolutePath(), args1, args2, chatbotArtifact,
+                                        args4, args5, args6, args7);
 
             bot.setStatus(statusService.findByCode(Status.STATUS_CODES.LAUNCHED.name()));
             if (bot.getConfigurations().size() == 0) {

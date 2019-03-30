@@ -1,17 +1,17 @@
 package com.seerlogics.botadmin.controller;
 
-import com.seerlogics.botadmin.dto.LaunchModel;
-import com.seerlogics.botadmin.dto.SearchBots;
-import com.seerlogics.botadmin.event.InstanceLaunchedEvent;
-import com.seerlogics.botadmin.model.Account;
-import com.seerlogics.botadmin.model.Bot;
-import com.seerlogics.botadmin.model.Configuration;
-import com.seerlogics.botadmin.service.AccountService;
-import com.seerlogics.botadmin.service.BotService;
-import com.seerlogics.botadmin.service.TrainedModelService;
 import com.lingoace.spring.controller.BaseController;
 import com.lingoace.util.RunScript;
 import com.lingoace.validation.Validate;
+import com.seerlogics.botadmin.event.InstanceLaunchedEvent;
+import com.seerlogics.botadmin.service.AccountService;
+import com.seerlogics.botadmin.service.BotService;
+import com.seerlogics.botadmin.service.TrainedModelService;
+import com.seerlogics.commons.dto.LaunchModel;
+import com.seerlogics.commons.dto.SearchBots;
+import com.seerlogics.commons.model.Account;
+import com.seerlogics.commons.model.Bot;
+import com.seerlogics.commons.model.Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;

@@ -1,8 +1,8 @@
 package com.seerlogics.botadmin.controller;
 
-import com.seerlogics.botadmin.model.Status;
-import com.seerlogics.botadmin.service.StatusService;
 import com.lingoace.spring.controller.BaseController;
+import com.seerlogics.botadmin.service.StatusService;
+import com.seerlogics.commons.model.Status;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

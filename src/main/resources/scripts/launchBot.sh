@@ -14,7 +14,7 @@ echo "Arg 5 =" $5
 cp target/$3 ..
 cd ..
 #example: java -jar -Dspring.profiles.active=local target/chatbot-0.0.1-SNAPSHOT.jar
-nohup java -jar $2 $3 $4 $5 > ~/nohup.out 2> ~/nohup.err < /dev/null &
+nohup java -jar $2 $3 $4 $5 $6 $7 > ~/nohup.out 2> ~/nohup.err < /dev/null &
 
 until [ "`curl --silent --show-error --connect-timeout 1 -I http://localhost:8099 | grep '404'`" != "" ];
 do

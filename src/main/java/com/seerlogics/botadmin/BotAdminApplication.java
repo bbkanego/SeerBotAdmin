@@ -20,7 +20,7 @@ import java.util.concurrent.Executor;
  * READ THESE LINKS to understant @SpringBootApplication:
  * https://docs.spring.io/spring-boot/docs/current/reference/html/using-boot-using-springbootapplication-annotation.html#using-boot-using-springbootapplication-annotation
  * https://springbootdev.com/2017/11/13/what-are-the-uses-of-entityscan-and-enablejparepositories-annotations/
- *
+ * <p>
  * Since ALL the JPA repository and Entities and controllers are under 'com.seerlogics.botadmin',
  * the "@SpringBootApplication's" auto configuration is able to do component scans
  */

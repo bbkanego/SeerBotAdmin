@@ -1,9 +1,9 @@
-package com.seerlogics.botadmin;
+package com.seerlogics.botadmin.config;
 
-import com.seerlogics.botadmin.config.AppProperties;
 import com.lingoace.common.CustomHttpServletRequestWrapperFilter;
 import com.lingoace.spring.authentication.JWTAuthenticationFilter;
 import com.lingoace.spring.authentication.RestAuthenticationEntryPoint;
+import com.seerlogics.botadmin.config.AppProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -84,7 +84,7 @@ public class MultiHttpSecurityConfig {
 
         /**
          * https://www.devglan.com/spring-security/jwt-role-based-authorization
-         * <p/>
+         * <p>
          * For ALL other URLs which are not ignored, the below will authenticate access!
          *
          * @param http
@@ -95,11 +95,11 @@ public class MultiHttpSecurityConfig {
             http.headers().frameOptions().sameOrigin();
             http.cors().and().csrf().disable()
                     .authorizeRequests()
-                    /**
-                     * Here, we have configured that no authentication is required to access the url /token, /signup
-                     * and rest of the urls are secured. Here prePostEnabled = true enables support for method
-                     * level security and enables use of @PreAuthorize
-                     */
+                            /**
+                             * Here, we have configured that no authentication is required to access the url /token, /signup
+                             * and rest of the urls are secured. Here prePostEnabled = true enables support for method
+                             * level security and enables use of @PreAuthorize
+                             */
                     .anyRequest().authenticated()
                     .and()
                     .exceptionHandling().authenticationEntryPoint(unauthorizedHandler()).and()

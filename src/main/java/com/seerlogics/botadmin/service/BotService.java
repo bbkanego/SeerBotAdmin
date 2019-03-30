@@ -2,10 +2,10 @@ package com.seerlogics.botadmin.service;
 
 import com.lingoace.exception.jpa.UnknownTypeException;
 import com.lingoace.spring.service.BaseServiceImpl;
-import com.seerlogics.botadmin.dto.LaunchModel;
-import com.seerlogics.botadmin.dto.SearchBots;
-import com.seerlogics.botadmin.model.*;
-import com.seerlogics.botadmin.repository.BotRepository;
+import com.seerlogics.commons.dto.LaunchModel;
+import com.seerlogics.commons.dto.SearchBots;
+import com.seerlogics.commons.model.*;
+import com.seerlogics.commons.repository.BotRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
