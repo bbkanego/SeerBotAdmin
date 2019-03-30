@@ -5,6 +5,8 @@
     "resetButton": "Reset",
     "updateButton": "Update",
     "deleteButton": "Delete",
+    "reTrainButton": "Re-Train",
+    "trainButton": "Train",
     "revertButton": "Revert",
     "cancelButton": "Cancel",
     "okButton": "Ok",

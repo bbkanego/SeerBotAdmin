@@ -4,10 +4,7 @@ import com.lingoace.spring.service.BaseServiceImpl;
 import com.seerlogics.botadmin.exception.BaseRuntimeException;
 import com.seerlogics.botadmin.exception.ErrorCodes;
 import com.seerlogics.commons.dto.SearchIntents;
-import com.seerlogics.commons.model.Category;
-import com.seerlogics.commons.model.Intent;
-import com.seerlogics.commons.model.IntentResponse;
-import com.seerlogics.commons.model.IntentUtterance;
+import com.seerlogics.commons.model.*;
 import com.seerlogics.commons.repository.IntentRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +28,9 @@ public class IntentService extends BaseServiceImpl<Intent> {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private LanguageService languageService;
 
     @Autowired
     private AccountService accountService;
@@ -116,10 +116,11 @@ public class IntentService extends BaseServiceImpl<Intent> {
         intent.getReferenceData().put("responseTypes", responseTypes);
 
         List<Map<String, String>> locales = new ArrayList<>();
-        for (Locale locale : Locale.getAvailableLocales()) {
+        Collection<Language> supportedLangs = languageService.getAll();
+        for (Language language : supportedLangs) {
             Map<String, String> localesMap = new HashMap<>();
-            localesMap.put("code", locale.toString());
-            localesMap.put("name", locale.getDisplayLanguage());
+            localesMap.put("code", language.getCode());
+            localesMap.put("name", language.getName());
             locales.add(localesMap);
         }
         intent.getReferenceData().put("locales", locales);
