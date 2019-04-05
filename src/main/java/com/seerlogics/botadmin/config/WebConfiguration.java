@@ -38,15 +38,35 @@ public class WebConfiguration implements WebMvcConfigurer, ResourceLoaderAware {
     private ResourceLoader resourceLoader;
 
     /**
-     * This ALLOWS ALL request to go through.
-     * todo make this more restrictive per the domain desired.
+     * https://spring.io/blog/2015/06/08/cors-support-in-spring-framework#javaconfig
+     * The below will configure ALL the headers and info that the pre-flight call or OPTIONS call will return.
      *
      * @param registry
      */
     @Override
     public void addCorsMappings(CorsRegistry registry) {
+        String[] allowedOrigins = new String[]{"http://localhost:4300",
+                "http://eventgenie.lingoace.com.s3-website.us-east-2.amazonaws.com",
+                "http://eventgenie.lingoace.com"};
+        /**
+         * This will be triggered for ALL URLs.
+         */
         registry.addMapping("/**")
-                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS");
+                /**
+                 * This will return allowed origins in "Access-Control-Allow-Origin"
+                 */
+                .allowedOrigins(allowedOrigins)
+                        /**
+                         * This will expose header "Access-Control-Allow-Credentials" telling browser that the server
+                         * is ready to accept cookies. The UI then will set "withCredentials=true" in JS to send
+                         * cookie with request
+                         * https://stackoverflow.com/questions/24687313/what-exactly-does-the-access-control-allow-credentials-header-do
+                         */
+                .allowCredentials(true)
+                        /**
+                         * This will return allowed methods in "Access-Control-Allow-Methods"
+                         */
+                .allowedMethods("PUT", "DELETE", "POST", "GET", "OPTIONS");
     }
 
     @Override
