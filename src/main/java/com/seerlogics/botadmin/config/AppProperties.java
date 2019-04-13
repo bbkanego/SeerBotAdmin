@@ -20,9 +20,6 @@ public class AppProperties {
     private String cleanBuildScript;
     private String launchBotScript;
     private String killBotScript;
-    private String botArtifactName;
-    private String botArtifactType;
-    private String botArtifactLocation;
     private String jwtSecretKey;
     private String jwtSignatureAlgo;
     private Long jwtTtl;
@@ -35,6 +32,52 @@ public class AppProperties {
     private String runEnvironment;
     private String botReferencebotLocation;
     private String botArtifact;
+    private String botActiveProfile;
+
+    private boolean useH2Db = false;
+    private String h2DbPath;
+    private String h2BotDb;
+    private String h2BotAdminDb;
+
+    public String getH2DbPath() {
+        return h2DbPath;
+    }
+
+    public void setH2DbPath(String h2DbPath) {
+        this.h2DbPath = h2DbPath;
+    }
+
+    public String getH2BotDb() {
+        return h2BotDb;
+    }
+
+    public void setH2BotDb(String h2BotDb) {
+        this.h2BotDb = h2BotDb;
+    }
+
+    public String getH2BotAdminDb() {
+        return h2BotAdminDb;
+    }
+
+    public void setH2BotAdminDb(String h2BotAdminDb) {
+        this.h2BotAdminDb = h2BotAdminDb;
+    }
+
+    public boolean isUseH2Db() {
+        return useH2Db;
+    }
+
+    public void setUseH2Db(boolean useH2Db) {
+        this.useH2Db = useH2Db;
+    }
+
+    public String getBotActiveProfile() {
+        return botActiveProfile;
+    }
+
+    public void setBotActiveProfile(String botActiveProfile) {
+        this.botActiveProfile = botActiveProfile;
+    }
 
     public String getBotArtifact() {
         return botArtifact;
@@ -146,30 +189,6 @@ public class AppProperties {
 
     public void setJwtSecretKey(String jwtSecretKey) {
         this.jwtSecretKey = jwtSecretKey;
-    }
-
-    public String getBotArtifactType() {
-        return botArtifactType;
-    }
-
-    public void setBotArtifactType(String botArtifactType) {
-        this.botArtifactType = botArtifactType;
-    }
-
-    public String getBotArtifactName() {
-        return botArtifactName;
-    }
-
-    public void setBotArtifactName(String botArtifactName) {
-        this.botArtifactName = botArtifactName;
-    }
-
-    public String getBotArtifactLocation() {
-        return botArtifactLocation;
-    }
-
-    public void setBotArtifactLocation(String botArtifactLocation) {
-        this.botArtifactLocation = botArtifactLocation;
     }
 
     public String getCleanBuildScript() {
