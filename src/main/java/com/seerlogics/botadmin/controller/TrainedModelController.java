@@ -40,6 +40,13 @@ public class TrainedModelController extends BaseController implements CrudContro
         return true;
     }
 
+    @GetMapping(value = "/re-train/{id}")
+    @ResponseBody
+    public Boolean reTrainModel(@PathVariable Long id) {
+        this.trainedModelService.reTrainModel(id);
+        return true;
+    }
+
     @GetMapping("/download/{id}")
     public ResponseEntity<Resource> downloadFile(@PathVariable Long id) {
         // Load file from database

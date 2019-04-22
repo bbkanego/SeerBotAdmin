@@ -95,7 +95,34 @@ public class TrainedModelService extends BaseServiceImpl<TrainedModel> {
         trainedModel.setFile(outStream.toByteArray());
         trainedModel.setOwner(accountService.getAuthenticatedUser());
         trainedModelRepository.save(trainedModel);
-        //---writeModelToFile(trainedModel2, "apps/chatbot/src/main/resources/nlp/models/custom/test.bin");
+    }
+
+    public void reTrainModel(Long existingModelId) {
+        // get existing trained model
+        TrainedModel existingTrainedModel = this.trainedModelRepository.getOne(existingModelId);
+        /**
+         * get all the standard intents for the category
+         */
+        StringBuilder buffer = new StringBuilder();
+        List<Intent> intents
+                = this.intentService.findIntentsByCategoryTypeAndOwner(existingTrainedModel.getCategory().getCode(),
+                existingTrainedModel.getType());
+        for (Intent currentIntent : intents) {
+            Set<IntentUtterance> intentUtterances = currentIntent.getUtterances();
+            int j = 0;
+            for (IntentUtterance intentUtterance : intentUtterances) {
+                j++;
+                buffer.append(currentIntent.getIntent());
+                buffer.append(" ");
+                buffer.append(intentUtterance.getUtterance());
+                if (j < (intentUtterances.size() - 1)) {
+                    buffer.append(System.lineSeparator());
+                }
+            }
+        }
+        ByteArrayOutputStream outStream = NLPModelTrainer.trainDoccatModel(buffer);
+        existingTrainedModel.setFile(outStream.toByteArray());
+        trainedModelRepository.save(existingTrainedModel);
     }
 
     void writeModelById(Long id, String fileToWrite) {
