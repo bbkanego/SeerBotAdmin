@@ -28,6 +28,7 @@ public class AppProperties {
     private String instanceType;
     private String instanceKey;
     private String instanceRole;
+    private String instanceProfileName;
     private String securityGroup;
     private String runEnvironment;
     private String botReferencebotLocation;
@@ -38,6 +39,14 @@ public class AppProperties {
     private String h2DbPath;
     private String h2BotDb;
     private String h2BotAdminDb;
+
+    public String getInstanceProfileName() {
+        return instanceProfileName;
+    }
+
+    public void setInstanceProfileName(String instanceProfileName) {
+        this.instanceProfileName = instanceProfileName;
+    }
 
     public String getH2DbPath() {
         return h2DbPath;

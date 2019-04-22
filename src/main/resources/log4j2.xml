@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN" monitorInterval="30">
+    <Properties>
+        <Property name="LOG_PATTERN">
+            %d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${hostName} --- [%15.15t] %-40.40c{1.} : %m%n%ex
+        </Property>
+        <property name="appsLogsFilename">${sys:user.home}/seerBotAdmin/logs/appLogs.log</property>
+        <property name="appsLogsFilenamePattern">${sys:user.home}/seerBotAdmin/logs/appLogs-%d{yyyy-MM-dd}.log.gz</property>
+        <property name="vendorLogsFilename">${sys:user.home}/seerBotAdmin/logs/vendorLogs.log</property>
+        <property name="vendorLogsFilenamePattern">${sys:user.home}/seerBotAdmin/logs/vendorLogs-%d{yyyy-MM-dd}.log.gz</property>
+    </Properties>
+    <Appenders>
+        <Console name="ConsoleAppender" target="SYSTEM_OUT" follow="true">
+            <PatternLayout pattern="${LOG_PATTERN}"/>
+        </Console>
+        <!-- Rolling File Appender -->
+        <RollingFile name="AppLogsFileAppender" fileName="${appsLogsFilename}" filePattern="${appsLogsFilenamePattern}">
+            <PatternLayout>
+                <Pattern>${LOG_PATTERN}</Pattern>
+            </PatternLayout>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+
+        <RollingFile name="VendorLogsFileAppender" fileName="${vendorLogsFilename}"
+                     filePattern="${vendorLogsFilenamePattern}">
+            <PatternLayout>
+                <Pattern>${LOG_PATTERN}</Pattern>
+            </PatternLayout>
+            <Policies>
+                <SizeBasedTriggeringPolicy size="10MB"/>
+            </Policies>
+            <DefaultRolloverStrategy max="10"/>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <Logger name="com.seerlogics.botadmin" level="debug" additivity="false">
+            <AppenderRef ref="AppLogsFileAppender"/>
+        </Logger>
+        <Logger name="com.seerlogics.cloud" level="debug" additivity="false">
+            <AppenderRef ref="AppLogsFileAppender"/>
+        </Logger>
+        <Logger name="com.lingoace" level="debug" additivity="false">
+            <AppenderRef ref="AppLogsFileAppender"/>
+        </Logger>
+        <!--
+            All loggers inherit from root, so here, all debug or higher messages
+            from all loggers will be printed to the vendorRollingFile appender.
+        -->
+        <Root level="info">
+            <AppenderRef ref="VendorLogsFileAppender"/>
+        </Root>
+    </Loggers>
+</Configuration>

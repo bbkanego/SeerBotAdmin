@@ -10,16 +10,46 @@ This profile allows you to deploy the Bot on AWS EC2 instance and test it.
 1. Main class: com.seerlogics.botadmin.BotAdminApplication
 2. Java args: -DdepProfile=dev -DconfigLoc=/opt/installs/tomcat/8.5.9 -Dspring.profiles.active=local
 
-## How to run chatbot locally
+## How to run BotAdmin Application locally
 ```
-java -jar -Dspring.profiles.active=local chatbot-0.0.1-SNAPSHOT.jar --seerchat.bottype=EVENT_BOT --seerchat.botOwnerId=2903
+java -jar -Dspring.profiles.active=local -DdepProfile=dev -DconfigLoc=/opt/installs/tomcat/8.5.9 seerlogics-bot-admin-1.0.0-SNAPSHOT.jar
+```
+
+## Cloud Deployments
+1. When testing deploying on cloud run the ''BotAdminApplication-ec2:8091'' configuration.
+2. You should launch the bot from the Bot Admin application and instance will be launched.
+3. You can connect to instance using the below command:
+```
+ssh -i ~/svn/bhushan/theory/AWS/SeerLogics/keyPairs/bizBotAdminLogin.pem ec2-user@ec2-3-14-73-84.us-east-2.compute.amazonaws.com
 ```
 
 ## Possible Errors
+1. JPA Error
 ```
 Error Desc: Caused by: org.hibernate.PersistentObjectException: detached entity passed to persist: com.paulsanwald.Account
                 at org.hibernate.event.internal.DefaultPersistEventListener.onPersist(DefaultPersistEventListener.java:141)
-
+```
 Soln: This is because you are passing an already saved/persisted entity as a possible FK into another object and then trying to "PERSIST" it
 as if its a new entity. To resolve this issue remove the "CascadeType.PERSIST" from the cascade type list
+
+
+2. AWS login issue:
 ```
+The authenticity of host 'ec2-18-222-187-228.us-east-2.compute.amazonaws.com (18.222.187.228)' can't be established.
+ECDSA key fingerprint is SHA256:qWtnrKiQwMzqimgVAHsiI6T0Rgx/YSsOtcmF7otQ/gY.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added 'ec2-18-222-187-228.us-east-2.compute.amazonaws.com,18.222.187.228' (ECDSA) to the list of known hosts.
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+@         WARNING: UNPROTECTED PRIVATE KEY FILE!          @
+@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+Permissions 0644 for '/home/bkane/svn/bhushan/theory/AWS/SeerLogics/keyPairs/bizBotAdminLogin.pem' are too open.
+It is required that your private key files are NOT accessible by others.
+This private key will be ignored.
+Load key "/home/bkane/svn/bhushan/theory/AWS/SeerLogics/keyPairs/bizBotAdminLogin.pem": bad permissions
+Permission denied (publickey).
+```
+To fix this run the below command:
+```
+chmod 0400 ~/svn/bhushan/theory/AWS/SeerLogics/keyPairs/*.pem
+```
+

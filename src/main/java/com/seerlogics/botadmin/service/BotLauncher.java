@@ -108,6 +108,7 @@ public class BotLauncher {
             Configuration configuration = (Configuration) bot.getConfigurations().toArray()[0];
             // kill the bot
             File killBotScript = ResourceUtils.getFile("classpath:" + appProperties.getKillBotScript());
+            RunScript.runCommand("chmod +x " + killBotScript.getAbsolutePath());
             RunScript.runCommand(killBotScript.getAbsolutePath());
 
             bot.setStatus(statusService.findByCode(Status.STATUS_CODES.DRAFT.name()));
@@ -124,10 +125,12 @@ public class BotLauncher {
         try {
             // kill the bot
             File killBotScript = ResourceUtils.getFile("classpath:" + appProperties.getKillBotScript());
+            RunScript.runCommand("chmod +x " + killBotScript.getAbsolutePath());
             RunScript.runCommand(killBotScript.getAbsolutePath());
 
             // next launch the bot
             File launchBotScript = ResourceUtils.getFile("classpath:" + appProperties.getLaunchBotScript());
+            RunScript.runCommand("chmod +x " + launchBotScript.getAbsolutePath());
             RunScript.runCommand(launchBotScript.getAbsolutePath());
         } catch (Exception e) {
             throw new LaunchBotException(e);
@@ -201,6 +204,7 @@ public class BotLauncher {
         try {
             // Since this is local, only one bot can run at a time. So kill any other bots.
             File killBotScript = ResourceUtils.getFile("classpath:" + appProperties.getKillBotScript());
+            RunScript.runCommand("chmod +x " + killBotScript.getAbsolutePath());
             RunScript.runCommand(killBotScript.getAbsolutePath());
 
             /**
@@ -231,6 +235,7 @@ public class BotLauncher {
             String args6 = "--seerchat.botId=" + launchModel.getBot().getId();
             String args7 = "--seerchat.trainedModelId=" + launchModel.getTrainedModelId();
             File launchBotScript = ResourceUtils.getFile("classpath:" + appProperties.getLaunchBotScript());
+            RunScript.runCommand("chmod +x " + launchBotScript.getAbsolutePath());
             RunScript.runCommandWithArgs(launchBotScript.getAbsolutePath(), args1, args2, botArtifactName,
                     args4, args5, args6, args7);
 
@@ -287,19 +292,37 @@ public class BotLauncher {
                     accountSpecificBotBuildDir.getAbsolutePath(),
                     "-Djar.finalName=" + botArtifactName,
                     "-DskipTests",
-                    "-Dspring.profiles.active=" + profile);
+                    "-P " + profile);
             LOGGER.debug("Build the artifact DONE -------");
 
             /**
              * Once the above build succeeds we will copy the bot jar to S3 bucket for the account.
              */
             LOGGER.debug("Copy the artifact -------");
+            /**
+             * Lets first work on how to define the bucket key for each artifact.
+             */
+            String s3TopLevelBucketKey = launchModel.getOwnerUserName() + "/" + bot.getName() + "_" + bot.getId();
+            // this specifies the account specific location
+            String chatBotArtifactKey = s3TopLevelBucketKey + "/" + chatbotArtifact;
+            // we need to upload the DB also which is needed for the chatbot to work.
+            String botAdminDbArtifactKey = s3TopLevelBucketKey + "/" + appProperties.getH2BotAdminDb();
+            String botDbArtifactKey = s3TopLevelBucketKey + "/" + appProperties.getH2BotDb();
+
+            /**
+             * Next we define location where the aws CLI will download the artifacts on each launched instance
+             */
+            String instanceArtifactLocation = "~/bot";
+            String instanceChatBotArtifactKey = instanceArtifactLocation + "/" + chatbotArtifact;
+            // we need to upload the DB also which is needed for the chatbot to work.
+            String instanceBotAdminDbArtifactKey = instanceArtifactLocation + "/" + appProperties.getH2BotAdminDb();
+            String instanceBotDbArtifactKey = instanceArtifactLocation + "/" + appProperties.getH2BotDb();
+
             BucketConfiguration bucketConfiguration = new BucketConfiguration();
             // bucket to copy the artifact to.
             bucketConfiguration.setBucketName(appProperties.getArtifactS3BucketName());
-            // this specifies the account specific location
-            String s3BucketKey = launchModel.getOwnerUserName() + "/" +  bot.getName();
-            bucketConfiguration.setFileObjKeyName(s3BucketKey);
+
+            bucketConfiguration.setFileObjKeyName(chatBotArtifactKey);
             // file that will copied from local to S3
             bucketConfiguration.setFileName(accountSpecificBotBuildDir.getAbsolutePath() + "/target/" + chatbotArtifact);
             // S3 auth credentials for the current user.
@@ -307,14 +330,14 @@ public class BotLauncher {
             manageDataStore.uploadToBucket(bucketConfiguration);
             LOGGER.debug("Copy the artifact DONE -------");
 
-            // we need to upload the DB also which is needed for the chatbot to work.
+
             if (appProperties.isUseH2Db()) {
                 LOGGER.debug("Copy the H2DB -------");
                 BucketConfiguration bucketConfigurationAdminDb = new BucketConfiguration();
                 // bucket to copy the artifact to.
                 bucketConfigurationAdminDb.setBucketName(appProperties.getArtifactS3BucketName());
                 // this specifies the account specific location
-                bucketConfigurationAdminDb.setFileObjKeyName(s3BucketKey);
+                bucketConfigurationAdminDb.setFileObjKeyName(botAdminDbArtifactKey);
                 // file that will copied from local to S3
                 File botAdminDbFile = new File(System.getProperty("user.home") + appProperties.getH2DbPath() + appProperties.getH2BotAdminDb());
                 bucketConfigurationAdminDb.setFileName(botAdminDbFile.getAbsolutePath());
@@ -326,7 +349,7 @@ public class BotLauncher {
                 // bucket to copy the artifact to.
                 bucketConfigurationBotDb.setBucketName(appProperties.getArtifactS3BucketName());
                 // this specifies the account specific location
-                bucketConfigurationBotDb.setFileObjKeyName(s3BucketKey);
+                bucketConfigurationBotDb.setFileObjKeyName(botDbArtifactKey);
                 // file that will copied from local to S3
                 File botDbFile = new File(System.getProperty("user.home") + appProperties.getH2DbPath() + appProperties.getH2BotDb());
                 bucketConfigurationBotDb.setFileName(botDbFile.getAbsolutePath());
@@ -342,42 +365,55 @@ public class BotLauncher {
              * The below will remove JDK 1.7 and install JDK 1.8
              * Next it will copy the bot artifact to the instance and start it
              */
-            String args1 = " -Dspring.profiles.active=" + profile;
+            //String args1 = " -Dspring.profiles.active=" + profile;
             String args2 = " --seerchat.bottype=" + launchModel.getBot().getCategory().getCode();
             String args3 = " --seerchat.botOwnerId=" + launchModel.getBot().getOwner().getId();
             String args4 = " --seerchat.botId=" + launchModel.getBot().getId();
             String args5 = " --seerchat.trainedModelId=" + launchModel.getTrainedModelId();
 
-            String javaCmd = "java -jar " + chatbotArtifact + args1 + args2 + args3 + args4 + args5 + "\n";
+            String javaCmd = "su - ec2-user -c 'java -jar " + instanceChatBotArtifactKey + args2 + args3 + args4 + args5 + "'\n";
 
-            String copyBotArtifact = "aws s3api get-object --bucket " + appProperties.getArtifactS3BucketName()
-                    + " --key " + s3BucketKey + " " + chatbotArtifact + "\n";
+            String copyBotArtifact = "su - ec2-user -c 'aws s3api get-object --bucket " + appProperties.getArtifactS3BucketName()
+                    + " --key " + chatBotArtifactKey + " " + instanceChatBotArtifactKey + "'\n";
 
-            String copyBotAdminDb = "aws s3api get-object --bucket " + appProperties.getArtifactS3BucketName()
-                    + " --key " + s3BucketKey + " " + appProperties.getH2BotAdminDb() + "\n";
-
-            String copyBotDb = "aws s3api get-object --bucket " + appProperties.getArtifactS3BucketName()
-                    + " --key " + s3BucketKey + " " + appProperties.getH2BotDb() + "\n";
+            /**
+             * The aws cli command will look like this. No profile needs to be defined:
+             * aws s3api get-object --bucket biz-bot-artifact --key bkane/EventMgmt-Bot_196/botDB.mv.db ~/bot/botDB.mv.db
+             */
             if (appProperties.isUseH2Db()) {
+                String copyBotAdminDb = "su - ec2-user -c 'aws s3api get-object --bucket " + appProperties.getArtifactS3BucketName()
+                        + " --key " + botAdminDbArtifactKey + " " + instanceBotAdminDbArtifactKey + "'\n";
+
+                String copyBotDb = "su - ec2-user -c 'aws s3api get-object --bucket " + appProperties.getArtifactS3BucketName()
+                        + " --key " + botDbArtifactKey + " " + instanceBotDbArtifactKey + "'\n";
+
                 copyBotArtifact += copyBotAdminDb + copyBotDb;
             }
 
             LOGGER.debug("Launch the instance -------");
             String scriptToRunOnInstanceLaunch = "#!/bin/bash\n" +
+                    "set -x\n" + // set debug mode
+                    /**
+                     * direct the command execution to a log file where we can check how the commands faired.
+                     * https://jee-appy.blogspot.com/2017/02/user-data-aws.html
+                     */
+                    "exec > >(tee /var/log/user-data.log|logger -t user-data -s 2>/dev/console) 2>&1\n" +
                     "sudo yum install -y java-1.8.0-openjdk.x86_64\n" +
                     "sudo /usr/sbin/alternatives --set java /usr/lib/jvm/jre-1.8.0-openjdk.x86_64/bin/java\n" +
                     "sudo /usr/sbin/alternatives --set javac /usr/lib/jvm/jre-1.8.0-openjdk.x86_64/bin/javac\n" +
-                    "sudo yum remove java-1.7\n"
+                    "sudo yum remove java-1.7\n" +
+                    // run below commands as ec2-user
+                    "su - ec2-user -c 'mkdir " + instanceArtifactLocation + "'\n"
                     + copyBotArtifact
                     + javaCmd;
 
-            // now launch the bots if not already present.
+            // now launch the bots if not already present. We are launching 3 bot instances.
             AwsInstanceConfiguration instanceConfiguration = new AwsInstanceConfiguration(appProperties.getReferenceImageId(),
                     AwsInstanceConfiguration.AwsInstanceType.valueOf(appProperties.getInstanceType()),
                     AwsInstanceConfiguration.DEFAULT_AZ,
-                    appProperties.getAwsCredentialProfileName(), 1, 3, appProperties.getInstanceKey(),
+                    appProperties.getAwsCredentialProfileName(), 1, 1, appProperties.getInstanceKey(),
                     appProperties.getSecurityGroup(), scriptToRunOnInstanceLaunch,
-                    appProperties.getInstanceRole(), launchModel.getOwnerUserName());
+                    appProperties.getInstanceRole(), appProperties.getInstanceProfileName(), launchModel.getOwnerUserName());
             manageInstance.launchInstance(instanceConfiguration);
             LOGGER.debug("Launch the instance DONE -------");
 
