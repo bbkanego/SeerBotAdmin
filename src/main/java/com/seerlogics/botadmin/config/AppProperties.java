@@ -24,28 +24,106 @@ public class AppProperties {
     private String jwtSignatureAlgo;
     private Long jwtTtl;
     private String botAppContext;
-    private String referenceImageId;
-    private String instanceType;
-    private String instanceKey;
-    private String instanceRole;
-    private String instanceProfileName;
-    private String securityGroup;
+
     private String runEnvironment;
     private String botReferencebotLocation;
     private String botArtifact;
     private String botActiveProfile;
+
+    private String cloudProvider;
+
+    // instance properties
+    private String instanceReferenceImageId;
+    private String instanceType;
+    private String instanceKey;
+    private String instanceRole;
+    private String instanceSecurityProfileName;
+    private String instanceSecurityGroups;
+    private String instanceAvailabilityZones;
+    private String instanceNameSuffix;
+
+    // elb properties
+    private String elbSecurityGroup;
+    private String elbAvailabilityZones;
+    private String elbHealthCheckUrl;
+    private String elbInstancePort;
+    private String elbNameSuffix;
 
     private boolean useH2Db = false;
     private String h2DbPath;
     private String h2BotDb;
     private String h2BotAdminDb;
 
-    public String getInstanceProfileName() {
-        return instanceProfileName;
+    public String getElbNameSuffix() {
+        return elbNameSuffix;
     }
 
-    public void setInstanceProfileName(String instanceProfileName) {
-        this.instanceProfileName = instanceProfileName;
+    public void setElbNameSuffix(String elbNameSuffix) {
+        this.elbNameSuffix = elbNameSuffix;
+    }
+
+    public String getCloudProvider() {
+        return cloudProvider;
+    }
+
+    public void setCloudProvider(String cloudProvider) {
+        this.cloudProvider = cloudProvider;
+    }
+
+    public String getInstanceNameSuffix() {
+        return instanceNameSuffix;
+    }
+
+    public void setInstanceNameSuffix(String instanceNameSuffix) {
+        this.instanceNameSuffix = instanceNameSuffix;
+    }
+
+    public String getElbAvailabilityZones() {
+        return elbAvailabilityZones;
+    }
+
+    public void setElbAvailabilityZones(String elbAvailabilityZones) {
+        this.elbAvailabilityZones = elbAvailabilityZones;
+    }
+
+    public String getElbHealthCheckUrl() {
+        return elbHealthCheckUrl;
+    }
+
+    public void setElbHealthCheckUrl(String elbHealthCheckUrl) {
+        this.elbHealthCheckUrl = elbHealthCheckUrl;
+    }
+
+    public String getElbInstancePort() {
+        return elbInstancePort;
+    }
+
+    public void setElbInstancePort(String elbInstancePort) {
+        this.elbInstancePort = elbInstancePort;
+    }
+
+    public String getElbSecurityGroup() {
+        return elbSecurityGroup;
+    }
+
+    public void setElbSecurityGroup(String elbSecurityGroup) {
+        this.elbSecurityGroup = elbSecurityGroup;
+    }
+
+    public String getInstanceAvailabilityZones() {
+        return instanceAvailabilityZones;
+    }
+
+    public void setInstanceAvailabilityZones(String instanceAvailabilityZones) {
+        this.instanceAvailabilityZones = instanceAvailabilityZones;
+    }
+
+    public String getInstanceSecurityProfileName() {
+        return instanceSecurityProfileName;
+    }
+
+    public void setInstanceSecurityProfileName(String instanceSecurityProfileName) {
+        this.instanceSecurityProfileName = instanceSecurityProfileName;
     }
 
     public String getH2DbPath() {
@@ -144,12 +222,12 @@ public class AppProperties {
         this.instanceKey = instanceKey;
     }
 
-    public String getSecurityGroup() {
-        return securityGroup;
+    public String getInstanceSecurityGroups() {
+        return instanceSecurityGroups;
     }
 
-    public void setSecurityGroup(String securityGroup) {
-        this.securityGroup = securityGroup;
+    public void setInstanceSecurityGroups(String instanceSecurityGroups) {
+        this.instanceSecurityGroups = instanceSecurityGroups;
     }
 
     public String getInstanceType() {
@@ -160,12 +238,12 @@ public class AppProperties {
         this.instanceType = instanceType;
     }
 
-    public String getReferenceImageId() {
-        return referenceImageId;
+    public String getInstanceReferenceImageId() {
+        return instanceReferenceImageId;
     }
 
-    public void setReferenceImageId(String referenceImageId) {
-        this.referenceImageId = referenceImageId;
+    public void setInstanceReferenceImageId(String instanceReferenceImageId) {
+        this.instanceReferenceImageId = instanceReferenceImageId;
     }
 
     public String getBotAppContext() {

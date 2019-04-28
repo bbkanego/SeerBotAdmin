@@ -6,10 +6,12 @@ import com.seerlogics.botadmin.event.InstanceLaunchedEvent;
 import com.seerlogics.botadmin.event.InstanceRestartedEvent;
 import com.seerlogics.botadmin.event.InstanceStoppedEvent;
 import com.seerlogics.botadmin.exception.LaunchBotException;
+import com.seerlogics.botadmin.exception.StopBotException;
+import com.seerlogics.botadmin.factory.ManageDataStoreFactory;
+import com.seerlogics.botadmin.factory.ManageInstanceFactory;
+import com.seerlogics.botadmin.factory.ManageLoadBalancerFactory;
 import com.seerlogics.cloud.BucketConfiguration;
 import com.seerlogics.cloud.ManageDataStore;
-import com.seerlogics.cloud.ManageInstance;
-import com.seerlogics.cloud.ManageLoadBalancer;
 import com.seerlogics.cloud.aws.ec2.AwsInstanceConfiguration;
 import com.seerlogics.cloud.aws.elb.AwsLoadBalancerConfiguration;
 import com.seerlogics.cloud.aws.model.LaunchLoadBalancerResult;
@@ -31,6 +33,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ResourceUtils;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by bkane on 12/30/18.
@@ -44,13 +48,13 @@ public class BotLauncher {
     private AppProperties appProperties;
 
     @Autowired
-    private ManageDataStore manageDataStore;
+    private ManageDataStoreFactory manageDataStoreFactory;
 
     @Autowired
-    private ManageInstance manageInstance;
+    private ManageInstanceFactory manageInstanceFactory;
 
     @Autowired
-    private ManageLoadBalancer manageLoadBalancer;
+    private ManageLoadBalancerFactory manageLoadBalancerFactory;
 
     @Autowired
     private BotRepository botRepository;
@@ -72,7 +76,7 @@ public class BotLauncher {
         } else {
             this.stopBotAsyncCloud(id);
         }
-        InstanceStoppedEvent instanceStoppedEvent = new InstanceStoppedEvent(this, "Instance Published");
+        InstanceStoppedEvent instanceStoppedEvent = new InstanceStoppedEvent(this, "Bot Stopped");
         applicationEventPublisher.publishEvent(instanceStoppedEvent);
     }
 
@@ -142,7 +146,24 @@ public class BotLauncher {
     }
 
     private void stopBotAsyncCloud(Long id) {
+        // get the bot and model to use
+        Bot bot = this.botRepository.getOne(id);
+        Configuration configuration = (Configuration) bot.getConfigurations().toArray()[0];
+        configuration.getLoadBalancerName();
 
+        try {
+            String[] instanceIds = StringUtils.split(configuration.getInstanceIds(), ",");
+            List<String> instanceIdsList = Arrays.asList(instanceIds);
+            manageInstanceFactory.createInstanceManager(appProperties).terminateInstances(instanceIdsList);
+
+            AwsLoadBalancerConfiguration awsLoadBalancerConfiguration =
+                    new AwsLoadBalancerConfiguration(configuration.getLoadBalancerName(), null,
+                            null, null, null, 0);
+            manageLoadBalancerFactory.createLoadBalancerManager(appProperties)
+                    .deleteLoadBalancer(awsLoadBalancerConfiguration);
+        } catch (Exception e) {
+            throw new StopBotException("Problems stopping bot with id = " + bot.getId());
+        }
     }
 
     /**
@@ -221,6 +242,11 @@ public class BotLauncher {
                     "-DskipTests",
                     "-Dspring.profiles.active=local");
 
+            int botPort = 8099;
+            if (launchModel.getPort() != null) {
+                botPort = launchModel.getPort();
+            }
+
             /**
              * Next launch the bot by going to the custom build directory.
              * Args provided to script:
@@ -234,10 +260,11 @@ public class BotLauncher {
             String args5 = "--seerchat.botOwnerId=" + launchModel.getBot().getOwner().getId();
             String args6 = "--seerchat.botId=" + launchModel.getBot().getId();
             String args7 = "--seerchat.trainedModelId=" + launchModel.getTrainedModelId();
+            String args8 = "--seerchat.botPort=" + botPort;
             File launchBotScript = ResourceUtils.getFile("classpath:" + appProperties.getLaunchBotScript());
             RunScript.runCommand("chmod +x " + launchBotScript.getAbsolutePath());
             RunScript.runCommandWithArgs(launchBotScript.getAbsolutePath(), args1, args2, botArtifactName,
-                    args4, args5, args6, args7);
+                    args4, args5, args6, args7, args8);
 
             bot.setStatus(statusService.findByCode(Status.STATUS_CODES.LAUNCHED.name()));
             if (bot.getConfigurations().size() == 0) {
@@ -245,7 +272,7 @@ public class BotLauncher {
                 configuration.setTrainedModel(trainedModel);
                 configuration.setEnvironment(Status.STATUS_CODES.LAUNCHED.name());
                 configuration.setUrl("http://localhost:8099/chatbot/api/chats");
-                configuration.setPort(8099);
+                configuration.setPort(botPort);
                 configuration.setWorkingFolder(accountSpecificBotBuildDir.getAbsolutePath());
                 configuration.setImageIds("localhost");
                 configuration.setInstanceIds("localhost");
@@ -327,9 +354,9 @@ public class BotLauncher {
             bucketConfiguration.setFileName(accountSpecificBotBuildDir.getAbsolutePath() + "/target/" + chatbotArtifact);
             // S3 auth credentials for the current user.
             bucketConfiguration.setCredentialProfileName(appProperties.getAwsCredentialProfileName());
+            ManageDataStore manageDataStore = manageDataStoreFactory.createDataStoreManager(appProperties);
             manageDataStore.uploadToBucket(bucketConfiguration);
             LOGGER.debug("Copy the artifact DONE -------");
-
 
             if (appProperties.isUseH2Db()) {
                 LOGGER.debug("Copy the H2DB -------");
@@ -365,13 +392,20 @@ public class BotLauncher {
              * The below will remove JDK 1.7 and install JDK 1.8
              * Next it will copy the bot artifact to the instance and start it
              */
+
+            int botPort = 8099;
+            if (launchModel.getPort() != null) {
+                botPort = launchModel.getPort();
+            }
             //String args1 = " -Dspring.profiles.active=" + profile;
             String args2 = " --seerchat.bottype=" + launchModel.getBot().getCategory().getCode();
             String args3 = " --seerchat.botOwnerId=" + launchModel.getBot().getOwner().getId();
             String args4 = " --seerchat.botId=" + launchModel.getBot().getId();
             String args5 = " --seerchat.trainedModelId=" + launchModel.getTrainedModelId();
+            String args6 = " --seerchat.botPort=" + botPort;
 
-            String javaCmd = "su - ec2-user -c 'java -jar " + instanceChatBotArtifactKey + args2 + args3 + args4 + args5 + "'\n";
+            String javaCmd = "su - ec2-user -c 'java -jar " + instanceChatBotArtifactKey + args2 + args3 +
+                    args4 + args5 + args6 + "'\n";
 
             String copyBotArtifact = "su - ec2-user -c 'aws s3api get-object --bucket " + appProperties.getArtifactS3BucketName()
                     + " --key " + chatBotArtifactKey + " " + instanceChatBotArtifactKey + "'\n";
@@ -408,21 +442,29 @@ public class BotLauncher {
                     + javaCmd;
 
             // now launch the bots if not already present. We are launching 3 bot instances.
-            AwsInstanceConfiguration instanceConfiguration = new AwsInstanceConfiguration(appProperties.getReferenceImageId(),
+            String[] instanceAvailabilityZones = StringUtils.split(appProperties.getInstanceAvailabilityZones(), ",");
+            String[] instanceSecurityGroups = StringUtils.split(appProperties.getInstanceSecurityGroups(), ",");
+            AwsInstanceConfiguration instanceConfiguration = new AwsInstanceConfiguration(appProperties.getInstanceReferenceImageId(),
                     AwsInstanceConfiguration.AwsInstanceType.valueOf(appProperties.getInstanceType()),
-                    AwsInstanceConfiguration.DEFAULT_AZ,
+                    Arrays.asList(instanceAvailabilityZones),
                     appProperties.getAwsCredentialProfileName(), 1, 1, appProperties.getInstanceKey(),
-                    appProperties.getSecurityGroup(), scriptToRunOnInstanceLaunch,
-                    appProperties.getInstanceRole(), appProperties.getInstanceProfileName(), launchModel.getOwnerUserName());
-            manageInstance.launchInstance(instanceConfiguration);
+                    Arrays.asList(instanceSecurityGroups), scriptToRunOnInstanceLaunch,
+                    appProperties.getInstanceRole(), appProperties.getInstanceSecurityProfileName(),
+                    launchModel.getOwnerUserName() + appProperties.getInstanceNameSuffix());
+            manageInstanceFactory.createInstanceManager(appProperties).launchInstance(instanceConfiguration);
             LOGGER.debug("Launch the instance DONE -------");
 
             LOGGER.debug("Launch the ELB -------");
+            String[] elbSecurityGroups = StringUtils.split(appProperties.getElbSecurityGroup(), ",");
+            String[] elbAvailabilityZones = StringUtils.split(appProperties.getElbAvailabilityZones(), ",");
             // next launch the ELB and register the instances just launched with the ELB.
-            AwsLoadBalancerConfiguration awsLoadBalancerConfiguration = new AwsLoadBalancerConfiguration(launchModel.getOwnerUserName(),
-                    appProperties.getSecurityGroup(), AwsInstanceConfiguration.DEFAULT_AZ,
-                    appProperties.getAwsCredentialProfileName());
-            LaunchLoadBalancerResult launchLoadBalancerResult = manageLoadBalancer.launchLoadBalancer(awsLoadBalancerConfiguration);
+            AwsLoadBalancerConfiguration awsLoadBalancerConfiguration =
+                    new AwsLoadBalancerConfiguration(launchModel.getOwnerUserName() + appProperties.getElbNameSuffix(),
+                            Arrays.asList(elbSecurityGroups), Arrays.asList(elbAvailabilityZones),
+                            appProperties.getAwsCredentialProfileName(), appProperties.getElbHealthCheckUrl(),
+                            Integer.parseInt(appProperties.getElbInstancePort()));
+            LaunchLoadBalancerResult launchLoadBalancerResult =
+                    manageLoadBalancerFactory.createLoadBalancerManager(appProperties).launchLoadBalancer(awsLoadBalancerConfiguration);
             LOGGER.debug("Launch the ELB DONE -------");
 
             LOGGER.debug("Saving to DB -------");
@@ -431,8 +473,8 @@ public class BotLauncher {
                 Configuration configuration = new Configuration();
                 configuration.setTrainedModel(trainedModel);
                 configuration.setEnvironment(Status.STATUS_CODES.LAUNCHED.name());
-                configuration.setUrl("http://" + launchLoadBalancerResult.getElbDNS() + contextPath + "/api/chats");
-                configuration.setPort(5000);
+                configuration.setUrl("http://" + launchLoadBalancerResult.getElbDNS() + appProperties.getElbHealthCheckUrl());
+                configuration.setPort(botPort);
                 configuration.setImageIds(StringUtils.join(launchLoadBalancerResult.getImageIds(), ","));
                 configuration.setInstanceIds(StringUtils.join(launchLoadBalancerResult.getInstanceIds(), ","));
                 configuration.setPublicDns(launchLoadBalancerResult.getElbDNS());

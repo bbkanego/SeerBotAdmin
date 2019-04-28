@@ -10,6 +10,9 @@ import com.lingoace.validation.ValidationHandler;
 import com.lingoace.validation.ValidationHandlerImpl;
 import com.lingoace.validation.ValidatorFactory;
 import com.lingoace.validation.ValidatorFactoryImpl;
+import com.seerlogics.botadmin.factory.ManageDataStoreFactory;
+import com.seerlogics.botadmin.factory.ManageInstanceFactory;
+import com.seerlogics.botadmin.factory.ManageLoadBalancerFactory;
 import com.seerlogics.cloud.ManageDataStore;
 import com.seerlogics.cloud.ManageInstance;
 import com.seerlogics.cloud.ManageLoadBalancer;
@@ -155,18 +158,18 @@ public class WebConfiguration implements WebMvcConfigurer, ResourceLoaderAware {
     }
 
     @Bean
-    public ManageInstance deployToCloud() {
-        return new ManageInstanceImpl();
+    public ManageInstanceFactory deployToCloud() {
+        return new ManageInstanceFactory();
     }
 
     @Bean
-    public ManageDataStore deployToDataStore() {
-        return new ManageDataStoreImpl();
+    public ManageDataStoreFactory deployToDataStore() {
+        return new ManageDataStoreFactory();
     }
 
     @Bean
-    public ManageLoadBalancer manageLoadBalancer() {
-        return new ManageLoadBalancerImpl();
+    public ManageLoadBalancerFactory manageLoadBalancer() {
+        return new ManageLoadBalancerFactory();
     }
 
     /*@Bean

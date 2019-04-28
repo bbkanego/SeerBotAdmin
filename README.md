@@ -53,3 +53,8 @@ To fix this run the below command:
 chmod 0400 ~/svn/bhushan/theory/AWS/SeerLogics/keyPairs/*.pem
 ```
 
+## Example Code for AWS Management
+1. http://www.doublecloud.org/2016/03/amazon-web-service-java-sdk-tutorial-create-new-virtual-machine/
+2. AWS Management code: https://github.com/neowu/cmn-project/blob/master/cmn/src/main/java/core/aws/task/ec2/CreateInstanceTask.java
+3. Create Instance Task: https://www.programcreek.com/java-api-examples/?code=neowu/cmn-project/cmn-project-master/cmn/src/main/java/core/aws/task/ec2/CreateInstanceTask.java#
+4. Create ELB: https://www.programcreek.com/java-api-examples/?code=neowu/cmn-project/cmn-project-master/cmn/src/main/java/core/aws/task/ec2/CreateInstanceTask.java#
