@@ -10,21 +10,21 @@
         <Property name="LOG_PATTERN">
             %d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${hostName} --- [%15.15t] %-40.40c{1.} : %m%n%ex
         </Property>
-        <Property name="appsDebugLogsFilename">${sys:user.home}/seerBotAdmin/logs/appDebugLogs.log</Property>
+        <Property name="appsDebugLogsFilename">${sys:user.home}/seerBotAdmin/logs/appDebug.log</Property>
         <Property name="appsDebugLogsFilenamePattern">
-            ${sys:user.home}/seerBotAdmin/logs/appDebugLogs-%d{yyyy-MM-dd}.log.gz
+            ${sys:user.home}/seerBotAdmin/logs/appDebug-%d{yyyy-MM-dd}.log.gz
         </Property>
-        <Property name="appsErrorLogsFilename">${sys:user.home}/seerBotAdmin/logs/appErrorLogs.log</Property>
+        <Property name="appsErrorLogsFilename">${sys:user.home}/seerBotAdmin/logs/appError.log</Property>
         <Property name="appsErrorLogsFilenamePattern">
-            ${sys:user.home}/seerBotAdmin/logs/appErrorLogs-%d{yyyy-MM-dd}.log.gz
+            ${sys:user.home}/seerBotAdmin/logs/appError-%d{yyyy-MM-dd}.log.gz
         </Property>
-        <Property name="vendorErrorLogsFilename">${sys:user.home}/seerBotAdmin/logs/vendorErrorLogs.log</Property>
+        <Property name="vendorErrorLogsFilename">${sys:user.home}/seerBotAdmin/logs/vendorError.log</Property>
         <Property name="vendorErrorLogsFilenamePattern">
-            ${sys:user.home}/seerBotAdmin/logs/vendorErrorLogs-%d{yyyy-MM-dd}.log.gz
+            ${sys:user.home}/seerBotAdmin/logs/vendorError-%d{yyyy-MM-dd}.log.gz
         </Property>
-        <Property name="vendorInfoLogsFilename">${sys:user.home}/seerBotAdmin/logs/vendorInfoLogs.log</Property>
+        <Property name="vendorInfoLogsFilename">${sys:user.home}/seerBotAdmin/logs/vendorInfo.log</Property>
         <Property name="vendorInfoLogsFilenamePattern">
-            ${sys:user.home}/seerBotAdmin/logs/vendorInfoLogs-%d{yyyy-MM-dd}.log.gz
+            ${sys:user.home}/seerBotAdmin/logs/vendorInfo-%d{yyyy-MM-dd}.log.gz
         </Property>
     </Properties>
     <Appenders>
@@ -32,15 +32,10 @@
             <LevelRangeFilter minLevel="INFO" maxLevel="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout pattern="${LOG_PATTERN}"/>
         </Console>
-        <!--<Appender type="org.apache.log4j.RollingFileAppender" name="AppLogsFileAppender" fileName="${appsLogsFilename}">
-            <Layout type="org.apache.log4j.PatternLayout" pattern="${LOG_PATTERN}"/>
-            <Filter type="org.apache.log4j.varia.LevelMatchFilter" level="debug" onMatch="true" onMismatch="false"/>
-            <Filter type="org.apache.log4j.varia.DenyAllFilter"/>
-        </Appender>-->
         <!-- Rolling File Appender -->
         <RollingFile name="AppDebugLogs" fileName="${appsDebugLogsFilename}"
                      filePattern="${appsDebugLogsFilenamePattern}">
-            <LevelRangeFilter minLevel="DEBUG" maxLevel="DEBUG" onMatch="ACCEPT" onMismatch="DENY"/>
+            <LevelRangeFilter minLevel="WARN" maxLevel="TRACE" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout>
                 <Pattern>${LOG_PATTERN}</Pattern>
             </PatternLayout>
@@ -51,7 +46,7 @@
         </RollingFile>
         <RollingFile name="AppErrorLogs" fileName="${appsErrorLogsFilename}"
                      filePattern="${appsErrorLogsFilenamePattern}">
-            <LevelRangeFilter minLevel="ERROR" maxLevel="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
+            <LevelRangeFilter minLevel="FATAL" maxLevel="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout>
                 <Pattern>${LOG_PATTERN}</Pattern>
             </PatternLayout>
@@ -73,7 +68,7 @@
         </RollingFile>
         <RollingFile name="VendorErrorLogs" fileName="${vendorErrorLogsFilename}"
                      filePattern="${vendorErrorLogsFilenamePattern}">
-            <LevelRangeFilter minLevel="ERROR" maxLevel="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
+            <LevelRangeFilter minLevel="FATAL" maxLevel="ERROR" onMatch="ACCEPT" onMismatch="DENY"/>
             <PatternLayout>
                 <Pattern>${LOG_PATTERN}</Pattern>
             </PatternLayout>
@@ -101,11 +96,11 @@
             <AppenderRef ref="VendorErrorLogs"/>
         </Logger>
         <!--
-            All loggers inherit from root, so here, all debug or higher messages
-            from all loggers will be printed to the vendorRollingFile appender.
+            All other info logs, dump to console and VendorInfoLogs
         -->
-        <Root level="info">
-            <AppenderRef ref="Console"/>
+        <Root level="debug">
+            <AppenderRef ref="ConsoleAppender"/>
+            <AppenderRef ref="VendorInfoLogs"/>
         </Root>
     </Loggers>
 </Configuration>
