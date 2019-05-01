@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Properties>
+    <Property name="LOG_PATTERN">
+        %d{yyyy-MM-dd HH:mm:ss.SSS} %5p ${hostName} --- [%15.15t] %-40.40c{1.} : %m%n%ex
+    </Property>
+    <Property name="appsDebugLogsFilename">${sys:user.home}/seerBotAdmin/logs/appDebug.log</Property>
+    <Property name="appsDebugLogsFilenamePattern">
+        ${sys:user.home}/seerBotAdmin/logs/appDebug-%d{yyyy-MM-dd}.log.gz
+    </Property>
+    <Property name="appsErrorLogsFilename">${sys:user.home}/seerBotAdmin/logs/appError.log</Property>
+    <Property name="appsErrorLogsFilenamePattern">
+        ${sys:user.home}/seerBotAdmin/logs/appError-%d{yyyy-MM-dd}.log.gz
+    </Property>
+    <Property name="vendorErrorLogsFilename">${sys:user.home}/seerBotAdmin/logs/vendorError.log</Property>
+    <Property name="vendorErrorLogsFilenamePattern">
+        ${sys:user.home}/seerBotAdmin/logs/vendorError-%d{yyyy-MM-dd}.log.gz
+    </Property>
+    <Property name="vendorInfoLogsFilename">${sys:user.home}/seerBotAdmin/logs/vendorInfo.log</Property>
+    <Property name="vendorInfoLogsFilenamePattern">
+        ${sys:user.home}/seerBotAdmin/logs/vendorInfo-%d{yyyy-MM-dd}.log.gz
+    </Property>
+</Properties>
