@@ -152,15 +152,20 @@ public class BotLauncher {
         configuration.getLoadBalancerName();
 
         try {
+            LOGGER.info("Stopping the bot with id = " + id);
             String[] instanceIds = StringUtils.split(configuration.getInstanceIds(), ",");
             List<String> instanceIdsList = Arrays.asList(instanceIds);
             manageInstanceFactory.createInstanceManager(appProperties).terminateInstances(instanceIdsList);
 
             AwsLoadBalancerConfiguration awsLoadBalancerConfiguration =
                     new AwsLoadBalancerConfiguration(configuration.getLoadBalancerName(), null,
-                            null, null, null, 0);
+                            null, null, null, 0, null);
             manageLoadBalancerFactory.createLoadBalancerManager(appProperties)
                     .deleteLoadBalancer(awsLoadBalancerConfiguration);
+
+            bot.getConfigurations().clear();
+            this.botRepository.save(bot);
+            LOGGER.info("Stopping bot complete...");
         } catch (Exception e) {
             throw new StopBotException("Problems stopping bot with id = " + bot.getId());
         }
@@ -339,7 +344,7 @@ public class BotLauncher {
             /**
              * Next we define location where the aws CLI will download the artifacts on each launched instance
              */
-            String instanceArtifactLocation = "~/bot";
+            String instanceArtifactLocation = "~/seerBot";
             String instanceChatBotArtifactKey = instanceArtifactLocation + "/" + chatbotArtifact;
             // we need to upload the DB also which is needed for the chatbot to work.
             String instanceBotAdminDbArtifactKey = instanceArtifactLocation + "/" + appProperties.getH2BotAdminDb();
@@ -397,14 +402,14 @@ public class BotLauncher {
             if (launchModel.getPort() != null) {
                 botPort = launchModel.getPort();
             }
-            //String args1 = " -Dspring.profiles.active=" + profile;
+            String jvmArg1 = " -Dseerchat.botOwnerId=" + launchModel.getBot().getOwner().getId();
             String args2 = " --seerchat.bottype=" + launchModel.getBot().getCategory().getCode();
             String args3 = " --seerchat.botOwnerId=" + launchModel.getBot().getOwner().getId();
             String args4 = " --seerchat.botId=" + launchModel.getBot().getId();
             String args5 = " --seerchat.trainedModelId=" + launchModel.getTrainedModelId();
             String args6 = " --seerchat.botPort=" + botPort;
 
-            String javaCmd = "su - ec2-user -c 'java -jar " + instanceChatBotArtifactKey + args2 + args3 +
+            String javaCmd = "su - ec2-user -c 'java -jar " + instanceChatBotArtifactKey + jvmArg1 + args2 + args3 +
                     args4 + args5 + args6 + "'\n";
 
             String copyBotArtifact = "su - ec2-user -c 'aws s3api get-object --bucket " + appProperties.getArtifactS3BucketName()
@@ -424,7 +429,7 @@ public class BotLauncher {
                 copyBotArtifact += copyBotAdminDb + copyBotDb;
             }
 
-            LOGGER.debug("Launch the instance -------");
+            LOGGER.info("Launch the instance -------");
             String scriptToRunOnInstanceLaunch = "#!/bin/bash\n" +
                     "set -x\n" + // set debug mode
                     /**
@@ -444,28 +449,30 @@ public class BotLauncher {
             // now launch the bots if not already present. We are launching 3 bot instances.
             String[] instanceAvailabilityZones = StringUtils.split(appProperties.getInstanceAvailabilityZones(), ",");
             String[] instanceSecurityGroups = StringUtils.split(appProperties.getInstanceSecurityGroups(), ",");
+            String instanceName = launchModel.getOwnerUserName() + appProperties.getInstanceNameSuffix();
             AwsInstanceConfiguration instanceConfiguration = new AwsInstanceConfiguration(appProperties.getInstanceReferenceImageId(),
                     AwsInstanceConfiguration.AwsInstanceType.valueOf(appProperties.getInstanceType()),
                     Arrays.asList(instanceAvailabilityZones),
                     appProperties.getAwsCredentialProfileName(), 1, 1, appProperties.getInstanceKey(),
                     Arrays.asList(instanceSecurityGroups), scriptToRunOnInstanceLaunch,
                     appProperties.getInstanceRole(), appProperties.getInstanceSecurityProfileName(),
-                    launchModel.getOwnerUserName() + appProperties.getInstanceNameSuffix());
+                    instanceName);
             manageInstanceFactory.createInstanceManager(appProperties).launchInstance(instanceConfiguration);
-            LOGGER.debug("Launch the instance DONE -------");
+            LOGGER.info("Launch the instance DONE -------");
 
-            LOGGER.debug("Launch the ELB -------");
+            LOGGER.info("Launch the ELB -------");
             String[] elbSecurityGroups = StringUtils.split(appProperties.getElbSecurityGroup(), ",");
             String[] elbAvailabilityZones = StringUtils.split(appProperties.getElbAvailabilityZones(), ",");
             // next launch the ELB and register the instances just launched with the ELB.
+            String lbName = launchModel.getOwnerUserName() + appProperties.getElbNameSuffix();
             AwsLoadBalancerConfiguration awsLoadBalancerConfiguration =
-                    new AwsLoadBalancerConfiguration(launchModel.getOwnerUserName() + appProperties.getElbNameSuffix(),
-                            Arrays.asList(elbSecurityGroups), Arrays.asList(elbAvailabilityZones),
+                    new AwsLoadBalancerConfiguration(lbName, Arrays.asList(elbSecurityGroups),
+                            Arrays.asList(elbAvailabilityZones),
                             appProperties.getAwsCredentialProfileName(), appProperties.getElbHealthCheckUrl(),
-                            Integer.parseInt(appProperties.getElbInstancePort()));
+                            Integer.parseInt(appProperties.getElbInstancePort()), instanceName);
             LaunchLoadBalancerResult launchLoadBalancerResult =
                     manageLoadBalancerFactory.createLoadBalancerManager(appProperties).launchLoadBalancer(awsLoadBalancerConfiguration);
-            LOGGER.debug("Launch the ELB DONE -------");
+            LOGGER.info("Launch the ELB DONE -------");
 
             LOGGER.debug("Saving to DB -------");
             bot.setStatus(statusService.findByCode(Status.STATUS_CODES.LAUNCHED.name()));
@@ -478,6 +485,7 @@ public class BotLauncher {
                 configuration.setImageIds(StringUtils.join(launchLoadBalancerResult.getImageIds(), ","));
                 configuration.setInstanceIds(StringUtils.join(launchLoadBalancerResult.getInstanceIds(), ","));
                 configuration.setPublicDns(launchLoadBalancerResult.getElbDNS());
+                configuration.setLoadBalancerName(lbName);
                 bot.getConfigurations().add(configuration);
             }
 

@@ -104,13 +104,15 @@ public class BotService extends BaseServiceImpl<Bot> {
     public Bot launchBot(LaunchModel launchModel) {
         Bot bot = this.botRepository.getOne(launchModel.getBot().getId());
         botLauncher.launchBotAsync(launchModel);
-        return bot;
+        bot.setStatus(statusService.findByCode(Status.STATUS_CODES.LAUNCHING.name()));
+        return save(bot);
     }
 
     public Bot stopBot(Long id) {
         Bot bot = this.botRepository.getOne(id);
         botLauncher.stopBotAsync(id);
-        return bot;
+        bot.setStatus(statusService.findByCode(Status.STATUS_CODES.DRAFT.name()));
+        return save(bot);
     }
 
     public Bot restartBot(Long id) {
