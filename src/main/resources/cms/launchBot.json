@@ -8,6 +8,8 @@
       "categoryLabel": "Category",
       "descriptionLabel": "Description",
       "statusLabel": "Status",
+      "trainedModel": "Trained Model",
+      "allowedOrigin": "Allowed Origin",
       "launchNowButton": "Launch Now"
     },
     "launched": {

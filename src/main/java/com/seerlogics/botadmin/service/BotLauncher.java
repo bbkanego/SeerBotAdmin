@@ -187,7 +187,7 @@ public class BotLauncher {
         String referenceBotPath = System.getProperty("user.home") + appProperties.getBotReferencebotLocation();
         String accountSpecificFolderName = "account_" + trainedModel.getOwner().getId() + File.separator +
                 "bot_" + bot.getId();
-        String accountSpecificBotBuildDirParent = System.getProperty("user.home") + File.separator + "seerBots"
+        String accountSpecificBotBuildDirParent = System.getProperty("user.home") + File.separator + "seerBot"
                 + File.separator + accountSpecificFolderName;
         String accountSpecificBotBuildDirPath = accountSpecificBotBuildDirParent + File.separator + "chatbot";
         File accountSpecificBotBuildDir = new File(accountSpecificBotBuildDirPath);
@@ -260,16 +260,18 @@ public class BotLauncher {
              * 3. Category Type of the bot.
              */
             String args1 = accountSpecificBotBuildDir.getAbsolutePath();
-            String args2 = "-Dspring.profiles.active=local";
+            String jvmArgs1 = " -Dseerchat.botOwnerId=" + launchModel.getBot().getOwner().getId();
+            String jvmArgs2 = " -Dseerchat.botId=" + launchModel.getBot().getOwner().getId();
             String args4 = "--seerchat.bottype=" + launchModel.getBot().getCategory().getCode();
             String args5 = "--seerchat.botOwnerId=" + launchModel.getBot().getOwner().getId();
             String args6 = "--seerchat.botId=" + launchModel.getBot().getId();
             String args7 = "--seerchat.trainedModelId=" + launchModel.getTrainedModelId();
             String args8 = "--seerchat.botPort=" + botPort;
+            String args9 = "--seerchat.allowedOrigins=http://localhost:4300,http://localhost:4320";
             File launchBotScript = ResourceUtils.getFile("classpath:" + appProperties.getLaunchBotScript());
             RunScript.runCommand("chmod +x " + launchBotScript.getAbsolutePath());
-            RunScript.runCommandWithArgs(launchBotScript.getAbsolutePath(), args1, args2, botArtifactName,
-                    args4, args5, args6, args7, args8);
+            RunScript.runCommandWithArgs(launchBotScript.getAbsolutePath(), args1, botArtifactName, jvmArgs1, jvmArgs2,
+                    args4, args5, args6, args7, args8, args9);
 
             bot.setStatus(statusService.findByCode(Status.STATUS_CODES.LAUNCHED.name()));
             if (bot.getConfigurations().size() == 0) {
@@ -282,6 +284,7 @@ public class BotLauncher {
                 configuration.setImageIds("localhost");
                 configuration.setInstanceIds("localhost");
                 configuration.setPublicDns("localhost");
+                configuration.setAllowedOrigins(launchModel.getAllowedOrigins());
                 bot.getConfigurations().add(configuration);
             }
 
@@ -402,15 +405,17 @@ public class BotLauncher {
             if (launchModel.getPort() != null) {
                 botPort = launchModel.getPort();
             }
-            String jvmArg1 = " -Dseerchat.botOwnerId=" + launchModel.getBot().getOwner().getId();
+            String jvmArgs1 = " -Dseerchat.botOwnerId=" + launchModel.getBot().getOwner().getId();
+            String jvmArgs2 = " -Dseerchat.botId=" + launchModel.getBot().getOwner().getId();
             String args2 = " --seerchat.bottype=" + launchModel.getBot().getCategory().getCode();
             String args3 = " --seerchat.botOwnerId=" + launchModel.getBot().getOwner().getId();
             String args4 = " --seerchat.botId=" + launchModel.getBot().getId();
             String args5 = " --seerchat.trainedModelId=" + launchModel.getTrainedModelId();
             String args6 = " --seerchat.botPort=" + botPort;
+            String args7 = " --seerchat.allowedOrigins=http://localhost:4300,http://localhost:4320";
 
-            String javaCmd = "su - ec2-user -c 'java -jar " + instanceChatBotArtifactKey + jvmArg1 + args2 + args3 +
-                    args4 + args5 + args6 + "'\n";
+            String javaCmd = "su - ec2-user -c 'java -jar " + instanceChatBotArtifactKey + jvmArgs1 + jvmArgs2 + args2 + args3 +
+                    args4 + args5 + args6 + args7 + "'\n";
 
             String copyBotArtifact = "su - ec2-user -c 'aws s3api get-object --bucket " + appProperties.getArtifactS3BucketName()
                     + " --key " + chatBotArtifactKey + " " + instanceChatBotArtifactKey + "'\n";
@@ -486,6 +491,7 @@ public class BotLauncher {
                 configuration.setInstanceIds(StringUtils.join(launchLoadBalancerResult.getInstanceIds(), ","));
                 configuration.setPublicDns(launchLoadBalancerResult.getElbDNS());
                 configuration.setLoadBalancerName(lbName);
+                configuration.setAllowedOrigins(launchModel.getAllowedOrigins());
                 bot.getConfigurations().add(configuration);
             }
 

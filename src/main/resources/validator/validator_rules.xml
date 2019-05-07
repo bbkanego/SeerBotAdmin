@@ -191,8 +191,8 @@
         </form>
 
         <form name="validateLaunchBotRule" classType="com.seerlogics.commons.dto.LaunchModel">
-            <field id="botToLaunch" property="bot" depends="required"/>
             <field id="modelToUse" property="trainedModelId" depends="required,validateLong"/>
+            <field id="allowedOrigins" property="allowedOrigins" depends="required"/>
         </form>
 
         <form name="validateSearchIntentRule" classType="com.seerlogics.commons.dto.SearchIntents">
