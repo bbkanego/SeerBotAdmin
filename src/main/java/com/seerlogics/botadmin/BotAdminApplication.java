@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 import java.util.concurrent.Executor;
 
 /**
- * READ THESE LINKS to understant @SpringBootApplication:
+ * READ THESE LINKS to understand @SpringBootApplication:
  * https://docs.spring.io/spring-boot/docs/current/reference/html/using-boot-using-springbootapplication-annotation.html#using-boot-using-springbootapplication-annotation
  * https://springbootdev.com/2017/11/13/what-are-the-uses-of-entityscan-and-enablejparepositories-annotations/
  * <p>
