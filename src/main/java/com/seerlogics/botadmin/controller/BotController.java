@@ -25,14 +25,17 @@ import java.util.*;
 @RestController
 @RequestMapping(value = "/api/v1/chatbot")
 public class BotController extends BaseController implements ApplicationListener<ApplicationEvent> {
-    @Autowired
-    private BotService botService;
+    private final BotService botService;
 
-    @Autowired
-    private TrainedModelService trainedModelService;
+    private final TrainedModelService trainedModelService;
 
-    @Autowired
-    private AccountService accountService;
+    private final AccountService accountService;
+
+    public BotController(BotService botService, TrainedModelService trainedModelService, AccountService accountService) {
+        this.botService = botService;
+        this.trainedModelService = trainedModelService;
+        this.accountService = accountService;
+    }
 
     @PostMapping(value = {"", "/",})
     @ResponseBody
@@ -86,6 +89,7 @@ public class BotController extends BaseController implements ApplicationListener
         for (int i = 0; i < configurations.size(); i++) {
             Configuration configuration = configurations.get(i);
             returnData.put("url" + (i + 1), configuration.getUrl());
+            returnData.put("uniqueBotId" + (i + 1), configuration.getUniqueBotId());
         }
         return returnData;
     }

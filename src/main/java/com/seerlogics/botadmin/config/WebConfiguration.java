@@ -13,16 +13,9 @@ import com.lingoace.validation.ValidatorFactoryImpl;
 import com.seerlogics.botadmin.factory.ManageDataStoreFactory;
 import com.seerlogics.botadmin.factory.ManageInstanceFactory;
 import com.seerlogics.botadmin.factory.ManageLoadBalancerFactory;
-import com.seerlogics.cloud.ManageDataStore;
-import com.seerlogics.cloud.ManageInstance;
-import com.seerlogics.cloud.ManageLoadBalancer;
-import com.seerlogics.cloud.aws.ec2.ManageInstanceImpl;
-import com.seerlogics.cloud.aws.elb.ManageLoadBalancerImpl;
-import com.seerlogics.cloud.aws.s3.ManageDataStoreImpl;
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.io.support.ResourcePatternUtils;
@@ -140,13 +133,13 @@ public class WebConfiguration implements WebMvcConfigurer, ResourceLoaderAware {
         return new CmsController();
     }
 
-    @Bean(name = "botAdminSystemProperties")
+    /*@Bean(name = "botAdminSystemProperties")
     public PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
         PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer = new PropertySourcesPlaceholderConfigurer();
-        /**
-         * to make this work pass the following VM args to tomcat:
-         * -DdepProfile=dev -DconfigLoc=/opt/installs/tomcat/8.5.9
-         */
+        *//**
+     * to make this work pass the following VM args to tomcat:
+     * -DdepProfile=dev -DconfigLoc=/opt/installs/tomcat/8.5.9
+     *//*
         Resource[] validatorResources = new Resource[]{
                 resourceLoader.getResource("file:" + System.getProperty("configLoc")
                         + "/config/botadmin/config_base.properties"),
@@ -155,7 +148,7 @@ public class WebConfiguration implements WebMvcConfigurer, ResourceLoaderAware {
         };
         propertySourcesPlaceholderConfigurer.setLocations(validatorResources);
         return propertySourcesPlaceholderConfigurer;
-    }
+    }*/
 
     @Bean
     public ManageInstanceFactory deployToCloud() {

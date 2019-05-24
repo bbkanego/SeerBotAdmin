@@ -3,7 +3,6 @@ package com.seerlogics.botadmin.config;
 import com.lingoace.common.CustomHttpServletRequestWrapperFilter;
 import com.lingoace.spring.authentication.JWTAuthenticationFilter;
 import com.lingoace.spring.authentication.RestAuthenticationEntryPoint;
-import com.seerlogics.botadmin.config.AppProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -78,7 +77,7 @@ public class MultiHttpSecurityConfig {
         public void configure(WebSecurity web) throws Exception {
             // "/**" will allow ALL requests.
             web.ignoring().antMatchers("/api/**/generate-token", "/error", "/metadata/validation/**",
-                    "/api/v1/account/signup", "/metadata/messages",
+                    "/api/v1/account/signup", "/metadata/messages", "/actuator/**",
                     "/api/v1/account/init/**", "/api/cms/all-content");
         }
 

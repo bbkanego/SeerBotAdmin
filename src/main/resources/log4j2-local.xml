@@ -5,7 +5,8 @@
     https://springframework.guru/log4j-2-configuration-using-xml/
     https://howtodoinjava.com/log4j2/multiple-appenders/
 -->
-<Configuration status="WARN" xmlns:xi="http://www.w3.org/2001/XInclude">
+<Configuration status="WARN" xmlns:xi="http://www.w3.org/2001/XInclude"
+               xmlns="http://logging.apache.org/log4j/2.0/config">
     <xi:include href="log4j2-properties.xml"/>
     <xi:include href="log4j2-appenders.xml"/>
     <Loggers>

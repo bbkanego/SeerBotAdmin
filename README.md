@@ -53,6 +53,14 @@ To fix this run the below command:
 chmod 0400 ~/svn/bhushan/theory/AWS/SeerLogics/keyPairs/*.pem
 ```
 
+## Unit Testing and SonarQube
+1. In order to generate code coverage report, JaCoCo is being used.
+2. JaCoCo has been configured in the "BOM" xml file.
+3. References:
+    a. https://www.mkyong.com/maven/maven-jacoco-code-coverage-example/
+    b. https://www.baeldung.com/jacoco
+    c. https://thepracticaldeveloper.com/2016/02/06/test-coverage-analysis-for-your-spring-boot-app/
+
 ## Example Code for AWS Management
 1. http://www.doublecloud.org/2016/03/amazon-web-service-java-sdk-tutorial-create-new-virtual-machine/
 2. AWS Management code: https://github.com/neowu/cmn-project/blob/master/cmn/src/main/java/core/aws/task/ec2/CreateInstanceTask.java
