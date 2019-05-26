@@ -18,7 +18,10 @@
     },
     "test": {
       "pageHeading": "Test Bot",
-      "message": "Test your bot through the below chat client"
+      "message": "Test your bot through the below chat client",
+      "botUniqueIdUse": "When you configure the chatbot on your website, use the below bot unique id in the bot configuration.",
+      "botUniqueId": "Bot unique id",
+      "chatApiUrl": "Chat API url"
     }
   }
 }
