@@ -6,55 +6,98 @@
 <form-validation>
     <formset>
         <form name="validateBotRule" classType="com.seerlogics.commons.model.Bot">
-            <field id="botName" property="name" depends="required,validateMaxLength">
+            <field id="botName" property="name" depends="required,containsChars,validateMaxLength">
                 <var>
                     <var-name>maxLength</var-name>
                     <var-value>50</var-value>
                 </var>
+                <var>
+                    <var-name>regEx</var-name>
+                    <var-value>^[a-zA-Z0-9-_\s]+$</var-value>
+                </var>
             </field>
-            <field id="botDisplayName" property="displayName" depends="required,validateMaxLength">
+            <field id="botDisplayName" property="displayName" depends="required,containsChars,validateMaxLength">
                 <var>
                     <var-name>maxLength</var-name>
                     <var-value>50</var-value>
                 </var>
+                <var>
+                    <var-name>regEx</var-name>
+                    <var-value>^[a-zA-Z0-9-_\s]+$</var-value>
+                </var>
             </field>
-            <field id="botDesc" property="description" depends="required,validateMaxLength">
+            <field id="botDesc" property="description" depends="required,containsChars,validateMaxLength">
                 <var>
                     <var-name>maxLength</var-name>
                     <var-value>200</var-value>
                 </var>
+                <var>
+                    <var-name>regEx</var-name>
+                    <var-value>^[a-zA-Z0-9-_\s]+$</var-value>
+                </var>
             </field>
-            <field id="botCat" property="category" depends="required"/>
-            <field id="botStatus" property="status" depends="required"/>
-            <field id="botSupportedLanguages" property="supportedLanguages" depends="required"/>
+            <field id="botCat" property="category" depends="required,containsChars">
+                <var>
+                    <var-name>regEx</var-name>
+                    <var-value>^[a-zA-Z0-9-_]+$</var-value>
+                </var>
+            </field>
+            <field id="botStatus" property="status" depends="required,containsChars">
+                <var>
+                    <var-name>regEx</var-name>
+                    <var-value>^[a-zA-Z0-9-_]+$</var-value>
+                </var>
+            </field>
+            <field id="botSupportedLanguages" property="supportedLanguages" depends="required,containsChars">
+                <var>
+                    <var-name>regEx</var-name>
+                    <var-value>^[a-zA-Z0-9-_]+$</var-value>
+                </var>
+            </field>
         </form>
 
         <form name="validatePersonRule" classType="com.seerlogics.commons.model.Party">
-            <field id="personName" property="name" depends="required,validateMaxLength">
+            <field id="personName" property="name" depends="required,containsChars,validateMaxLength">
                 <var>
                     <var-name>maxLength</var-name>
                     <var-value>50</var-value>
                 </var>
+                <var>
+                    <var-name>regEx</var-name>
+                    <var-value>^[a-zA-Z0-9-_\s]+$</var-value>
+                </var>
             </field>
-            <field id="firstName" property="firstName" depends="required,validateMaxLength">
+            <field id="firstName" property="firstName" depends="required,containsChars,validateMaxLength">
                 <var>
                     <var-name>maxLength</var-name>
                     <var-value>50</var-value>
                 </var>
+                <var>
+                    <var-name>regEx</var-name>
+                    <var-value>^[a-zA-Z0-9-_\s]+$</var-value>
+                </var>
             </field>
-            <field id="lastName" property="lastName" depends="required,validateMaxLength">
+            <field id="lastName" property="lastName" depends="required,containsChars,validateMaxLength">
                 <var>
                     <var-name>maxLength</var-name>
                     <var-value>200</var-value>
+                </var>
+                <var>
+                    <var-name>regEx</var-name>
+                    <var-value>^[a-zA-Z0-9-_\s]+$</var-value>
                 </var>
             </field>
         </form>
 
         <form name="validateAccountRule" classType="com.seerlogics.commons.model.Account">
-            <field id="userName" property="userName" depends="required,validateMaxLength">
+            <field id="userName" property="userName" depends="required,containsChars,validateMaxLength">
                 <var>
                     <var-name>maxLength</var-name>
                     <var-value>50</var-value>
+                </var>
+                <var>
+                    <var-name>regEx</var-name>
+                    <var-value>^[a-zA-Z0-9-_]+$</var-value>
                 </var>
             </field>
             <field id="passwordCaptureReenter" property="passwordCaptureReenter" depends="required,validateMaxLength">
@@ -73,69 +116,110 @@
             <field property="owner" classType="com.seerlogics.commons.model.Person" id="personOwner"
                    depends="required">
                 <arg key="label.person" position="0"/>
-                <field property="firstName" id="personOwner_firstName" depends="required,validateMaxLength">
+                <field property="firstName" id="personOwner_firstName"
+                       depends="required,containsChars,validateMaxLength">
                     <arg key="label.firstName" position="0"/>
                     <var>
                         <var-name>maxLength</var-name>
                         <var-value>50</var-value>
                     </var>
+                    <var>
+                        <var-name>regEx</var-name>
+                        <var-value>^[a-zA-Z0-9-_\s]+$</var-value>
+                    </var>
                 </field>
-                <field property="lastName" id="personOwner_lastName" depends="required,validateMaxLength">
+                <field property="lastName" id="personOwner_lastName" depends="required,containsChars,validateMaxLength">
                     <arg key="label.lastName" position="0"/>
                     <var>
                         <var-name>maxLength</var-name>
                         <var-value>50</var-value>
                     </var>
+                    <var>
+                        <var-name>regEx</var-name>
+                        <var-value>^[a-zA-Z0-9-_\s]+$</var-value>
+                    </var>
                 </field>
                 <field property="contactModes" classType="java.util.Set" id="personOwner_contactModes"
                        depends="required">
                     <arg key="label.utterances" position="0"/>
-                    <field property="street" id="personOwner_contactModes_street" depends="required,validateMaxLength">
+                    <field property="street" id="personOwner_contactModes_street"
+                           depends="required,containsChars,validateMaxLength">
                         <arg key="label.street" position="0"/>
                         <var>
                             <var-name>maxLength</var-name>
                             <var-value>50</var-value>
                         </var>
+                        <var>
+                            <var-name>regEx</var-name>
+                            <var-value>^[a-zA-Z0-9-_\s]+$</var-value>
+                        </var>
                     </field>
-                    <field property="city" id="personOwner_contactModes_city" depends="required,validateMaxLength">
+                    <field property="city" id="personOwner_contactModes_city"
+                           depends="required,containsChars,validateMaxLength">
                         <arg key="label.city" position="0"/>
                         <var>
                             <var-name>maxLength</var-name>
                             <var-value>50</var-value>
                         </var>
+                        <var>
+                            <var-name>regEx</var-name>
+                            <var-value>^[a-zA-Z0-9-_\s]+$</var-value>
+                        </var>
                     </field>
-                    <field property="state" id="personOwner_contactModes_state" depends="required,validateMaxLength">
+                    <field property="state" id="personOwner_contactModes_state"
+                           depends="required,containsChars,validateMaxLength">
                         <arg key="label.state" position="0"/>
                         <var>
                             <var-name>maxLength</var-name>
                             <var-value>50</var-value>
                         </var>
+                        <var>
+                            <var-name>regEx</var-name>
+                            <var-value>^[a-zA-Z0-9-_\s]+$</var-value>
+                        </var>
                     </field>
-                    <field property="zip" id="personOwner_contactModes_zip" depends="required,validateMaxLength">
+                    <field property="zip" id="personOwner_contactModes_zip"
+                           depends="required,containsChars,validateMaxLength">
                         <arg key="label.zip" position="0"/>
                         <var>
                             <var-name>maxLength</var-name>
                             <var-value>20</var-value>
+                        </var>
+                        <var>
+                            <var-name>regEx</var-name>
+                            <var-value>^[a-zA-Z0-9-_]+$</var-value>
                         </var>
                     </field>
                 </field>
             </field>
         </form>
 
-        <form name="validateIntentRule" classType="com.seerlogics.commons.model.Intent">
-            <field id="intent" property="intent" depends="required,validateMaxLength">
+        <form name="validateIntentRule"
+              customValidator="com.seerlogics.botadmin.validation.IntentCustomValidator|validateBean"
+              classType="com.seerlogics.commons.model.Intent">
+
+            <field id="intent" property="intent" depends="required,containsChars,validateMaxLength">
                 <var>
                     <var-name>maxLength</var-name>
                     <var-value>150</var-value>
                 </var>
+                <var>
+                    <var-name>regEx</var-name>
+                    <var-value>^[a-zA-Z]+$</var-value>
+                </var>
             </field>
             <field property="utterances" classType="java.util.Set" id="utterances" depends="required">
                 <arg key="label.utterances" position="0"/>
-                <field property="utterance" id="utterances_utterance" depends="required,validateMaxLength">
+                <field property="utterance" id="utterances_utterance"
+                       depends="required,containsChars,validateMaxLength">
                     <arg key="label.utterance" position="0"/>
                     <var>
                         <var-name>maxLength</var-name>
                         <var-value>300</var-value>
+                    </var>
+                    <var>
+                        <var-name>regEx</var-name>
+                        <var-value>^[a-zA-Z\s]+$</var-value>
                     </var>
                 </field>
                 <field property="locale" id="utterances_locale" depends="required,validateMaxLength">
@@ -171,19 +255,72 @@
                 </field>
             </field>
             <field id="intentCat" property="category" depends="required"/>
+            <field property="mayBeIntent" classType="com.seerlogics.commons.model.Intent" id="mayBeIntent"
+                   depends="required">
+                <arg key="label.person" position="0"/>
+
+                <field property="responses" classType="java.util.Set" id="mayBeIntent_responses" depends="required">
+                    <arg key="label.responses" position="0"/>
+                    <field property="response" id="mayBeIntent_responses_response" depends="required,validateMaxLength">
+                        <arg key="label.response" position="0"/>
+                        <var>
+                            <var-name>maxLength</var-name>
+                            <var-value>300</var-value>
+                        </var>
+                    </field>
+                    <field property="locale" id="mayBeIntent_responses_locale" depends="required,validateMaxLength">
+                        <arg key="label.locale" position="0"/>
+                        <var>
+                            <var-name>maxLength</var-name>
+                            <var-value>10</var-value>
+                        </var>
+                    </field>
+                    <field property="responseType" id="mayBeIntent_responses_responseType"
+                           depends="required,validateMaxLength">
+                        <arg key="label.responseType" position="0"/>
+                        <var>
+                            <var-name>maxLength</var-name>
+                            <var-value>20</var-value>
+                        </var>
+                    </field>
+                </field>
+                <field property="locale" id="mayBeIntent_responses_locale" depends="required,validateMaxLength">
+                    <arg key="label.locale" position="0"/>
+                    <var>
+                        <var-name>maxLength</var-name>
+                        <var-value>10</var-value>
+                    </var>
+                </field>
+                <field property="responseType" id="mayBeIntent_responses_responseType"
+                                        depends="required,validateMaxLength">
+                    <arg key="label.responseType" position="0"/>
+                    <var>
+                        <var-name>maxLength</var-name>
+                        <var-value>20</var-value>
+                    </var>
+                </field>
+            </field>
         </form>
 
         <form name="validateTrainModelRule" classType="com.seerlogics.commons.model.TrainedModel">
-            <field id="modelName" property="name" depends="required,validateMaxLength">
+            <field id="modelName" property="name" depends="required,containsChars,validateMaxLength">
                 <var>
                     <var-name>maxLength</var-name>
                     <var-value>300</var-value>
                 </var>
+                <var>
+                    <var-name>regEx</var-name>
+                    <var-value>^[a-zA-Z0-9-_]+$</var-value>
+                </var>
             </field>
-            <field id="modelDescription" property="description" depends="required,validateMaxLength">
+            <field id="modelDescription" property="description" depends="required,containsChars,validateMaxLength">
                 <var>
                     <var-name>maxLength</var-name>
                     <var-value>1000</var-value>
+                </var>
+                <var>
+                    <var-name>regEx</var-name>
+                    <var-value>^[a-zA-Z0-9-_\s]+$</var-value>
                 </var>
             </field>
             <field id="modelCategory" property="category" depends="required"/>

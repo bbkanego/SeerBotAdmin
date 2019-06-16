@@ -23,6 +23,11 @@
       "responseTypeLabel": "Response Type",
       "utteranceLabel": "Utterance",
       "categoryLabel": "Category"
+    },
+    "mayBeIntent": {
+      "intent": "Close match intent",
+      "response": "Close match response",
+      "enterResponse": "Enter close match response"
     }
   }
 }

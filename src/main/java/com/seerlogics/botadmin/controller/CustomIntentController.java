@@ -8,7 +8,6 @@ import com.seerlogics.botadmin.service.IntentService;
 import com.seerlogics.commons.dto.SearchIntents;
 import com.seerlogics.commons.model.Category;
 import com.seerlogics.commons.model.Intent;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -22,11 +21,14 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/v1/custom-intent")
 public class CustomIntentController extends BaseController implements CrudController<Intent> {
-    @Autowired
-    private IntentService customIntentService;
+    private final IntentService customIntentService;
 
-    @Autowired
-    private CategoryService categoryService;
+    private final CategoryService categoryService;
+
+    public CustomIntentController(IntentService customIntentService, CategoryService categoryService) {
+        this.customIntentService = customIntentService;
+        this.categoryService = categoryService;
+    }
 
     /**
      * This method allows you to select categtory and copy standard intents to your custom intent table.
@@ -45,7 +47,7 @@ public class CustomIntentController extends BaseController implements CrudContro
     @PreAuthorize("hasRole('ACCT_ADMIN')")
     @PostMapping(value = {"", "/",})
     @ResponseBody
-    public Boolean save(@RequestBody Intent intent) {
+    public Boolean save(@Validate("validateIntentRule") @RequestBody Intent intent) {
         this.customIntentService.save(intent);
         return true;
     }

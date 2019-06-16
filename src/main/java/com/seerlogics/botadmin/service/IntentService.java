@@ -49,7 +49,7 @@ public class IntentService extends BaseServiceImpl<Intent> {
 
     @Override
     public Intent save(Intent intent) {
-        // validate the intent. The intent should have only 1 response and MayBeResponse for a locale.
+        /*// validate the intent. The intent should have only 1 response and MayBeResponse for a locale.
         Set<IntentResponse> intentResponses = intent.getResponses();
         for (IntentResponse intentResponse : intentResponses) {
             List<IntentResponse> tempIntentResponses =
@@ -63,6 +63,18 @@ public class IntentService extends BaseServiceImpl<Intent> {
                     throw new BaseRuntimeException(ErrorCodes.DUPLICATE_INTENTS_RESPONSE_TYPE_ERROR);
                 }
             }
+        }*/
+        List<IntentResponse> newResponses = new ArrayList<>(intent.getResponses());
+        intent.getResponses().clear();
+        intent.getResponses().addAll(newResponses);
+        Intent mayBeIntent = intent.getMayBeIntent();
+        if (mayBeIntent != null && mayBeIntent.getId() == null) {
+            mayBeIntent.setOwner(intent.getOwner());
+            mayBeIntent.setIntent("Maybe" + intent.getIntent());
+            mayBeIntent.setIntentType(Intent.INTENT_TYPE.MAYBE.name());
+            mayBeIntent.setCategory(intent.getCategory());
+            IntentResponse intentResponses = (IntentResponse) mayBeIntent.getResponses().toArray()[0];
+            intentResponses.setResponseType(IntentResponse.RESPONSE_TYPE.MAYBE.name());
         }
         return intentRepository.save(intent);
     }
@@ -135,11 +147,19 @@ public class IntentService extends BaseServiceImpl<Intent> {
     }
 
     public Intent initCustomIntent() {
-        Intent intents = new Intent();
-        this.addReferenceData(intents);
-        intents.setIntentType(Intent.INTENT_TYPE.CUSTOM.name());
-        intents.setOwner(accountService.getAuthenticatedUser());
-        return intents;
+        Intent intent = new Intent();
+        this.addReferenceData(intent);
+        intent.setIntentType(Intent.INTENT_TYPE.CUSTOM.name());
+        intent.setOwner(accountService.getAuthenticatedUser());
+
+        // set may be intent
+        Intent mayBeIntent = new Intent();
+        intent.setMayBeIntent(mayBeIntent);
+        IntentResponse mayResponse = new IntentResponse();
+        mayBeIntent.getResponses().add(mayResponse);
+        this.addReferenceData(mayBeIntent);
+
+        return intent;
     }
 
     public Boolean uploadIntentsFromFile(@RequestPart("intentsData") MultipartFile file,
