@@ -7,9 +7,11 @@ import com.seerlogics.botadmin.service.IntentService;
 import com.seerlogics.commons.dto.SearchIntents;
 import com.seerlogics.commons.model.Intent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Collection;
 import java.util.List;
 
@@ -84,5 +86,25 @@ public class PredefinedIntentController extends BaseController implements CrudCo
     public List<Intent> searchIntents(@Validate("validateSearchIntentRule")
                                       @RequestBody SearchIntents searchIntents) {
         return predefinedIntentService.findIntentsAndUtterances(searchIntents);
+    }
+
+    @GetMapping("/export/csv")
+    @ResponseBody
+    public String exportIntentsAsCSV(@RequestParam("ccode") String categoryCode,
+                                     @RequestParam("int") String intentType, HttpServletResponse response) {
+        List<List<String>> intents = predefinedIntentService.exportIntents(categoryCode, intentType);
+
+        response.setContentType("text/csv");
+        response.setStatus(200);
+        String filename = "intents.csv";
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION,
+                "attachment; filename=\"" + filename + "\"");
+        StringBuilder stringBuilder = new StringBuilder();
+        for (List<String> intent : intents) {
+            for (String item : intent) {
+                stringBuilder.append(item);
+            }
+        }
+        return stringBuilder.toString();
     }
 }

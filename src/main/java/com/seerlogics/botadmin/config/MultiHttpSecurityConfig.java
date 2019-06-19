@@ -94,11 +94,11 @@ public class MultiHttpSecurityConfig {
             http.headers().frameOptions().sameOrigin();
             http.cors().and().csrf().disable()
                     .authorizeRequests()
-                            /**
-                             * Here, we have configured that no authentication is required to access the url /token, /signup
-                             * and rest of the urls are secured. Here prePostEnabled = true enables support for method
-                             * level security and enables use of @PreAuthorize
-                             */
+                    /**
+                     * Here, we have configured that no authentication is required to access the url /token, /signup
+                     * and rest of the urls are secured. Here prePostEnabled = true enables support for method
+                     * level security and enables use of @PreAuthorize
+                     */
                     .anyRequest().authenticated()
                     .and()
                     .exceptionHandling().authenticationEntryPoint(unauthorizedHandler()).and()

@@ -139,27 +139,27 @@ public class IntentService extends BaseServiceImpl<Intent> {
     }
 
     public Intent initPredefinedIntent() {
-        Intent intents = new Intent();
-        this.addReferenceData(intents);
-        intents.setIntentType(Intent.INTENT_TYPE.PREDEFINED.name());
-        intents.setOwner(accountService.getAuthenticatedUser());
-        return intents;
+        return createIntentModel(Intent.INTENT_TYPE.PREDEFINED);
     }
 
-    public Intent initCustomIntent() {
-        Intent intent = new Intent();
-        this.addReferenceData(intent);
-        intent.setIntentType(Intent.INTENT_TYPE.CUSTOM.name());
-        intent.setOwner(accountService.getAuthenticatedUser());
+    private Intent createIntentModel(Intent.INTENT_TYPE predefined) {
+        Intent mainIntent = new Intent();
+        this.addReferenceData(mainIntent);
+        mainIntent.setIntentType(predefined.name());
+        mainIntent.setOwner(accountService.getAuthenticatedUser());
 
         // set may be intent
         Intent mayBeIntent = new Intent();
-        intent.setMayBeIntent(mayBeIntent);
+        mainIntent.setMayBeIntent(mayBeIntent);
         IntentResponse mayResponse = new IntentResponse();
         mayBeIntent.getResponses().add(mayResponse);
         this.addReferenceData(mayBeIntent);
 
-        return intent;
+        return mainIntent;
+    }
+
+    public Intent initCustomIntent() {
+        return createIntentModel(Intent.INTENT_TYPE.CUSTOM);
     }
 
     public Boolean uploadIntentsFromFile(@RequestPart("intentsData") MultipartFile file,
@@ -174,7 +174,7 @@ public class IntentService extends BaseServiceImpl<Intent> {
                 Map<String, Intent> intents = new HashMap<>();
                 for (String row : rows) {
                     String[] cols = row.split(" ", 2);
-                    LOGGER.debug(String.format("intent: %s, utterance: %s", cols[0], cols[1]));
+                    LOGGER.debug("intent: {}, utterance: {}", cols[0], cols[1]);
                     String intentKey = cols[0].trim();
                     Intent currentIntent;
                     if (intents.keySet().contains(intentKey)) {
@@ -197,14 +197,14 @@ public class IntentService extends BaseServiceImpl<Intent> {
                     intentUtterance.setUtterance(cols[1].trim());
                     currentIntent.addIntentUtterance(intentUtterance);
 
-                    if (currentIntent.getResponses().size() == 0) {
+                    if (currentIntent.getResponses().isEmpty()) {
                         IntentResponse intentResponse = new IntentResponse();
                         intentResponse.setLocale(Locale.ENGLISH.toString());
                         intentResponse.setResponse(cols[1].trim());
                         currentIntent.addIntentResponse(intentResponse);
                     }
                 }
-                LOGGER.debug("Final intent : " + intents.size());
+                LOGGER.debug("Final intent : {}", intents.size());
                 this.saveAll(intents.values());
             } catch (Exception e) {
                 return false;
@@ -241,5 +241,33 @@ public class IntentService extends BaseServiceImpl<Intent> {
         }
         this.saveAll(customIntents);
         return customIntents;
+    }
+
+    /**
+     * Export all of the intents into a CSV.
+     *
+     * @param categoryCode
+     * @param intentType
+     */
+    public List<List<String>> exportIntents(String categoryCode, String intentType) {
+        List<Intent> intents = this.intentRepository.
+                findIntentsByCodeTypeAndOwner(categoryCode, intentType,
+                        this.accountService.getAuthenticatedUser());
+
+        List<List<String>> allIntents = new ArrayList<>();
+        for (Intent intent : intents) {
+            String intentName = intent.getIntent();
+            Set<IntentUtterance> intentUtterances = intent.getUtterances();
+            for (IntentUtterance intentUtterance : intentUtterances) {
+                List<String> currentIntent = new ArrayList<>();
+                currentIntent.add(intentName);
+                currentIntent.add("^");
+                currentIntent.add(intentUtterance.getUtterance());
+                currentIntent.add("^");
+                currentIntent.add(intentUtterance.getLocale() + System.lineSeparator());
+                allIntents.add(currentIntent);
+            }
+        }
+        return allIntents;
     }
 }

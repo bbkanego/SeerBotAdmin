@@ -1,0 +1,180 @@
+SearchEvents^search for events^en
+SearchEvents^search events^en
+SearchEvents^search event^en
+SearchEvents^find event^en
+SearchEvents^find events^en
+SearchEvents^hello search for events^en
+SearchEvents^look for events^en
+SearchEvents^lookup events^en
+SearchEvents^lookup event^en
+SearchEvents^hello look for events^en
+SearchEvents^events^en
+SearchEvents^event^en
+SearchEvents^I want to search for events^en
+SearchEvents^hello I want to search for events^en
+SearchEvents^I want to search for event^en
+SearchEvents^hello I want to search for event^en
+SearchEvents^can you search for events^en
+SearchEvents^hello can you search for events^en
+SearchEvents^can you search for event^en
+SearchEvents^hello can you search for event^en
+SearchEvents^please help me search for events^en
+SearchEvents^hello please help me search for events^en
+SearchEvents^please help me search for event^en
+SearchEvents^hello please help me search for event^en
+SearchEvents^help me search for event^en
+SearchEvents^hello help me search for event^en
+SearchEvents^are there any events^en
+SearchEvents^hello are there any events^en
+SearchEvents^is there an event^en
+SearchEvents^hello is there an event^en
+SearchEvents^where are my events^en
+SearchEvents^show me events^en
+SearchEvents^show me my events^en
+SearchEventsNear^search for events near^en
+SearchEventsNear^hello search for events near^en
+SearchEventsNear^search for event near^en
+SearchEventsNear^hello search for event near^en
+SearchEventsNear^I want to search events near^en
+SearchEventsNear^hello I want to search events near^en
+SearchEventsNear^I want to search event near^en
+SearchEventsNear^hello I want to search event near^en
+SearchEventsNear^search events near^en
+SearchEventsNear^hello search events near^en
+SearchEventsNear^search event near^en
+SearchEventsNear^hello search event near^en
+SearchEventsNear^search event close to^en
+SearchEventsNear^hello search event close to^en
+SearchEventsNear^search events close to^en
+SearchEventsNear^hello search events close to^en
+SearchEventsNear^can you search event near^en
+SearchEventsNear^hello can you search event near^en
+SearchEventsNear^can you search events near^en
+SearchEventsNear^hello can you search events near^en
+SearchEventsNear^get search events near^en
+SearchEventsNear^hello get search events near^en
+SearchEventsNear^look for events near^en
+SearchEventsNear^hello look for events near^en
+SearchEventsNear^look for event near^en
+SearchEventsNear^hello look for event near^en
+SearchEventsNear^are there events near^en
+SearchEventsNear^is there event near^en
+SearchEventsNear^what are events near^en
+SearchEventsNear^hello what are events near^en
+SearchEventsNear^what is event near^en
+SearchEventsNear^hello what is event near^en
+SearchEventsNear^hello what events are near^en
+SearchEventsNear^what events are near^en
+SearchEventsNear^search for events in^en
+SearchEventsNear^hello search for events in^en
+SearchEventsNear^search for event in^en
+SearchEventsNear^hello search for event in^en
+SearchEventsNear^I want to search events in^en
+SearchEventsNear^hello I want to search events in^en
+SearchEventsNear^I want to search event in^en
+SearchEventsNear^hello I want to search event in^en
+SearchEventsNear^search events in^en^en
+SearchEventsNear^hello search events in^en
+SearchEventsNear^search event in^en
+SearchEventsNear^is there event in^en
+SearchEventsNear^are there events in^en
+SearchEventsNear^hello search event in^en
+SearchEventsNear^can you search event in^en
+SearchEventsNear^hello can you search event in^en
+SearchEventsNear^can you search events in^en
+SearchEventsNear^hello can you search events in^en
+SearchEventsNear^get search events in^en
+SearchEventsNear^hello get search events in^en
+SearchEventsNear^look for events in^en
+SearchEventsNear^hello look for events in^en
+SearchEventsNear^look for event in^en
+SearchEventsNear^hello look for event in^en
+SearchEventsNear^what are events in^en
+SearchEventsNear^hello what are events in^en
+SearchEventsNear^what is event in^en
+SearchEventsNear^hello what is event in^en
+SearchEventsNear^hello what events are in^en
+SearchEventsNear^what events are in^en
+DeleteEventYesNo^delete event^en
+DeleteEventYesNo^delete events^en
+EventDeleted^event delete complete^en
+PerformEventDelete^perform event delete^en
+CancelEventDelete^cancel delete event^en
+SearchRoles^search roles^en
+SearchRoles^search role^en
+SearchRoles^look roles^en
+SearchRoles^find roles^en
+SearchRoles^search for roles^en
+SearchRoles^hello search for roles^en
+SearchRoles^hello search for role^en
+SearchRoles^look for roles^en
+SearchRoles^hello look for roles^en
+SearchRoles^hello look for role^en
+SearchRoles^I want to search for roles^en
+SearchRoles^hello I want to search for roles^en
+SearchRoles^I want to search for role^en
+SearchRoles^hello I want to search for role^en
+SearchRoles^can you search for roles^en
+SearchRoles^hello can you search for roles^en
+SearchRoles^can you search for role^en
+SearchRoles^hello can you search for role^en
+SearchRoles^please help me search for roles^en
+SearchRoles^hello please help me search for roles^en
+SearchRoles^please help me search for role^en
+SearchRoles^hello please help me search for role^en
+SearchRoles^help me search for role^en
+SearchRoles^hello help me search for role^en
+SearchRoles^are there any roles^en
+SearchRoles^hello are there any roles^en
+SearchRoles^is there any role^en
+SearchRoles^hello is there any role^en
+HaveLogInIssues^have log in issues^en
+HaveLogInIssues^cannot log in^en
+HaveLogInIssues^have problems log in^en
+HaveLogInIssues^am having problems log in^en
+HaveLogInIssues^am having problems login^en
+HaveLogInIssues^am having problems signin^en
+HaveLogInIssues^have troubles during log in^en
+HaveLogInIssues^need help sign in^en
+HaveLogInIssues^not able to sign in^en
+HaveLogInIssues^not able to log in^en
+HaveLogInIssues^not able to login^en
+HaveLogInIssues^not able to signin^en
+HaveLogInIssues^cannot access my account^en
+HaveLogInIssues^having login problems^en
+HaveLogInIssues^have login issues^en
+HaveLogInIssues^resolve log in problems^en
+HaveLogInIssues^resolve login problems^en
+HaveLogInIssues^resolve signin problems^en
+HaveLogInIssues^resolve sign in problems^en
+HaveLogInIssues^resolve sign in issues^en
+HaveLogInIssues^resolve signin issues^en
+HaveLogInIssues^resolve login issues^en
+HaveLogInIssues^resolve log in issues^en
+HaveLogInIssues^fix log in issues^en
+HaveLogInIssues^fix log in problems^en
+HaveLogInIssues^fix login problems^en
+HaveLogInIssues^fix sign in problems^en
+HaveLogInIssues^fix signin issues^en
+AddRoles^roles created^en
+AddRoles^roles create^en
+AddRoles^create roles^en
+AddRoles^add roles^en
+ThankYou^thanks^en
+ThankYou^thank you^en
+ThankYou^that helps^en
+ThankYou^helpful^en
+Help^help^en
+Help^help me^en
+Help^how do you work ?^en
+Hi^hello^en
+Hi^hi^en
+Hi^how are you?^en
+Hi^how are you doing?^en
+Hi^are you ok?^en
+Hi^hope you are doing good?^en
+Hi^Ola^en
+Hi^howdy?^en
+HowCanIHelp^good and you^en
+HowCanIHelp^great and you^en
+HowCanIHelp^good^en
