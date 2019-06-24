@@ -1,10 +1,20 @@
 # BotAdmin
 
 ## Available Profiles
-1. Local DEV
-This profile allows you run the Bot locally in dev mode and deploy the bot locally and test it.
-2. AWS/Production
-This profile allows you to deploy the Bot on AWS EC2 instance and test it.
+1. Local DEV (local) This profile allows you run the Bot locally in dev mode and deploy the bot locally and test it.
+```
+mvn clean install -P local
+```
+2. AWS/Production (aws-ec2) This profile allows you to deploy the Bot on AWS EC2 instance and test it.
+```
+mvn clean install -P aws-ec2
+```
+Once the build succeeds you should see 'spring.profiles.active=aws-ec2' set in the application.properties file.
+
+3. AWS/Production WAR (aws-ec2-war) This profile allows you to deploy the Bot WAR file on AWS EC2 instance and test it.
+```
+mvn clean install -P aws-ec2-war
+```
 
 ## How to run application locally
 1. Main class: com.seerlogics.botadmin.BotAdminApplication
