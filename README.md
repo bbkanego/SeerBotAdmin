@@ -5,13 +5,33 @@
 ```
 mvn clean install -P local
 ```
-2. AWS/Production (aws-ec2) This profile allows you to deploy the Bot on AWS EC2 instance and test it.
+
+2. Local DEV-WAR (local) This profile allows you run the Bot locally in dev mode and deploy the bot on tomcat and test it.
+```
+mvn clean install -P local-war
+```
+Once built copy the WAR to "~/installs/apache-tomcat-9.0.21/webapps" and start tomcat (using ~/installs/apache-tomcat-9.0.21/bin/startup.sh) and test using URL:
+```
+http://localhost:8091/botadmin/actuator/info
+```
+
+I have changed the server.xml for tomcat 9 and added the following in HOST section
+```
+<Context path="/botadmin" docBase="seerlogics-bot-admin-1.0.0-SNAPSHOT"/>
+```
+I have also added additional parameters like below to HOST element
+```
+autoDeploy="false" deployOnStartup="false"
+```
+to make the app work with a new context path.
+
+3. AWS/Production (aws-ec2) This profile allows you to deploy the Bot on AWS EC2 instance and test it.
 ```
 mvn clean install -P aws-ec2
 ```
 Once the build succeeds you should see 'spring.profiles.active=aws-ec2' set in the application.properties file.
 
-3. AWS/Production WAR (aws-ec2-war) This profile allows you to deploy the Bot WAR file on AWS EC2 instance and test it.
+4. AWS/Production WAR (aws-ec2-war) This profile allows you to deploy the Bot WAR file on AWS EC2 instance and test it.
 ```
 mvn clean install -P aws-ec2-war
 ```
@@ -76,3 +96,7 @@ chmod 0400 ~/svn/bhushan/theory/AWS/SeerLogics/keyPairs/*.pem
 2. AWS Management code: https://github.com/neowu/cmn-project/blob/master/cmn/src/main/java/core/aws/task/ec2/CreateInstanceTask.java
 3. Create Instance Task: https://www.programcreek.com/java-api-examples/?code=neowu/cmn-project/cmn-project-master/cmn/src/main/java/core/aws/task/ec2/CreateInstanceTask.java#
 4. Create ELB: https://www.programcreek.com/java-api-examples/?code=neowu/cmn-project/cmn-project-master/cmn/src/main/java/core/aws/task/ec2/CreateInstanceTask.java#
+
+## Admin/Actuator URLs
+1. Health URL: http://localhost:8091/actuator/health
+2. Info URL: http://localhost:8091/actuator/info

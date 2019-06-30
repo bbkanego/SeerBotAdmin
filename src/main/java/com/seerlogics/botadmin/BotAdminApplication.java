@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.data.mongo.MongoRepositoriesAutoCo
 import org.springframework.boot.autoconfigure.jms.JmsAutoConfiguration;
 import org.springframework.boot.autoconfigure.jms.activemq.ActiveMQAutoConfiguration;
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
@@ -23,6 +24,8 @@ import java.util.concurrent.Executor;
  * <p>
  * Since ALL the JPA repository and Entities and controllers are under 'com.seerlogics.botadmin',
  * the "@SpringBootApplication's" auto configuration is able to do component scans
+ *
+ * SpringBootServletInitializer: allows WAR deployment & initialization of Spring boot app
  */
 @SpringBootApplication // same as adding @Configuration @EnableAutoConfiguration @ComponentScan
 @EnableAsync
@@ -35,7 +38,7 @@ import java.util.concurrent.Executor;
         JmsAutoConfiguration.class,
         ActiveMQAutoConfiguration.class})
 @EnableTransactionManagement
-public class BotAdminApplication {
+public class BotAdminApplication extends SpringBootServletInitializer {
     public static void main(String[] args) {
         SpringApplication.run(BotAdminApplication.class, args);
     }
