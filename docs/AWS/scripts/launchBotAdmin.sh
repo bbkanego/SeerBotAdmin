@@ -8,9 +8,13 @@
 
 s3commonKeyPrefix='bkane/BotAdminApp/'
 
-botAdminArtifact='seerlogics-bot-admin-1.0.0-SNAPSHOT.jar'
+botAdminArtifact='seerlogics-bot-admin-1.0.0-SNAPSHOT.war'
 botAdminBlob='~/svn/code/java/SeerlogicsBotAdmin/target/'$botAdminArtifact
 s3botAdminDataKey=$s3commonKeyPrefix$botAdminArtifact
+
+serverXMLArtifact='server.xml'
+serverXMLBlob='/Users/bkane/svn/code/java/SeerlogicsBotAdmin/tomcat/AWS/'$serverXMLArtifact
+s3serverXMLDataKey=$s3commonKeyPrefix$serverXMLArtifact
 
 botDBArtifact='botDB.mv.db'
 botDBBlob='~/svn/code/java/SeerlogicsBotAdmin/h2/'$botDBArtifact
@@ -24,17 +28,18 @@ bucket='biz-bot-artifact'
 
 echo 'build BotAdmin artifact now'
 cd ~/svn/code/java/SeerlogicsBotAdmin
-mvn clean install -P aws-ec2
+mvn clean install -P aws-ec2-war
 
 echo 'Build done ------------------'
 
 cd ~/svn/code/java/SeerlogicsBotAdmin/docs/AWS/scripts
 
 # cd to ~/Users/bkane/svn/code/java/SeerlogicsBotAdmin/target
-echo 'Copying deployable artifacts to S3: ' $botAdminBlob $botDBBlob $chatBotDbBlob
+echo 'Copying deployable artifacts to S3: ' $botAdminBlob $botDBBlob $chatBotDbBlob $serverXMLBlob
 aws s3api put-object --profile bizBotAdmin --body $botAdminBlob --bucket $bucket --key $s3botAdminDataKey
 aws s3api put-object --profile bizBotAdmin --body $botDBBlob --bucket $bucket --key $s3botDBDataKey
 aws s3api put-object --profile bizBotAdmin --body $chatBotDbBlob --bucket $bucket --key $s3chatBotDBDataKey
+aws s3api put-object --profile bizBotAdmin --body $serverXMLBlob --bucket $bucket --key $s3serverXMLDataKey
 
 echo 'Launching instances now'
 #aws ec2 run-instances --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=BizBotAdmin}]' --region us-east-2 --profile bizBotAdmin --image-id ami-0cd3dfa4e37921605 --key-name bizBotAdminLogin --security-groups bizBotSecurityGroup --instance-type t2.micro --placement AvailabilityZone=us-east-2c --block-device-mappings DeviceName=/dev/sdh,Ebs={VolumeSize=100} --count 1
