@@ -65,6 +65,15 @@ su - ec2-user -c 'chmod +x /home/ec2-user/installs/tomcat/bin/*.sh'
 echo 'Starting the BotAdminApp'
 su - ec2-user -c '/home/ec2-user/installs/tomcat/bin/startup.sh'
 
+echo 'register the instance with elb'
+#su - ec2-user -c 'wget http://s3.amazonaws.com/ec2metadata/ec2-metadata'
+#su - ec2-user -c 'chmod u+x ec2-metadata'
+#su - ec2-user -c "instanceId=$(/home/ec2-user/ec2-metadata --instance-id | grep 'instance-id' | awk {'print $2'})"
+#su - ec2-user -c 'instanceId="`/home/ec2-user/ec2-metadata --instance-id | grep 'instance-id' | awk {'print $2'}`"'
+instanceId="`wget -q -O - http://169.254.169.254/latest/meta-data/instance-id`"
+echo "---->>> Instance id is = " $instanceId
+aws elb register-instances-with-load-balancer --region us-east-2 --load-balancer-name BizBotAdminELB --instances $instanceId
+
 echo 'Deleting deployable artifact' $s3botAdminDataKey
 su - ec2-user -c 'aws s3api delete-object --bucket biz-bot-artifact --key bkane/BotAdminApp/seerlogics-bot-admin-1.0.0-SNAPSHOT.war'
 echo 'Deleting deployable artifact' $s3botDBDataKey

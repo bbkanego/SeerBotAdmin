@@ -26,6 +26,8 @@ s3chatBotDBDataKey=$s3commonKeyPrefix$chatBotDbArtifact
 
 bucket='biz-bot-artifact'
 
+~/svn/code/java/SeerlogicsBotAdmin/docs/AWS/scripts/terminateEC2Instances.sh
+
 echo 'build BotAdmin artifact now'
 cd ~/svn/code/java/SeerlogicsBotAdmin
 mvn clean install -P aws-ec2-war
@@ -43,5 +45,8 @@ aws s3api put-object --profile bizBotAdmin --body $serverXMLBlob --bucket $bucke
 
 echo 'Launching instances now'
 #aws ec2 run-instances --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=BizBotAdmin}]' --region us-east-2 --profile bizBotAdmin --image-id ami-0cd3dfa4e37921605 --key-name bizBotAdminLogin --security-groups bizBotSecurityGroup --instance-type t2.micro --placement AvailabilityZone=us-east-2c --block-device-mappings DeviceName=/dev/sdh,Ebs={VolumeSize=100} --count 1
-aws ec2 run-instances --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=BizBotAdmin}]' --user-data file://onLaunchScript.sh --region us-east-2 --iam-instance-profile Name="S3_biz_bot_artifact_Readonly" --image-id ami-0cd3dfa4e37921605 --key-name bizBotAdminLogin --security-groups bizBotSecurityGroup --instance-type t2.micro --placement AvailabilityZone=us-east-2c --count 1
+aws ec2 run-instances --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=BizBotAdmin}]' --user-data file://onLaunchScript.sh --region us-east-2 --iam-instance-profile Name="S3_biz_bot_artifact_Readonly" --image-id ami-0cd3dfa4e37921605 --key-name bizBotAdminLogin --security-groups bizBotSecurityGroup --instance-type t2.micro --placement AvailabilityZone=us-east-2c --count 2
 
+echo 'create ELB and configure it'
+aws elb create-load-balancer --load-balancer-name BizBotAdminELB --listeners "Protocol=HTTP,LoadBalancerPort=80,InstanceProtocol=HTTP,InstancePort=8099" --subnets subnet-5adb8617 --security-groups sg-066e46dd3f09492bd
+aws elb configure-health-check --load-balancer-name BizBotAdminELB --health-check Target=HTTP:8099/botadmin/actuator/info,Interval=30,UnhealthyThreshold=2,HealthyThreshold=2,Timeout=3
