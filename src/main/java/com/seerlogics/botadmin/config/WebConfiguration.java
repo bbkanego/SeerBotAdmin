@@ -42,8 +42,7 @@ public class WebConfiguration implements WebMvcConfigurer, ResourceLoaderAware {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         String[] allowedOrigins = new String[]{"http://localhost:4300", "http://localhost:4320",
-                "http://eventgenie.lingoace.com.s3-website.us-east-2.amazonaws.com",
-                "http://eventgenie.lingoace.com"};
+                "http://gab.seersense.com"};
         /**
          * This will be triggered for ALL URLs.
          */

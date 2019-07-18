@@ -2,18 +2,22 @@ package com.seerlogics.botadmin.service;
 
 import com.lingoace.exception.jpa.UnknownTypeException;
 import com.lingoace.spring.service.BaseServiceImpl;
+import com.seerlogics.botadmin.config.AppProperties;
 import com.seerlogics.commons.dto.LaunchModel;
 import com.seerlogics.commons.dto.SearchBots;
 import com.seerlogics.commons.model.*;
 import com.seerlogics.commons.repository.BotRepository;
+import com.seerlogics.commons.repository.LaunchInfoRepository;
+import com.seerlogics.commons.repository.TrainedModelRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -25,26 +29,42 @@ public class BotService extends BaseServiceImpl<Bot> {
 
     protected static final Logger LOGGER = LoggerFactory.getLogger(BotService.class);
 
-    @Autowired
-    private BotRepository botRepository;
+    private final BotRepository botRepository;
 
-    @Autowired
-    private CategoryService categoryService;
+    private final CategoryService categoryService;
 
-    @Autowired
-    private StatusService statusService;
+    private final StatusService statusService;
 
-    @Autowired
-    private LanguageService languageService;
+    private final LanguageService languageService;
 
-    @Autowired
-    private TrainedModelService trainedModelService;
+    private final AccountService accountService;
 
-    @Autowired
-    private AccountService accountService;
+    private final TrainedModelRepository trainedModelRepository;
 
-    @Autowired
-    private BotLauncher botLauncher;
+    private final LaunchInfoRepository launchInfoRepository;
+
+    private final BotLauncher botLauncher;
+
+    private AppProperties appProperties;
+
+    @Value("${app.botType:simple}")
+    private String botType;
+
+    public BotService(BotRepository botRepository, CategoryService categoryService,
+                      StatusService statusService, LanguageService languageService,
+                      AccountService accountService, TrainedModelRepository trainedModelRepository,
+                      LaunchInfoRepository launchInfoRepository,
+                      BotLauncher botLauncher, AppProperties appProperties) {
+        this.botRepository = botRepository;
+        this.categoryService = categoryService;
+        this.statusService = statusService;
+        this.languageService = languageService;
+        this.accountService = accountService;
+        this.trainedModelRepository = trainedModelRepository;
+        this.launchInfoRepository = launchInfoRepository;
+        this.botLauncher = botLauncher;
+        this.appProperties = appProperties;
+    }
 
     public Bot initModel(String type) {
         Collection<Category> categories = categoryService.getAll();
@@ -102,10 +122,25 @@ public class BotService extends BaseServiceImpl<Bot> {
     }
 
     public Bot launchBot(LaunchModel launchModel) {
-        Bot bot = this.botRepository.getOne(launchModel.getBot().getId());
-        botLauncher.launchBotAsync(launchModel);
-        bot.setStatus(statusService.findByCode(Status.STATUS_CODES.LAUNCHING.name()));
-        return save(bot);
+        Bot targetBot = this.botRepository.getOne(launchModel.getBot().getId());
+        if ("async".equals(this.botType)) {
+            botLauncher.launchBotAsync(launchModel);
+            targetBot.setStatus(statusService.findByCode(Status.STATUS_CODES.LAUNCHING.name()));
+        } else {
+            launchBotSimple(launchModel, targetBot);
+            targetBot.setStatus(statusService.findByCode(Status.STATUS_CODES.LAUNCHED.name()));
+        }
+        return save(targetBot);
+    }
+
+    private void launchBotSimple(LaunchModel launchModel, Bot targetBot) {
+        LaunchInfo launchInfo = new LaunchInfo();
+        launchInfo.setTargetBotId(targetBot.getId());
+        launchInfo.setTrainedModel(trainedModelRepository.getOne(launchModel.getTrainedModelId()));
+        launchInfo.setUniqueBotId(UUID.randomUUID().toString());
+        launchInfo.setAllowedOrigins(launchModel.getAllowedOrigins());
+        launchInfo.setChatUrl(appProperties.getChatAppDomain() + appProperties.getElbHealthCheckUrl());
+        targetBot.getLaunchInfo().add(launchInfo);
     }
 
     public Bot stopBot(Long id) {

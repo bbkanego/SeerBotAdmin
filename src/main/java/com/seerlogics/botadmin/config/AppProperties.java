@@ -31,6 +31,7 @@ public class AppProperties {
     private String botActiveProfile;
 
     private String cloudProvider;
+    private String chatAppDomain;
 
     // instance properties
     private String instanceReferenceImageId;
@@ -53,6 +54,14 @@ public class AppProperties {
     private String h2DbPath;
     private String h2BotDb;
     private String h2BotAdminDb;
+
+    public String getChatAppDomain() {
+        return chatAppDomain;
+    }
+
+    public void setChatAppDomain(String chatAppDomain) {
+        this.chatAppDomain = chatAppDomain;
+    }
 
     public String getElbNameSuffix() {
         return elbNameSuffix;

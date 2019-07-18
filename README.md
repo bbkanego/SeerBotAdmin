@@ -100,3 +100,24 @@ chmod 0400 ~/svn/bhushan/theory/AWS/SeerLogics/keyPairs/*.pem
 ## Admin/Actuator URLs
 1. Health URL: http://localhost:8091/actuator/health
 2. Info URL: http://localhost:8091/actuator/info
+
+## Running BOT H2 DB in server mode
+```
+java -cp ~/installs/H2/h2-1.4.199.jar org.h2.tools.Server -web -webAllowOthers -tcp -tcpAllowOthers -baseDir /Users/bkane/svn/code/java/SeerlogicsBotAdmin/h2
+```
+The above will start the server print out the below in console:
+```
+TCP server running at tcp://23.202.231.166:9092 (others can connect)
+
+Web Console server running at http://192.168.0.113:8082 (others can connect)
+```
+
+##### You can connect to the server both the Web app, IDE(DB client) and H2 console at the same time using URL:
+BotAdminDB URL:
+```
+jdbc:h2:tcp://localhost/~/svn/code/java/SeerlogicsBotAdmin/h2/botDB
+```
+ChatBot DB URL:
+```
+jdbc:h2:tcp://localhost/~/svn/code/java/SeerlogicsBotAdmin/h2/chatBotServerDB
+```

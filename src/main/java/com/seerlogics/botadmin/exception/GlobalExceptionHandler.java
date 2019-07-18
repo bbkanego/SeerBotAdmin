@@ -4,6 +4,7 @@ import opennlp.tools.util.InsufficientTrainingDataException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -17,6 +18,14 @@ import java.util.UUID;
  */
 @ControllerAdvice
 public class GlobalExceptionHandler extends com.lingoace.common.GlobalExceptionHandler {
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public Object handleValidationException(BadCredentialsException e) {
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put("message", "Invalid user name or password");
+        return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+    }
+
     // define the catch all here!!!
     @ExceptionHandler(Exception.class)
     public Object resolveException(HttpServletRequest httpServletRequest, Exception e) {

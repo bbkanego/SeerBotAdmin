@@ -4,6 +4,10 @@ import com.lingoace.model.AuthToken;
 import com.lingoace.model.Login;
 import com.lingoace.spring.authentication.JWTTokenProvider;
 import com.seerlogics.botadmin.config.AppProperties;
+import com.seerlogics.commons.model.CustomUserDetails;
+import com.seerlogics.commons.model.Organization;
+import com.seerlogics.commons.model.Party;
+import com.seerlogics.commons.model.Person;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -48,6 +52,8 @@ public class AuthenticationController {
                 )
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
+        CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+
         final String token = JWTTokenProvider.generateToken(authentication,
                 SignatureAlgorithm.forName(appProperties.getJwtSignatureAlgo()),
                 appProperties.getJwtSecretKey(), appProperties.getJwtTtl());
@@ -56,6 +62,17 @@ public class AuthenticationController {
         for (GrantedAuthority authority : authorities) {
             authToken.getRoles().add(authority.getAuthority().replace("ROLE_", "").trim());
         }
+        authToken.setUserName(loginUser.getUserName());
+        Party party = customUserDetails.getAccount().getOwner();
+        if (party instanceof Person) {
+            Person person = (Person) party;
+            authToken.setFirstName(person.getFirstName());
+            authToken.setLastName(person.getLastName());
+        } else if (party instanceof Organization) {
+            Organization organization = (Organization) party;
+            authToken.setFirstName(organization.getName());
+        }
+
         return ResponseEntity.ok(authToken);
     }
 }
