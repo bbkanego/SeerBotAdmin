@@ -100,6 +100,16 @@
                     <var-value>^[a-zA-Z0-9-_]+$</var-value>
                 </var>
             </field>
+            <field id="realm" property="realm" depends="required,containsChars,validateMaxLength">
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>50</var-value>
+                </var>
+                <var>
+                    <var-name>regEx</var-name>
+                    <var-value>^[a-zA-Z0-9-_]+$</var-value>
+                </var>
+            </field>
             <field id="passwordCaptureReenter" property="passwordCaptureReenter" depends="required,validateMaxLength">
                 <var>
                     <var-name>maxLength</var-name>
@@ -292,7 +302,7 @@
                     </var>
                 </field>
                 <field property="responseType" id="mayBeIntent_responses_responseType"
-                                        depends="required,validateMaxLength">
+                       depends="required,validateMaxLength">
                     <arg key="label.responseType" position="0"/>
                     <var>
                         <var-name>maxLength</var-name>
@@ -338,6 +348,62 @@
 
         <form name="validateSearchBotsRule" classType="com.seerlogics.commons.dto.SearchBots">
             <field id="botCategory" property="category" depends="required"/>
+        </form>
+
+        <form name="validateCategoryRule" classType="com.seerlogics.commons.model.Category">
+            <field property="name" id="catName" depends="required,containsChars,validateMaxLength">
+                <var>
+                    <var-name>regEx</var-name>
+                    <var-value>^[a-zA-Z0-9\s]+$</var-value>
+                </var>
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>200</var-value>
+                </var>
+            </field>
+            <field property="code" id="catCode" depends="required,containsChars,validateMaxLength">
+                <var>
+                    <var-name>regEx</var-name>
+                    <var-value>^[a-zA-Z0-9_\s]+$</var-value>
+                </var>
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>50</var-value>
+                </var>
+            </field>
+            <field property="description" id="catDescription" depends="required,containsChars,validateMaxLength">
+                <var>
+                    <var-name>regEx</var-name>
+                    <var-value>^[a-zA-Z0-9\s]+$</var-value>
+                </var>
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>2000</var-value>
+                </var>
+            </field>
+        </form>
+
+        <form name="validateCategorySearchRule" classType="com.seerlogics.commons.model.Category">
+            <field property="name" id="catName" depends="containsChars,validateMaxLength">
+                <var>
+                    <var-name>regEx</var-name>
+                    <var-value>^[a-zA-Z0-9\s]+$</var-value>
+                </var>
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>200</var-value>
+                </var>
+            </field>
+            <field property="code" id="catCode" depends="containsChars,validateMaxLength">
+                <var>
+                    <var-name>regEx</var-name>
+                    <var-value>^[a-zA-Z0-9_\s]+$</var-value>
+                </var>
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>50</var-value>
+                </var>
+            </field>
         </form>
 
     </formset>

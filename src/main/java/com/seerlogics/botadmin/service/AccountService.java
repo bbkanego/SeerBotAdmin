@@ -4,7 +4,9 @@ import com.lingoace.spring.service.BaseServiceImpl;
 import com.seerlogics.commons.model.*;
 import com.seerlogics.commons.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -23,16 +25,20 @@ import java.util.*;
 @Service(value = "accountService")
 public class AccountService extends BaseServiceImpl<Account> implements UserDetailsService {
 
+    // cannot do constructor injection since it causes cyclic dependency issue
     @Autowired
     private AccountRepository accountRepository;
 
+    // cannot do constructor injection since it causes cyclic dependency issue
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
+    // cannot do constructor injection since it causes cyclic dependency issue
     @Autowired
     private RoleService roleService;
 
     @Override
+    @PreAuthorize("hasAnyRole('ACCT_ADMIN', 'UBER_ADMIN')")
     public Collection<Account> getAll() {
         return accountRepository.findAll();
     }
@@ -57,25 +63,27 @@ public class AccountService extends BaseServiceImpl<Account> implements UserDeta
     }
 
     @Override
+    @PreAuthorize("hasAnyRole('UBER_ADMIN')")
     public void delete(Long id) {
         accountRepository.deleteById(id);
     }
 
     @Override
-    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String userName) {
         Account account = accountRepository.findByUserName(userName);
         if (account == null) {
             throw new UsernameNotFoundException(userName);
         }
-        return new CustomUserDetails(account.getUserName(), account.getPassword(), getAuthority(account), account);
+        return new CustomUserDetails(account.getUserName(), account.getPassword(),
+                getAuthority(account), account);
     }
 
-    public Account getAccountByUsername(String userName) throws UsernameNotFoundException {
+    public Account getAccountByUsername(String userName) {
         return accountRepository.findByUserName(userName);
     }
 
-    private Set getAuthority(Account account) {
-        Set authorities = new HashSet<>();
+    private Set<GrantedAuthority> getAuthority(Account account) {
+        Set<GrantedAuthority> authorities = new HashSet<>();
         account.getRoles().forEach(role -> {
             authorities.add(new SimpleGrantedAuthority("ROLE_" + role.getCode()));
         });

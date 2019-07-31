@@ -20,6 +20,14 @@
       "option2": "Edit Bot",
       "option3": "Launch Bot",
       "option4": "Test Bot"
+    },
+    "refData": {
+      "heading": "Reference Data",
+      "category": {
+        "searchCategory": "Search Category",
+        "createCategory": "Create Category",
+        "editCategory": "Edit Category"
+      }
     }
   }
 }

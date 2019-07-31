@@ -1,7 +1,7 @@
 package com.seerlogics.botadmin.service;
 
 import com.lingoace.spring.service.BaseServiceImpl;
-import com.seerlogics.botadmin.exception.BaseRuntimeException;
+import com.seerlogics.commons.exception.BaseRuntimeException;
 import com.seerlogics.botadmin.exception.ErrorCodes;
 import com.seerlogics.commons.dto.SearchIntents;
 import com.seerlogics.commons.model.*;
@@ -108,7 +108,7 @@ public class IntentService extends BaseServiceImpl<Intent> {
     public SearchIntents initSearchIntentsCriteria(String type) {
         SearchIntents searchIntents = new SearchIntents();
         searchIntents.setIntentType(type);
-        searchIntents.getReferenceData().put("categories", categoryService.getAll());
+        searchIntents.getReferenceData().put("categories", categoryService.finaAllForSelection());
         return searchIntents;
     }
 
@@ -117,7 +117,7 @@ public class IntentService extends BaseServiceImpl<Intent> {
     }
 
     private void addReferenceData(Intent intent) {
-        intent.getReferenceData().put("categories", categoryService.getAll());
+        intent.getReferenceData().put("categories", categoryService.finaAllForSelection());
         List<Map<String, String>> responseTypes = new ArrayList<>();
         for (IntentResponse.RESPONSE_TYPE responseType : IntentResponse.RESPONSE_TYPE.values()) {
             Map<String, String> dynamicResponseType = new HashMap<>();

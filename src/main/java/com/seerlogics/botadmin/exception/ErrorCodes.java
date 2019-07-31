@@ -12,4 +12,5 @@ public final class ErrorCodes {
     public static String INTENTS_UPLOAD_ERROR = "SBA-10005";
     public static String INTENTS_RESPONSE_NUM_ERROR = "SBA-10006";
     public static String DUPLICATE_INTENTS_RESPONSE_TYPE_ERROR = "SBA-10007";
+    public static String UNAUTHORIZED_ACCESS = "SBA-10008";
 }

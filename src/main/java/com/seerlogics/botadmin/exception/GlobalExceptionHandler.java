@@ -1,5 +1,6 @@
 package com.seerlogics.botadmin.exception;
 
+import com.seerlogics.commons.exception.BaseRuntimeException;
 import opennlp.tools.util.InsufficientTrainingDataException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.http.HttpStatus;

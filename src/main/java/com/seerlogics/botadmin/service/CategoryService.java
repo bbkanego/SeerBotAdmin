@@ -1,9 +1,12 @@
 package com.seerlogics.botadmin.service;
 
 import com.lingoace.spring.service.BaseServiceImpl;
+import com.seerlogics.botadmin.exception.ErrorCodes;
+import com.seerlogics.commons.exception.BaseRuntimeException;
+import com.seerlogics.commons.model.Account;
 import com.seerlogics.commons.model.Category;
 import com.seerlogics.commons.repository.CategoryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,12 +19,29 @@ import java.util.Collection;
 @Transactional
 public class CategoryService extends BaseServiceImpl<Category> {
 
-    @Autowired
-    private CategoryRepository categoryRepository;
+    private final CategoryRepository categoryRepository;
+    private final AccountService accountService;
 
+    public CategoryService(CategoryRepository categoryRepository, AccountService accountService) {
+        this.categoryRepository = categoryRepository;
+        this.accountService = accountService;
+    }
+
+    @PreAuthorize("hasAnyRole('ACCT_ADMIN', 'UBER_ADMIN')")
     @Override
     public Collection<Category> getAll() {
         return categoryRepository.findAll();
+    }
+
+    @PreAuthorize("hasAnyRole('ACCT_ADMIN', 'UBER_ADMIN')")
+    public Collection<Category> findForEdit(Category category) {
+        return categoryRepository.findByOwnerAccounts(accountService.getAuthenticatedUser());
+    }
+
+    @PreAuthorize("hasAnyRole('ACCT_ADMIN', 'UBER_ADMIN', 'ACCT_USER')")
+    public Collection<Category> finaAllForSelection() {
+        Account admin = accountService.getAccountByUsername("admin");
+        return categoryRepository.findByOwnerAccounts(admin, accountService.getAuthenticatedUser());
     }
 
     @Override
@@ -29,14 +49,37 @@ public class CategoryService extends BaseServiceImpl<Category> {
         return categoryRepository.getOne(id);
     }
 
+    @PreAuthorize("hasAnyRole('ACCT_ADMIN', 'UBER_ADMIN')")
     @Override
-    public Category save(Category object) {
-        return categoryRepository.save(object);
+    public Category save(Category category) {
+        // is new category?
+        if (category.getId() == null) {
+            category.setOwnerAccount(accountService.getAuthenticatedUser());
+            return categoryRepository.save(category);
+        } else {
+            Category tempCat = categoryRepository.getOne(category.getId());
+            if (tempCat.getOwnerAccount().getId().equals(accountService.getAuthenticatedUser().getId())) {
+                return categoryRepository.save(category);
+            } else {
+                throw new BaseRuntimeException(ErrorCodes.UNAUTHORIZED_ACCESS);
+            }
+        }
     }
 
+    @PreAuthorize("hasAnyRole('ACCT_ADMIN', 'UBER_ADMIN')")
     @Override
     public void delete(Long id) {
-        categoryRepository.deleteById(id);
+        Category category = categoryRepository.getOne(id);
+        if (accountService.getAuthenticatedUser().getId().equals(category.getOwnerAccount().getId())) {
+            categoryRepository.delete(category);
+        } else {
+            throw new BaseRuntimeException(ErrorCodes.UNAUTHORIZED_ACCESS);
+        }
+    }
+
+    @PreAuthorize("hasAnyRole('ACCT_ADMIN', 'UBER_ADMIN')")
+    public Category initModel() {
+        return new Category();
     }
 
     public Category getCategoryByCode(String code) {

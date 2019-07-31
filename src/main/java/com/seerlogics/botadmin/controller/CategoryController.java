@@ -3,8 +3,6 @@ package com.seerlogics.botadmin.controller;
 import com.lingoace.spring.controller.BaseController;
 import com.seerlogics.botadmin.service.CategoryService;
 import com.seerlogics.commons.model.Category;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,8 +12,11 @@ import java.util.Collection;
 @RequestMapping(value = "/api/v1/category")
 public class CategoryController extends BaseController {
 
-    @Autowired
-    private CategoryService categoryService;
+    private final CategoryService categoryService;
+
+    public CategoryController(CategoryService categoryService) {
+        this.categoryService = categoryService;
+    }
 
     @PostMapping(value = {"", "/",})
     public ResponseEntity<Boolean> save(@RequestBody Category category) {
@@ -36,7 +37,16 @@ public class CategoryController extends BaseController {
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<String> delete(@PathVariable("id") Long id) {
         this.categoryService.delete(id);
-        return new ResponseEntity<>("success", HttpStatus.OK);
+        return ResponseEntity.ok("success");
     }
 
+    @GetMapping(value = {"/init"})
+    public ResponseEntity<Category> initModel() {
+        return ResponseEntity.ok(this.categoryService.initModel());
+    }
+
+    @PostMapping(value = {"/get-for-edit"})
+    public ResponseEntity<Collection<Category>> getForEdit(@RequestBody Category category) {
+        return ResponseEntity.ok(this.categoryService.findForEdit(category));
+    }
 }

@@ -1,0 +1,18 @@
+{
+  "refData": {
+    "maintainCategory": {
+      "pageHeadingCreate": "Create Category",
+      "pageHeadingEdit": "Edit Category",
+      "nameLabel": "Name",
+      "codeLabel": "Code",
+      "descriptionLabel": "Description"
+    },
+    "searchCategory": {
+      "pageHeading": "Search Category",
+      "resultsHeading": "Search Results",
+      "nameLabel": "Name",
+      "codeLabel": "Code",
+      "descriptionLabel": "Description"
+    }
+  }
+}
