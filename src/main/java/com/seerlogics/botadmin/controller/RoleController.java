@@ -3,8 +3,6 @@ package com.seerlogics.botadmin.controller;
 import com.lingoace.spring.controller.BaseController;
 import com.seerlogics.botadmin.service.RoleService;
 import com.seerlogics.commons.model.Role;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +14,12 @@ import java.util.Collection;
 @RestController
 @RequestMapping(value = "/api/v1/role")
 public class RoleController extends BaseController {
-    @Autowired
-    private RoleService roleService;
+
+    private final RoleService roleService;
+
+    public RoleController(RoleService roleService) {
+        this.roleService = roleService;
+    }
 
     @PostMapping(value = {"", "/",})
     public ResponseEntity<String> save(@RequestBody Role role) {
@@ -26,13 +28,18 @@ public class RoleController extends BaseController {
     }
 
     @GetMapping(value = {"", "/",})
-    public ResponseEntity<Collection<Role>> getAll() {
-        return new ResponseEntity<>(this.roleService.getAll(), HttpStatus.OK);
+    public Collection<Role> getAll() {
+        return this.roleService.getAll();
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<Role> getById(@PathVariable("id") Long id) {
-        return new ResponseEntity<>(this.roleService.getSingle(id), HttpStatus.OK);
+    public Role getById(@PathVariable("id") Long id) {
+        return this.roleService.getSingle(id);
+    }
+
+    @GetMapping(value = "/init")
+    public Role initModel() {
+        return this.roleService.initModel();
     }
 
     @DeleteMapping(value = "/{id}")

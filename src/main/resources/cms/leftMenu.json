@@ -24,9 +24,29 @@
     "refData": {
       "heading": "Reference Data",
       "category": {
-        "searchCategory": "Search Category",
-        "createCategory": "Create Category",
-        "editCategory": "Edit Category"
+        "search": "Search Category",
+        "create": "Create Category",
+        "edit": "Edit Category"
+      },
+      "action": {
+        "search": "Search Action",
+        "create": "Create Action",
+        "edit": "Edit Action"
+      },
+      "resource": {
+        "search": "Search Resource",
+        "create": "Create Resource",
+        "edit": "Edit Resource"
+      },
+      "policy": {
+        "search": "Search Policy",
+        "create": "Create Policy",
+        "edit": "Edit Policy"
+      },
+      "role": {
+        "search": "Search Role",
+        "create": "Create Role",
+        "edit": "Edit Role"
       }
     }
   }

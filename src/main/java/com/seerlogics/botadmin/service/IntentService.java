@@ -1,13 +1,13 @@
 package com.seerlogics.botadmin.service;
 
 import com.lingoace.spring.service.BaseServiceImpl;
-import com.seerlogics.commons.exception.BaseRuntimeException;
 import com.seerlogics.botadmin.exception.ErrorCodes;
 import com.seerlogics.commons.dto.SearchIntents;
+import com.seerlogics.commons.exception.BaseRuntimeException;
 import com.seerlogics.commons.model.*;
 import com.seerlogics.commons.repository.IntentRepository;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -23,19 +23,25 @@ import java.util.*;
 @Transactional
 public class IntentService extends BaseServiceImpl<Intent> {
 
-    @Autowired
-    private IntentRepository intentRepository;
+    private final IntentRepository intentRepository;
 
-    @Autowired
-    private CategoryService categoryService;
+    private final CategoryService categoryService;
 
-    @Autowired
-    private LanguageService languageService;
+    private final LanguageService languageService;
 
-    @Autowired
-    private AccountService accountService;
+    private final AccountService accountService;
+
+    public IntentService(IntentRepository intentRepository,
+                         CategoryService categoryService, LanguageService languageService,
+                         AccountService accountService) {
+        this.intentRepository = intentRepository;
+        this.categoryService = categoryService;
+        this.languageService = languageService;
+        this.accountService = accountService;
+    }
 
     @Override
+    @PreAuthorize("hasAnyRole('ACCT_ADMIN', 'UBER_ADMIN', 'ACCT_USER')")
     public Collection<Intent> getAll() {
         return intentRepository.findAll();
     }

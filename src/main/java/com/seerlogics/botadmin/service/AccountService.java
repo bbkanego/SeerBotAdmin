@@ -7,12 +7,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,7 +32,7 @@ public class AccountService extends BaseServiceImpl<Account> implements UserDeta
 
     // cannot do constructor injection since it causes cyclic dependency issue
     @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    private PasswordEncoder passwordEncoder;
 
     // cannot do constructor injection since it causes cyclic dependency issue
     @Autowired
@@ -44,8 +45,14 @@ public class AccountService extends BaseServiceImpl<Account> implements UserDeta
     }
 
     @Override
+    @PreAuthorize("hasAnyRole('ACCT_ADMIN', 'UBER_ADMIN')")
     public Account getSingle(Long id) {
-        return accountRepository.getOne(id);
+        if (doesUserHaveAnyRole("UBER_ADMIN")) {
+            return accountRepository.getOne(id);
+        } else {
+            String realm = getAuthenticatedUser().getRealm();
+            return accountRepository.findByRealmAndId(realm, id);
+        }
     }
 
     @Override
@@ -54,7 +61,7 @@ public class AccountService extends BaseServiceImpl<Account> implements UserDeta
         if (account.getId() == null) {
             account.setPassword(account.getPasswordCapture());
         }
-        account.setPassword(bCryptPasswordEncoder.encode(account.getPassword()));
+        account.setPassword(passwordEncoder.encode(account.getPassword()));
         Role selectedRole = (Role) account.getRoles().toArray()[0];
         Role matchingRole = roleService.findByCode(selectedRole.getCode());
         account.getRoles().clear();
@@ -94,6 +101,17 @@ public class AccountService extends BaseServiceImpl<Account> implements UserDeta
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
         return customUserDetails.getAccount();
+    }
+
+    public boolean doesUserHaveAnyRole(String... roles) {
+        boolean hasRole = false;
+        Set<String> authorities = AuthorityUtils.authorityListToSet(SecurityContextHolder.getContext().
+                getAuthentication().getAuthorities());
+        for (String role : roles) {
+            hasRole = authorities.contains("ROLE_" + role);
+            if (hasRole) break;
+        }
+        return hasRole;
     }
 
     public Account initAccount(String type) {

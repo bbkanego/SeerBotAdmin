@@ -16,7 +16,8 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.annotation.Resource;
@@ -38,8 +39,8 @@ public class MultiHttpSecurityConfig {
         private AppProperties appProperties;
 
         @Bean
-        public BCryptPasswordEncoder getPasswordEncoder() {
-            return new BCryptPasswordEncoder(11);
+        public PasswordEncoder getPasswordEncoder() {
+            return PasswordEncoderFactories.createDelegatingPasswordEncoder();
         }
 
         @Override
@@ -92,6 +93,10 @@ public class MultiHttpSecurityConfig {
         @Override
         protected void configure(HttpSecurity http) throws Exception {
             http.headers().frameOptions().sameOrigin();
+            /**
+             * We are disabling CSRF here since we are using JWT to authenticate. We are not using "Cookie" for auth.
+             * CSRF is possible when using "Cookie" method for auth.
+             */
             http.cors().and().csrf().disable()
                     .authorizeRequests()
                     /**

@@ -3,7 +3,7 @@ package com.seerlogics.botadmin.service;
 import com.lingoace.spring.service.BaseServiceImpl;
 import com.seerlogics.commons.model.Role;
 import com.seerlogics.commons.repository.RoleRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,10 +14,16 @@ import java.util.Collection;
  */
 @Service
 @Transactional
+@PreAuthorize("hasAnyRole('UBER_ADMIN')")
 public class RoleService extends BaseServiceImpl<Role> {
 
-    @Autowired
-    private RoleRepository roleRepository;
+    private final RoleRepository roleRepository;
+    private final PolicyService policyService;
+
+    public RoleService(RoleRepository roleRepository, PolicyService policyService) {
+        this.roleRepository = roleRepository;
+        this.policyService = policyService;
+    }
 
     @Override
     public Collection<Role> getAll() {
@@ -26,7 +32,9 @@ public class RoleService extends BaseServiceImpl<Role> {
 
     @Override
     public Role getSingle(Long id) {
-        return roleRepository.getOne(id);
+        Role role = roleRepository.getOne(id);
+        addReferenceData(role);
+        return role;
     }
 
     @Override
@@ -42,5 +50,15 @@ public class RoleService extends BaseServiceImpl<Role> {
     @Override
     public Role findByCode(String code) {
         return roleRepository.findByCode(code);
+    }
+
+    public Role initModel() {
+        Role role = new Role();
+        addReferenceData(role);
+        return role;
+    }
+
+    private void addReferenceData(Role role) {
+        role.getReferenceData().put("policies", policyService.getAll());
     }
 }

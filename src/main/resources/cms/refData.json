@@ -3,16 +3,34 @@
     "maintainCategory": {
       "pageHeadingCreate": "Create Category",
       "pageHeadingEdit": "Edit Category",
-      "nameLabel": "Name",
-      "codeLabel": "Code",
-      "descriptionLabel": "Description"
+      "pageHeadingSearch": "Search Category"
     },
-    "searchCategory": {
-      "pageHeading": "Search Category",
-      "resultsHeading": "Search Results",
-      "nameLabel": "Name",
-      "codeLabel": "Code",
-      "descriptionLabel": "Description"
+    "maintainAction": {
+      "pageHeadingSearch": "Search Action",
+      "pageHeadingCreate": "Create Action",
+      "pageHeadingEdit": "Edit Action"
+    },
+    "maintainResource": {
+      "pageHeadingSearch": "Search Resource",
+      "pageHeadingEdit": "Edit Resource",
+      "pageHeadingCreate": "Create Resource"
+    },
+    "maintainPolicy": {
+      "pageHeadingSearch": "Search Policy",
+      "pageHeadingCreate": "Create Policy",
+      "pageHeadingEdit": "Edit Policy",
+      "statementHeading": "Statements",
+      "resource": "Resource",
+      "effect": "Effect",
+      "action": "Action"
+    },
+    "maintainRole": {
+      "pageHeadingSearch": "Search Role",
+      "pageHeadingCreate": "Create Role",
+      "pageHeadingEdit": "Edit Role",
+      "policyHeading": "Policies",
+      "policy": "Policies",
+      "entitlements": "Entitlements"
     }
   }
 }

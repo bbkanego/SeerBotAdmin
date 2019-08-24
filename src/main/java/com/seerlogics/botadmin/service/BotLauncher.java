@@ -25,7 +25,6 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -42,36 +41,44 @@ import java.util.List;
 @Component
 @Transactional
 public class BotLauncher {
-    protected static final Logger LOGGER = LoggerFactory.getLogger(BotLauncher.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(BotLauncher.class);
+    public static final String LOCAL = "local";
 
-    @Autowired
-    private AppProperties appProperties;
+    private final AppProperties appProperties;
 
-    @Autowired
-    private ManageDataStoreFactory manageDataStoreFactory;
+    private final ManageDataStoreFactory manageDataStoreFactory;
 
-    @Autowired
-    private ManageInstanceFactory manageInstanceFactory;
+    private final ManageInstanceFactory manageInstanceFactory;
 
-    @Autowired
-    private ManageLoadBalancerFactory manageLoadBalancerFactory;
+    private final ManageLoadBalancerFactory manageLoadBalancerFactory;
 
-    @Autowired
-    private BotRepository botRepository;
+    private final BotRepository botRepository;
 
-    @Autowired
-    private StatusService statusService;
+    private final StatusService statusService;
 
-    @Autowired
-    private TrainedModelService trainedModelService;
+    private final TrainedModelService trainedModelService;
 
-    @Autowired
-    private ApplicationEventPublisher applicationEventPublisher;
+    private final ApplicationEventPublisher applicationEventPublisher;
+
+    public BotLauncher(AppProperties appProperties, ManageDataStoreFactory manageDataStoreFactory,
+                       ManageInstanceFactory manageInstanceFactory, ManageLoadBalancerFactory
+                               manageLoadBalancerFactory, BotRepository botRepository,
+                       StatusService statusService, TrainedModelService trainedModelService,
+                       ApplicationEventPublisher applicationEventPublisher) {
+        this.appProperties = appProperties;
+        this.manageDataStoreFactory = manageDataStoreFactory;
+        this.manageInstanceFactory = manageInstanceFactory;
+        this.manageLoadBalancerFactory = manageLoadBalancerFactory;
+        this.botRepository = botRepository;
+        this.statusService = statusService;
+        this.trainedModelService = trainedModelService;
+        this.applicationEventPublisher = applicationEventPublisher;
+    }
 
     @Async("stopBotTaskExecutor")
     @Transactional
     public void stopBotAsync(Long id) {
-        if ("local".equals(appProperties.getRunEnvironment())) {
+        if (LOCAL.equals(appProperties.getRunEnvironment())) {
             this.stopBotAsyncLocal(id);
         } else {
             this.stopBotAsyncCloud(id);
@@ -83,7 +90,7 @@ public class BotLauncher {
     @Async("restartBotTaskExecutor")
     @Transactional
     public void restartBotAsync(Long id) {
-        if ("local".equals(appProperties.getRunEnvironment())) {
+        if (LOCAL.equals(appProperties.getRunEnvironment())) {
             this.restartBotAsyncLocal(id);
         } else {
             this.restartBotAsyncCloud(id);
@@ -95,7 +102,7 @@ public class BotLauncher {
     @Async("launchBotTaskExecutor")
     @Transactional
     public void launchBotAsync(LaunchModel launchModel) {
-        if ("local".equals(appProperties.getRunEnvironment())) {
+        if (LOCAL.equals(appProperties.getRunEnvironment())) {
             this.launchBotAsyncLocal(launchModel);
         } else {
             this.launchBotAsyncCloud(launchModel);

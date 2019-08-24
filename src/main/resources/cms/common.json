@@ -12,6 +12,11 @@
     "okButton": "Ok",
     "resultsHeading": "Search Results",
     "thisIsRequired": "This is required",
-    "requiredIndicator": "<span class='glyphicon glyphicon-asterisk icon-required'></span>&nbsp;Indicate Required Fields"
+    "requiredIndicator": "<span class='glyphicon glyphicon-asterisk icon-required'></span>&nbsp;Indicate Required Fields",
+    "entity": {
+      "name": "Name",
+      "code": "Code",
+      "description": "Description"
+    }
   }
 }

@@ -1,6 +1,9 @@
 package com.seerlogics.botadmin.controller;
 
-import com.lingoace.model.AuthToken;
+import com.lingoace.dto.AuthToken;
+import com.lingoace.dto.Policy;
+import com.lingoace.dto.Role;
+import com.lingoace.dto.Statement;
 import com.lingoace.model.Login;
 import com.lingoace.spring.authentication.JWTTokenProvider;
 import com.seerlogics.botadmin.config.AppProperties;
@@ -60,7 +63,7 @@ public class AuthenticationController {
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
         AuthToken authToken = new AuthToken(token);
         for (GrantedAuthority authority : authorities) {
-            authToken.getRoles().add(authority.getAuthority().replace("ROLE_", "").trim());
+
         }
         authToken.setUserName(loginUser.getUserName());
         Party party = customUserDetails.getAccount().getOwner();
@@ -72,6 +75,28 @@ public class AuthenticationController {
             Organization organization = (Organization) party;
             authToken.setFirstName(organization.getName());
         }
+
+        customUserDetails.getAccount().getRoles().forEach(dbRole -> {
+            Role roleDTO = new Role();
+            roleDTO.setCode(dbRole.getCode());
+            roleDTO.setName(dbRole.getName());
+            authToken.getRoles().add(roleDTO);
+
+            dbRole.getPolicies().forEach(dbPolicy -> {
+                Policy policyDTO = new Policy();
+                roleDTO.getPolicies().add(policyDTO);
+                policyDTO.setName(policyDTO.getName());
+                dbPolicy.getStatements().forEach(dbStatement -> {
+                    Statement statementDTO = new Statement();
+                    statementDTO.setEffect(dbStatement.getEffect());
+                    policyDTO.getStatements().add(statementDTO);
+                    statementDTO.setResource(dbStatement.getResource().getName());
+                    dbStatement.getActions().forEach(dbAction -> {
+                        statementDTO.getActions().add(dbAction.getName());
+                    });
+                });
+            });
+        });
 
         return ResponseEntity.ok(authToken);
     }
