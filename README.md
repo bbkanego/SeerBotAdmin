@@ -137,4 +137,28 @@ newly created instances.
 ```
 
  
-2. 
+2.
+
+## How to restart gogs:
+
+- First SSH to bubuntu using the below command:
+```
+    ssh bkane@ubuntu -p 821
+```
+
+- Next run the command
+```
+/var/www/html/gogs/gogs web
+```
+You should see the below logs indicating gogs restarting:
+```
+2019/11/04 21:47:52 [TRACE] Custom path: /var/www/html/gogs/custom
+2019/11/04 21:47:52 [TRACE] Log path: /var/www/html/gogs/log
+2019/11/04 21:47:52 [TRACE] Build Time: 2018-06-05 12:58:53 UTC
+2019/11/04 21:47:52 [TRACE] Build Git Hash: 91441c3fb29d8ead645d8fffa4658d749d5b3fc3
+2019/11/04 21:47:52 [TRACE] Log Mode: File (Trace)
+2019/11/04 21:47:52 [ INFO] Gogs 0.11.53.0603
+```
+
+- You can use command to check if something is running @3000 port: lsof -i:3000
+ 
