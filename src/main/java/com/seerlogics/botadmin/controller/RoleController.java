@@ -22,7 +22,7 @@ public class RoleController extends BaseController {
     }
 
     @PostMapping(value = {"", "/",})
-    public ResponseEntity<String> save(@RequestBody Role role) {
+    public ResponseEntity save(@RequestBody Role role) {
         this.roleService.save(role);
         return returnSuccessResponse();
     }
@@ -43,7 +43,7 @@ public class RoleController extends BaseController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<String> delete(@PathVariable("id") Long id) {
+    public ResponseEntity delete(@PathVariable("id") Long id) {
         this.roleService.delete(id);
         return returnSuccessResponse();
     }

@@ -39,7 +39,7 @@ import java.util.List;
  * Created by bkane on 12/30/18.
  */
 @Component
-@Transactional
+@Transactional("botAdminTransactionManager")
 public class BotLauncher {
     private static final Logger LOGGER = LoggerFactory.getLogger(BotLauncher.class);
     public static final String LOCAL = "local";

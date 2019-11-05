@@ -12,7 +12,6 @@ import com.seerlogics.commons.dto.SearchBots;
 import com.seerlogics.commons.model.Account;
 import com.seerlogics.commons.model.Bot;
 import com.seerlogics.commons.model.Configuration;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.web.bind.annotation.*;
@@ -52,9 +51,11 @@ public class BotController extends BaseController implements ApplicationListener
 
     @DeleteMapping(value = "/{id}")
     @ResponseBody
-    public String delete(@PathVariable("id") Long id) {
+    public Map<String, Object> delete(@PathVariable("id") Long id) {
         this.botService.delete(id);
-        return "success";
+        Map<String, Object> response = new HashMap<>();
+        response.put("success", true);
+        return response;
     }
 
     @GetMapping(value = "/{id}")
@@ -78,11 +79,21 @@ public class BotController extends BaseController implements ApplicationListener
         return launchModel;
     }
 
-    @PostMapping(value = "/launch")
+    @PostMapping(value = "/test")
     @ResponseBody
-    public Map<String, Object> launch(@Validate("validateLaunchBotRule") @RequestBody LaunchModel launchModel) {
-        launchModel.setOwnerUserName(accountService.getAuthenticatedUser().getUserName());
-        Bot bot = this.botService.launchBot(launchModel);
+    public Map<String, Object> test(@Validate("validateLaunchBotRule") @RequestBody LaunchModel launchModel) {
+        Bot bot = this.botService.testBot(launchModel);
+        return getBotConfiguration(bot);
+    }
+
+    @GetMapping(value = "/launch/{id}")
+    @ResponseBody
+    public Map<String, Object> launch(@PathVariable Long id) {
+        Bot bot = this.botService.launchBot(id);
+        return getBotConfiguration(bot);
+    }
+
+    private Map<String, Object> getBotConfiguration(Bot bot) {
         Map<String, Object> returnData = new HashMap<>();
         returnData.put("bot", bot);
         List<Configuration> configurations = new ArrayList<>(bot.getConfigurations());

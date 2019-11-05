@@ -3,7 +3,6 @@ package com.seerlogics.botadmin.controller;
 import com.lingoace.spring.controller.BaseController;
 import com.seerlogics.botadmin.service.StatusService;
 import com.seerlogics.commons.model.Status;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,11 +16,15 @@ import java.util.List;
 @RestController
 @RequestMapping(value = "/api/v1/status")
 public class StatusController extends BaseController {
-    @Autowired
-    private StatusService statusService;
+
+    private final StatusService statusService;
+
+    public StatusController(StatusService statusService) {
+        this.statusService = statusService;
+    }
 
     @PostMapping(value = {"", "/",})
-    public ResponseEntity<String> save(@RequestBody Status role) {
+    public ResponseEntity save(@RequestBody Status role) {
         this.statusService.save(role);
         return returnSuccessResponse();
     }
@@ -37,7 +40,7 @@ public class StatusController extends BaseController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<String> delete(@PathVariable("id") Long id) {
+    public ResponseEntity delete(@PathVariable("id") Long id) {
         this.statusService.delete(id);
         return returnSuccessResponse();
     }

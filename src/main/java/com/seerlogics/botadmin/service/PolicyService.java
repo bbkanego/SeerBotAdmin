@@ -12,7 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
-@Transactional
+@Transactional("botAdminTransactionManager")
 @Service(value = "policyService")
 @PreAuthorize("hasAnyRole('UBER_ADMIN')")
 public class PolicyService extends BaseServiceImpl<Policy> {

@@ -121,3 +121,20 @@ ChatBot DB URL:
 ```
 jdbc:h2:tcp://localhost/~/svn/code/java/SeerlogicsBotAdmin/h2/chatBotServerDB
 ```
+
+## Deploy Bot Admin and Chat Bot on AWS
+
+1. Run the below script to deploy BotAdmin Sever on AWS:
+```
+/Users/bkane/svn/code/java/SeerlogicsBotAdmin/docs/AWS/scripts/launchBotAdmin.sh
+```
+
+The above script will copy the Bot Admin WAR and run the instances. When the instances 
+run the below script will get invoked on start up. This will install JDK, Tomcat etc on the 
+newly created instances.
+```
+/Users/bkane/svn/code/java/SeerlogicsBotAdmin/docs/AWS/scripts/onLaunchScript.sh
+```
+
+ 
+2. 

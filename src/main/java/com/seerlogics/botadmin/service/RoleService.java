@@ -13,8 +13,7 @@ import java.util.Collection;
  * Created by bkane on 11/3/18.
  */
 @Service
-@Transactional
-@PreAuthorize("hasAnyRole('UBER_ADMIN')")
+@Transactional("botAdminTransactionManager")
 public class RoleService extends BaseServiceImpl<Role> {
 
     private final RoleRepository roleRepository;
@@ -37,11 +36,13 @@ public class RoleService extends BaseServiceImpl<Role> {
         return role;
     }
 
+    @PreAuthorize("hasAnyRole('UBER_ADMIN')")
     @Override
     public Role save(Role object) {
         return roleRepository.save(object);
     }
 
+    @PreAuthorize("hasAnyRole('UBER_ADMIN')")
     @Override
     public void delete(Long id) {
         roleRepository.deleteById(id);

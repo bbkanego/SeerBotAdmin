@@ -24,7 +24,7 @@ public class AccountController extends BaseController {
     }
 
     @PostMapping(value = {"", "/signup",})
-    public ResponseEntity<String> save(@RequestBody Account category) {
+    public ResponseEntity save(@RequestBody Account category) {
         this.accountService.save(category);
         return returnSuccessResponse();
     }
@@ -54,7 +54,7 @@ public class AccountController extends BaseController {
 
     @PreAuthorize("hasAnyRole('ACCT_ADMIN', 'UBER_ADMIN')")
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<String> delete(@PathVariable("id") Long id) {
+    public ResponseEntity delete(@PathVariable("id") Long id) {
         this.accountService.delete(id);
         return returnSuccessResponse();
     }

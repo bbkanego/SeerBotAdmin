@@ -85,7 +85,7 @@ public class TrainedModelController extends BaseController implements CrudContro
     @GetMapping(value = {"/{id}"})
     @ResponseBody
     public TrainedModel getById(@PathVariable("id") Long id) {
-        return this.trainedModelService.getSingle(id);
+        return this.trainedModelService.getModelForDelete(id);
     }
 
     @Override

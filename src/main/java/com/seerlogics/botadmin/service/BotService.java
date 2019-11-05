@@ -3,15 +3,17 @@ package com.seerlogics.botadmin.service;
 import com.lingoace.exception.jpa.UnknownTypeException;
 import com.lingoace.spring.service.BaseServiceImpl;
 import com.seerlogics.botadmin.config.AppProperties;
+import com.seerlogics.botadmin.exception.ErrorCodes;
 import com.seerlogics.commons.dto.LaunchModel;
 import com.seerlogics.commons.dto.SearchBots;
+import com.seerlogics.commons.exception.BaseRuntimeException;
 import com.seerlogics.commons.model.*;
 import com.seerlogics.commons.repository.BotRepository;
-import com.seerlogics.commons.repository.LaunchInfoRepository;
 import com.seerlogics.commons.repository.TrainedModelRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +26,8 @@ import java.util.stream.Collectors;
  * Created by bkane on 10/31/18.
  */
 @Service
-@Transactional
+@Transactional("botAdminTransactionManager")
+@PreAuthorize("hasAnyRole('ACCT_ADMIN')")
 public class BotService extends BaseServiceImpl<Bot> {
 
     protected static final Logger LOGGER = LoggerFactory.getLogger(BotService.class);
@@ -41,9 +44,9 @@ public class BotService extends BaseServiceImpl<Bot> {
 
     private final TrainedModelRepository trainedModelRepository;
 
-    private final LaunchInfoRepository launchInfoRepository;
-
     private final BotLauncher botLauncher;
+
+    private final HelperService helperService;
 
     private AppProperties appProperties;
 
@@ -53,16 +56,15 @@ public class BotService extends BaseServiceImpl<Bot> {
     public BotService(BotRepository botRepository, CategoryService categoryService,
                       StatusService statusService, LanguageService languageService,
                       AccountService accountService, TrainedModelRepository trainedModelRepository,
-                      LaunchInfoRepository launchInfoRepository,
-                      BotLauncher botLauncher, AppProperties appProperties) {
+                      BotLauncher botLauncher, HelperService helperService, AppProperties appProperties) {
         this.botRepository = botRepository;
         this.categoryService = categoryService;
         this.statusService = statusService;
         this.languageService = languageService;
         this.accountService = accountService;
         this.trainedModelRepository = trainedModelRepository;
-        this.launchInfoRepository = launchInfoRepository;
         this.botLauncher = botLauncher;
+        this.helperService = helperService;
         this.appProperties = appProperties;
     }
 
@@ -96,7 +98,13 @@ public class BotService extends BaseServiceImpl<Bot> {
 
     @Override
     public Bot save(Bot bot) {
-        bot.setOwner(accountService.getAuthenticatedUser());
+        if (bot.getId() == null) {
+            bot.setOwner(accountService.getAuthenticatedUser());
+        } else {
+            if (!this.helperService.isAllowedToEdit(bot.getOwner())) {
+                throw new BaseRuntimeException(ErrorCodes.UNAUTHORIZED_ACCESS);
+            }
+        }
         return this.botRepository.save(bot);
     }
 
@@ -108,6 +116,11 @@ public class BotService extends BaseServiceImpl<Bot> {
     @Override
     public Bot getSingle(Long id) {
         Bot bot = this.botRepository.getOne(id);
+
+        if (!this.helperService.isAllowedToEdit(bot.getOwner())) {
+            throw new BaseRuntimeException(ErrorCodes.UNAUTHORIZED_ACCESS);
+        }
+
         Collection<Category> categories = categoryService.getAll();
         Collection<Language> languages = languageService.getAll();
         bot.getReferenceData().put("categories", categories);
@@ -117,19 +130,40 @@ public class BotService extends BaseServiceImpl<Bot> {
 
     public Bot changeStatus(Long id, String code) {
         Bot bot = this.getSingle(id);
+        if (!this.helperService.isAllowedToEdit(bot.getOwner())) {
+            throw new BaseRuntimeException(ErrorCodes.UNAUTHORIZED_ACCESS);
+        }
         bot.setStatus(statusService.findByCode(Status.STATUS_CODES.valueOf(code).name()));
         return save(bot);
     }
 
-    public Bot launchBot(LaunchModel launchModel) {
+    public Bot testBot(LaunchModel launchModel) {
+        launchModel.setOwnerUserName(accountService.getAuthenticatedUser().getUserName());
+
         Bot targetBot = this.botRepository.getOne(launchModel.getBot().getId());
+
+        if (!this.helperService.isAllowedToEdit(targetBot.getOwner())) {
+            throw new BaseRuntimeException(ErrorCodes.UNAUTHORIZED_ACCESS);
+        }
+
         if ("async".equals(this.botType)) {
             botLauncher.launchBotAsync(launchModel);
-            targetBot.setStatus(statusService.findByCode(Status.STATUS_CODES.LAUNCHING.name()));
+            targetBot.setStatus(statusService.findByCode(Status.STATUS_CODES.TESTING.name()));
         } else {
             launchBotSimple(launchModel, targetBot);
-            targetBot.setStatus(statusService.findByCode(Status.STATUS_CODES.LAUNCHED.name()));
+            targetBot.setStatus(statusService.findByCode(Status.STATUS_CODES.TESTING.name()));
         }
+        return save(targetBot);
+    }
+
+    public Bot launchBot(Long id) {
+        Bot targetBot = this.botRepository.getOne(id);
+
+        if (!this.helperService.isAllowedToEdit(targetBot.getOwner())) {
+            throw new BaseRuntimeException(ErrorCodes.UNAUTHORIZED_ACCESS);
+        }
+
+        targetBot.setStatus(statusService.findByCode(Status.STATUS_CODES.LAUNCHED.name()));
         return save(targetBot);
     }
 
@@ -145,13 +179,26 @@ public class BotService extends BaseServiceImpl<Bot> {
 
     public Bot stopBot(Long id) {
         Bot bot = this.botRepository.getOne(id);
-        botLauncher.stopBotAsync(id);
+
+        if (!this.helperService.isAllowedToEdit(bot.getOwner())) {
+            throw new BaseRuntimeException(ErrorCodes.UNAUTHORIZED_ACCESS);
+        }
+
+        //botLauncher.stopBotAsync(id);
+        LaunchInfo launchInfo = (LaunchInfo) bot.getLaunchInfo().toArray()[0];
+        //bot.getLaunchInfo().remove(launchInfo);
+        bot.getLaunchInfo().clear();
         bot.setStatus(statusService.findByCode(Status.STATUS_CODES.DRAFT.name()));
         return save(bot);
     }
 
     public Bot restartBot(Long id) {
         Bot bot = this.botRepository.getOne(id);
+
+        if (!this.helperService.isAllowedToEdit(bot.getOwner())) {
+            throw new BaseRuntimeException(ErrorCodes.UNAUTHORIZED_ACCESS);
+        }
+
         botLauncher.restartBotAsync(id);
         return bot;
     }

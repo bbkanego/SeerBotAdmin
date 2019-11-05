@@ -119,24 +119,9 @@
                     <var-value>^[a-zA-Z0-9-_\s]+$</var-value>
                 </var>
             </field>
-            <field id="botCat" property="category" depends="required,containsChars">
-                <var>
-                    <var-name>regEx</var-name>
-                    <var-value>^[a-zA-Z0-9-_]+$</var-value>
-                </var>
-            </field>
-            <field id="botStatus" property="status" depends="required,containsChars">
-                <var>
-                    <var-name>regEx</var-name>
-                    <var-value>^[a-zA-Z0-9-_]+$</var-value>
-                </var>
-            </field>
-            <field id="botSupportedLanguages" property="supportedLanguages" depends="required,containsChars">
-                <var>
-                    <var-name>regEx</var-name>
-                    <var-value>^[a-zA-Z0-9-_]+$</var-value>
-                </var>
-            </field>
+            <field id="botCat" property="category" depends="required"/>
+            <field id="botSupportedLanguages" classType="java.util.Set"
+                        property="supportedLanguages" depends="required"/>
         </form>
 
         <form name="validatePersonRule" classType="com.seerlogics.commons.model.Party">
@@ -173,14 +158,15 @@
         </form>
 
         <form name="validateAccountRule" classType="com.seerlogics.commons.model.Account">
-            <field id="userName" property="userName" depends="required,containsChars,validateMaxLength">
+            <field id="userName" property="userName" depends="required,containsChars,validateEmail,validateMaxLength">
                 <var>
                     <var-name>maxLength</var-name>
-                    <var-value>50</var-value>
+                    <var-value>100</var-value>
                 </var>
                 <var>
+                    <!-- Check if valid email -->
                     <var-name>regEx</var-name>
-                    <var-value>^[a-zA-Z0-9-_]+$</var-value>
+                    <var-value>^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$</var-value>
                 </var>
             </field>
             <field id="realm" property="realm" depends="required,containsChars,validateMaxLength">
@@ -205,7 +191,9 @@
                     <var-value>50</var-value>
                 </var>
             </field>
+<!--
             <field property="roles" classType="java.util.Set" id="roles" depends="required"/>
+-->
             <field property="owner" classType="com.seerlogics.commons.model.Person" id="personOwner"
                    depends="required">
                 <arg key="label.person" position="0"/>
@@ -232,7 +220,7 @@
                         <var-value>^[a-zA-Z0-9-_\s]+$</var-value>
                     </var>
                 </field>
-                <field property="contactModes" classType="java.util.Set" id="personOwner_contactModes"
+                <!--<field property="contactModes" classType="java.util.Set" id="personOwner_contactModes"
                        depends="required">
                     <arg key="label.utterances" position="0"/>
                     <field property="street" id="personOwner_contactModes_street"
@@ -283,7 +271,7 @@
                             <var-value>^[a-zA-Z0-9-_]+$</var-value>
                         </var>
                     </field>
-                </field>
+                </field>-->
             </field>
         </form>
 

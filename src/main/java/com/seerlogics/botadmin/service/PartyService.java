@@ -16,7 +16,7 @@ import java.util.Collection;
  * Created by bkane on 11/3/18.
  */
 @Service
-@Transactional
+@Transactional("botAdminTransactionManager")
 public class PartyService extends BaseServiceImpl<Party> {
 
     @Autowired

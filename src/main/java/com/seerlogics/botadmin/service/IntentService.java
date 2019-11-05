@@ -20,7 +20,7 @@ import java.util.*;
  * Created by bkane on 11/3/18.
  */
 @Service
-@Transactional
+@Transactional("botAdminTransactionManager")
 public class IntentService extends BaseServiceImpl<Intent> {
 
     private final IntentRepository intentRepository;

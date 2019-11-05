@@ -1,8 +1,8 @@
 {
   "maintainAccount": {
-    "createAccount": "Create Account",
+    "createAccount": "Sign Up to SeerGab!",
     "updateAccount": "Update Account",
-    "userName": "User Name",
+    "userName": "User Name (email)",
     "password": "Password",
     "passwordRenter": "Renter Password",
     "roles": "Roles",
@@ -15,8 +15,9 @@
       "state": "State",
       "zip": "Zip"
     },
-    "accountDetailsHeading": "Account Details",
+    "accountDetailsHeading": "Enter below details to signup",
     "personInfoHeading": "Personal Information",
-    "addressInfoHeading": "Address Information"
+    "addressInfoHeading": "Address Information",
+    "realm": "Company Name"
   }
 }

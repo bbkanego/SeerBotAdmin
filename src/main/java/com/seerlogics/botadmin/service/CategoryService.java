@@ -18,16 +18,18 @@ import java.util.UUID;
  * Created by bkane on 11/1/18.
  */
 @Service
-@Transactional
+@Transactional("botAdminTransactionManager")
 @PreAuthorize("hasAnyRole('ACCT_ADMIN', 'UBER_ADMIN')")
 public class CategoryService extends BaseServiceImpl<Category> {
 
     private final CategoryRepository categoryRepository;
     private final AccountService accountService;
+    private final HelperService helperService;
 
-    public CategoryService(CategoryRepository categoryRepository, AccountService accountService) {
+    public CategoryService(CategoryRepository categoryRepository, AccountService accountService, HelperService helperService) {
         this.categoryRepository = categoryRepository;
         this.accountService = accountService;
+        this.helperService = helperService;
     }
 
     @Override
@@ -61,7 +63,7 @@ public class CategoryService extends BaseServiceImpl<Category> {
             return categoryRepository.save(category);
         } else {
             Category tempCat = categoryRepository.getOne(category.getId());
-            if (tempCat.getOwnerAccount().getId().equals(accountService.getAuthenticatedUser().getId())) {
+            if (this.helperService.isAllowedToEdit(tempCat.getOwnerAccount())) {
                 return categoryRepository.save(category);
             } else {
                 throw new BaseRuntimeException(ErrorCodes.UNAUTHORIZED_ACCESS);
@@ -72,7 +74,8 @@ public class CategoryService extends BaseServiceImpl<Category> {
     @Override
     public void delete(Long id) {
         Category category = categoryRepository.getOne(id);
-        if (accountService.getAuthenticatedUser().getId().equals(category.getOwnerAccount().getId())) {
+
+        if (this.helperService.isAllowedToEdit(category.getOwnerAccount())) {
             categoryRepository.delete(category);
         } else {
             throw new BaseRuntimeException(ErrorCodes.UNAUTHORIZED_ACCESS);

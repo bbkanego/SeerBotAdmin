@@ -13,4 +13,6 @@ public final class ErrorCodes {
     public static String INTENTS_RESPONSE_NUM_ERROR = "SBA-10006";
     public static String DUPLICATE_INTENTS_RESPONSE_TYPE_ERROR = "SBA-10007";
     public static String UNAUTHORIZED_ACCESS = "SBA-10008";
+    public static String CONSTRAINT_VIOLATION_ERROR = "SBA-10009";
+    public static String DATA_INTEGRITY_VIOLATION_ERROR = "SBA-10010";
 }

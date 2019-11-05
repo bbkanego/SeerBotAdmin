@@ -6,9 +6,9 @@ import com.lingoace.spring.service.BaseServiceImpl;
 import com.seerlogics.commons.model.Intent;
 import com.seerlogics.commons.model.IntentUtterance;
 import com.seerlogics.commons.model.TrainedModel;
+import com.seerlogics.commons.repository.LaunchInfoRepository;
 import com.seerlogics.commons.repository.TrainedModelRepository;
 import org.apache.commons.io.FileUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ResourceUtils;
@@ -22,19 +22,26 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-@Transactional
+@Transactional("botAdminTransactionManager")
 public class TrainedModelService extends BaseServiceImpl<TrainedModel> {
-    @Autowired
-    private TrainedModelRepository trainedModelRepository;
+    private final TrainedModelRepository trainedModelRepository;
 
-    @Autowired
-    private AccountService accountService;
+    private final AccountService accountService;
 
-    @Autowired
-    private IntentService intentService;
+    private final IntentService intentService;
 
-    @Autowired
-    private CategoryService categoryService;
+    private final CategoryService categoryService;
+
+    private final LaunchInfoRepository launchInfoRepository;
+
+    public TrainedModelService(TrainedModelRepository trainedModelRepository, AccountService accountService,
+                               IntentService intentService, CategoryService categoryService, LaunchInfoRepository launchInfoRepository) {
+        this.trainedModelRepository = trainedModelRepository;
+        this.accountService = accountService;
+        this.intentService = intentService;
+        this.categoryService = categoryService;
+        this.launchInfoRepository = launchInfoRepository;
+    }
 
     @Override
     public Collection<TrainedModel> getAll() {
@@ -74,6 +81,12 @@ public class TrainedModelService extends BaseServiceImpl<TrainedModel> {
         /**
          * get all the standard intents for the category
          */
+        createModelFromUtterances(trainedModel);
+        trainedModel.setOwner(accountService.getAuthenticatedUser());
+        trainedModelRepository.save(trainedModel);
+    }
+
+    private void createModelFromUtterances(TrainedModel trainedModel) {
         StringBuilder buffer = new StringBuilder();
         List<Intent> intents
                 = this.intentService.findIntentsByCategoryTypeAndOwner(trainedModel.getCategory().getCode(),
@@ -93,8 +106,6 @@ public class TrainedModelService extends BaseServiceImpl<TrainedModel> {
         }
         ByteArrayOutputStream outStream = NLPModelTrainer.trainDoccatModel(buffer);
         trainedModel.setFile(outStream.toByteArray());
-        trainedModel.setOwner(accountService.getAuthenticatedUser());
-        trainedModelRepository.save(trainedModel);
     }
 
     public void reTrainModel(Long existingModelId) {
@@ -103,25 +114,7 @@ public class TrainedModelService extends BaseServiceImpl<TrainedModel> {
         /**
          * get all the standard intents for the category
          */
-        StringBuilder buffer = new StringBuilder();
-        List<Intent> intents
-                = this.intentService.findIntentsByCategoryTypeAndOwner(existingTrainedModel.getCategory().getCode(),
-                existingTrainedModel.getType());
-        for (Intent currentIntent : intents) {
-            Set<IntentUtterance> intentUtterances = currentIntent.getUtterances();
-            int j = 0;
-            for (IntentUtterance intentUtterance : intentUtterances) {
-                j++;
-                buffer.append(currentIntent.getIntent());
-                buffer.append(" ");
-                buffer.append(intentUtterance.getUtterance());
-                if (j < (intentUtterances.size() - 1)) {
-                    buffer.append(System.lineSeparator());
-                }
-            }
-        }
-        ByteArrayOutputStream outStream = NLPModelTrainer.trainDoccatModel(buffer);
-        existingTrainedModel.setFile(outStream.toByteArray());
+        createModelFromUtterances(existingTrainedModel);
         trainedModelRepository.save(existingTrainedModel);
     }
 
@@ -165,6 +158,15 @@ public class TrainedModelService extends BaseServiceImpl<TrainedModel> {
         }
         trainedModel.setType(modelType.toUpperCase());
         trainedModel.getReferenceData().put("categories", this.categoryService.getAll());
+        return trainedModel;
+    }
+
+    public TrainedModel getModelForDelete(Long id) {
+        TrainedModel trainedModel = this.getSingle(id);
+        // now check if there are any bots using this model.
+        if (this.launchInfoRepository.findByTrainedModel(trainedModel).size() == 0) {
+            trainedModel.setDeleteAllowed(true);
+        }
         return trainedModel;
     }
 }

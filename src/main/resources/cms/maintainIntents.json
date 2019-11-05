@@ -11,6 +11,14 @@
       "enterIntent": "Enter Intents",
       "uploadIntents": "Upload Intents File",
       "copyIntents": "Copy Predefined Intents",
+      "addUtterance": "Add Utterance",
+      "removeUtterance": "Remove Utterance",
+      "addResponse": "Add Response",
+      "removeResponse": "Remove Response",
+      "responseType": "Response Type",
+      "locale": "Locale",
+      "closeMatchResponse": "Close match response",
+      "exactMatchResponse": "Exact match response",
       "copyIntentsMsg": "Select category to copy predefined intents from.",
       "uploadIntentsDetails": "The intents file should have intent and utterance separated by a space. Each intent/utterance combination should be on a separate line"
     },
@@ -20,7 +28,6 @@
       "pageHeading": "Edit Intent",
       "intentLabel": "Intent",
       "responseLabel": "Response",
-      "responseTypeLabel": "Response Type",
       "utteranceLabel": "Utterance",
       "categoryLabel": "Category"
     },

@@ -40,7 +40,7 @@ public class ActionController extends BaseController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<String> delete(@PathVariable("id") Long id) {
+    public ResponseEntity delete(@PathVariable("id") Long id) {
         this.actionService.delete(id);
         return returnSuccessResponse();
     }

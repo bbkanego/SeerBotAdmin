@@ -14,7 +14,7 @@ import java.util.List;
  * Created by bkane on 11/3/18.
  */
 @Service
-@Transactional
+@Transactional("botAdminTransactionManager")
 public class LanguageService extends BaseServiceImpl<Language> {
 
     @Autowired

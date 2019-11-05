@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Collection;
 import java.util.UUID;
 
-@Transactional
+@Transactional("botAdminTransactionManager")
 @Service(value = "actionService")
 @PreAuthorize("hasAnyRole('UBER_ADMIN')")
 public class ActionService extends BaseServiceImpl<Action> {

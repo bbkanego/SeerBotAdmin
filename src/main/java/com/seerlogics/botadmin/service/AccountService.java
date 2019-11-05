@@ -22,7 +22,7 @@ import java.util.*;
 /**
  * Created by bkane on 11/3/18.
  */
-@Transactional
+@Transactional("botAdminTransactionManager")
 @Service(value = "accountService")
 public class AccountService extends BaseServiceImpl<Account> implements UserDetailsService {
 
@@ -39,7 +39,7 @@ public class AccountService extends BaseServiceImpl<Account> implements UserDeta
     private RoleService roleService;
 
     @Override
-    @PreAuthorize("hasAnyRole('ACCT_ADMIN', 'UBER_ADMIN')")
+    @PreAuthorize("hasAnyRole('UBER_ADMIN')")
     public Collection<Account> getAll() {
         return accountRepository.findAll();
     }
@@ -125,6 +125,15 @@ public class AccountService extends BaseServiceImpl<Account> implements UserDeta
         account.setOwner(party);
 
         addReferenceData(account);
+
+        /**
+         * default the role of the user to Account Admin.
+         * All new accounts created will be for Account Admin.
+         */
+        Role acctAdmin = new Role();
+        acctAdmin.setCode(Role.ROLE_TYPE.ACCT_ADMIN.name());
+        acctAdmin.setName("Account Admin");
+        account.getRoles().add(acctAdmin);
 
         return account;
     }

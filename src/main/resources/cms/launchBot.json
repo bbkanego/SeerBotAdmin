@@ -2,7 +2,7 @@
   "launchBot": {
     "startLaunch": {
       "pageHeading": "Launch Bot",
-      "message": "Click 'Launch Now' to launch your bot. Once you do that the bot will be available for use over the internet",
+      "testBotMessage": "Click 'Test Now' to launch the bot in test mode before launching. Once you are satisfied with the bot, you can launch your bot for your website",
       "nameLabel": "Name",
       "displayNameLabel": "Display Name",
       "categoryLabel": "Category",
@@ -10,18 +10,25 @@
       "statusLabel": "Status",
       "trainedModel": "Trained Model",
       "allowedOrigin": "Allowed Origin",
-      "launchNowButton": "Launch Now"
+      "launchNowButton": "Launch Bot",
+      "stopNowButton": "Stop Bot",
+      "chatNowLabel": "Chat Now",
+      "sendLabel": "Send",
+      "testNow": "Test Now",
+      "testMessage": "Click 'Test Now' to launch your bot for Testing.",
+      "typeYourMessage": "Type your message here and hit enter..."
     },
     "launched": {
       "pageHeading": "Bot Launched",
-      "message": "Your bot is being launched. Please check back in a few minutes."
-    },
-    "test": {
-      "pageHeading": "Test Bot",
-      "message": "Test your bot through the below chat client",
+      "botLaunchedMessage": "Your bot has been launched.",
       "botUniqueIdUse": "When you configure the chatbot on your website, use the below bot unique id in the bot configuration.",
       "botUniqueId": "Bot unique id",
       "chatApiUrl": "Chat API url"
+    },
+    "test": {
+      "pageHeading": "Test Bot",
+      "botLaunchedForTesting": "Your bot has been launched for testing.",
+      "message": "Test your bot using the below chat client. If you are satisfied with the Bot, you can launch the bot by clicking the 'Launch Now' button."
     }
   }
 }

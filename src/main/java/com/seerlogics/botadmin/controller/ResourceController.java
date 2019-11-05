@@ -34,7 +34,7 @@ public class ResourceController extends BaseController {
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<String> delete(@PathVariable("id") Long id) {
+    public ResponseEntity delete(@PathVariable("id") Long id) {
         this.resourceService.delete(id);
         return returnSuccessResponse();
     }
