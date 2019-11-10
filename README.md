@@ -41,8 +41,30 @@ mvn clean install -P aws-ec2-war
 2. Java args: -DdepProfile=dev -DconfigLoc=/opt/installs/tomcat/8.5.9 -Dspring.profiles.active=local
 
 ## How to run BotAdmin Application locally
+
+1. Start the DB server. This server will be common for both the admin and shared bot application
 ```
-java -jar -Dspring.profiles.active=local -DdepProfile=dev -DconfigLoc=/opt/installs/tomcat/8.5.9 seerlogics-bot-admin-1.0.0-SNAPSHOT.jar
+$> cd  ~/svn/code/java/SeerlogicsBotAdmin/scripts
+$> ./runH2.sh
+
+```
+
+2. Next start the BotAdmin application using the idea run configurations:
+```
+SeerBotAdminApp:local-8091
+```
+and then the shared bot using:
+```
+SeerLogicsSharedBot:local-8099
+```
+Once the shared bot is running you can confirm that using:
+```
+http://localhost:8099/chatbot/actuator/info
+http://localhost:8099/chatbot/actuator/health
+```
+You can also test using Postman collection located in:
+```
+~/svn/code/java/SeerlogicsBotAdmin/postman
 ```
 
 ## Cloud Deployments
@@ -136,8 +158,6 @@ newly created instances.
 /Users/bkane/svn/code/java/SeerlogicsBotAdmin/docs/AWS/scripts/onLaunchScript.sh
 ```
 
- 
-2.
 
 ## How to restart gogs:
 
