@@ -79,7 +79,8 @@ public class MultiHttpSecurityConfig {
             // "/**" will allow ALL requests.
             web.ignoring().antMatchers("/api/**/generate-token", "/error", "/metadata/validation/**",
                     "/api/v1/account/signup", "/metadata/messages", "/actuator/**",
-                    "/api/v1/account/init/**", "/api/cms/all-content");
+                    "/api/v1/account/init/**", "/api/cms/all-content",
+                    "/api/v1/subscription/init/**", "/api/v1/subscription/signup");
         }
 
         /**

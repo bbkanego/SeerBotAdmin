@@ -164,6 +164,8 @@ newly created instances.
 - First SSH to bubuntu using the below command:
 ```
     ssh bkane@ubuntu -p 821
+    
+    // this will ask for pwd. enter the simplest pwd ever.
 ```
 
 - Next run the command
@@ -181,4 +183,92 @@ You should see the below logs indicating gogs restarting:
 ```
 
 - You can use command to check if something is running @3000 port: lsof -i:3000
- 
+
+
+## SQL Server admin
+```
+bkane@bubuntu:~/installs/killbill$ mysql -u root -p
+Enter password: 
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 226
+Server version: 5.7.22-0ubuntu0.16.04.1 (Ubuntu)
+
+// show all users
+select * from mysql.user;
+```
+
+## SSH to bhushanhplinux
+```
+ssh bkane@bhushanhplinux -p 22
+``` 
+
+## Kill Bill Notes
+I have downloaded the source for Killbill (killbill-0.21.2 - https://github.com/killbill/killbill/tree/killbill-0.21.2) and built it locally.
+```
+// downloaded and build Kill-bill in folder:
+bkane@bubuntu:~/installs/killbill
+
+// next build kill bill as follows:
+bkane@bubuntu:~/installs/killbill$ mvn clean install -DskipTests
+```
+
+#### Add kill bill users
+```
+bkane@bubuntu:~/installs/killbill$ mysql -u root -p
+
+mysql>CREATE USER 'killbill'@'%' IDENTIFIED BY 'killbill';
+
+mysql>CREATE DATABASE killbill;
+
+// grant full access on DB and ALL its tables
+mysql>GRANT ALL PRIVILEGES ON killbill.* TO 'killbill'@'%';
+```
+
+#### Create the Killbill database tables
+```
+// login as killbill user
+mysql -u killbill -p
+
+USE killbill;
+
+// next run the query
+source ~/installs/killbill/tenant/src/main/resources/org/killbill/billing/tenant/ddl.sql
+source ~/installs/killbill/entitlement/src/main/resources/org/killbill/billing/entitlement/ddl.sql
+source ~/installs/killbill/util/src/main/resources/org/killbill/billing/util/ddl.sql
+source ~/installs/killbill/subscription/src/main/resources/org/killbill/billing/subscription/ddl.sql
+source ~/installs/killbill/catalog/src/main/resources/org/killbill/billing/catalog/ddl.sql
+source ~/installs/killbill/payment/src/main/resources/org/killbill/billing/payment/ddl.sql
+source ~/installs/killbill/beatrix/src/main/resources/org/killbill/billing/beatrix/ddl.sql
+source ~/installs/killbill/account/src/main/resources/org/killbill/billing/account/ddl.sql
+source ~/installs/killbill/invoice/src/main/resources/org/killbill/billing/invoice/ddl.sql
+source ~/installs/killbill/usage/src/main/resources/org/killbill/billing/usage/ddl.sql
+
+// next check if DB tables where created
+desc custom_fields;
+desc service_broadcasts;
+```
+
+#### Update MySQL connection parameters in Kill bill with above username/pwd
+Next make sure that you change the MySQL username and password set above in:
+```
+${killbillinstalldir}/profiles/killbill/src/main/resources/killbill-server.properties
+```
+By default the mysql pwd will be "root/root". Change that as required.
+
+#### Set up a super user to make API calls. Refer: http://docs.killbill.io/0.20/user_management.html
+```
+Refer ~/installs/killbill/profiles/killbill/src/main/resources
+
+//change/add a superuser
+[users]
+superadmin=superadmin123,root
+
+```
+
+#### Finally Start Killbill server after the above changes
+```
+bkane@bubuntu:~/installs/killbill$ ./bin/start-server -s
+
+// logs
+bkane@bubuntu:~/installs/killbill$ ./profiles/killbill/logs
+```

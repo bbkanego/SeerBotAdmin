@@ -15,6 +15,7 @@
       "chatNowLabel": "Chat Now",
       "sendLabel": "Send",
       "testNow": "Test Now",
+      "modelName": "Model Name",
       "testMessage": "Click 'Test Now' to launch your bot for Testing.",
       "typeYourMessage": "Type your message here and hit enter..."
     },
