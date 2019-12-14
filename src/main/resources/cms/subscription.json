@@ -1,0 +1,44 @@
+{
+  "subscription": {
+    "tier": {
+      "pageHeading": "Maintain Tier",
+      "name": "Name",
+      "description": "Description",
+      "minTransactions": "Minimum Transactions",
+      "maxTransactions": "Maximum Transactions",
+      "tierDuration": "Duration",
+      "tierType": "Type",
+      "resultsTable": {
+        "headingPredefined": "Following predefined intents were found",
+        "headingCustom": "Following custom intents were found",
+        "colHeaders": {
+          "col1": "Name",
+          "col2": "Description",
+          "col3": "Tier Duration",
+          "col4": "Tier Type",
+          "col5": "Min Transactions",
+          "col6": "Max Transactions"
+        }
+      }
+    },
+    "plan": {
+      "pageHeading": "Maintain Plan",
+      "name": "Name",
+      "description": "Description",
+      "price": "Price",
+      "tier": "Tier",
+      "duration": "Duration",
+      "resultsTable": {
+        "headingPredefined": "Following plans were found",
+        "headingCustom": "Following plans were found",
+        "colHeaders": {
+          "col1": "Name",
+          "col2": "Description",
+          "col3": "Price",
+          "col4": "Tier",
+          "col5": "Duration"
+        }
+      }
+    }
+  }
+}

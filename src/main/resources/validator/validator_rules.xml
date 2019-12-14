@@ -490,5 +490,79 @@
             </field>
         </form>
 
+        <form name="validateTier" extends="referenceDataNoCodeRule">
+            <field property="tierDurationString" id="tierDurationString" depends="required,containsChars,validateMaxLength">
+                <var>
+                    <var-name>regEx</var-name>
+                    <var-value>^[a-zA-Z]+$</var-value>
+                </var>
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>50</var-value>
+                </var>
+            </field>
+            <field property="tierTypeString" id="tierDurationType" depends="required,containsChars,validateMaxLength">
+                <var>
+                    <var-name>regEx</var-name>
+                    <var-value>^[a-zA-Z]+$</var-value>
+                </var>
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>50</var-value>
+                </var>
+            </field>
+            <field property="maxTransactions" id="maxTransactions" depends="required,containsChars,validateMaxLength,validateLong">
+                <var>
+                    <var-name>regEx</var-name>
+                    <var-value>^[0-9]+$</var-value>
+                </var>
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>10</var-value>
+                </var>
+            </field>
+            <field property="minTransactions" id="minTransactions" depends="required,containsChars,validateMaxLength,validateLong">
+                <var>
+                    <var-name>regEx</var-name>
+                    <var-value>^[0-9]+$</var-value>
+                </var>
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>10</var-value>
+                </var>
+            </field>
+        </form>
+
+        <form name="validateSubscriptionPlan" extends="referenceDataNoCodeRule">
+            <field property="price" id="price" depends="required,containsChars,validateMaxLength">
+                <var>
+                    <var-name>regEx</var-name>
+                    <var-value>^[0-9]+$</var-value>
+                </var>
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>10</var-value>
+                </var>
+            </field>
+            <field property="tierCode" id="tierCode" depends="required">
+            </field>
+            <field property="duration" id="duration" depends="required,validateMaxLength,validateLong">
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>10</var-value>
+                </var>
+            </field>
+            <field property="minTransactions" id="minTransactions" depends="required,containsChars,validateMaxLength,validateLong">
+                <var>
+                    <var-name>regEx</var-name>
+                    <var-value>^[0-9]+$</var-value>
+                </var>
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>10</var-value>
+                </var>
+            </field>
+        </form>
+
     </formset>
 </form-validation>

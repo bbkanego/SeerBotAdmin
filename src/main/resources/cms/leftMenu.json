@@ -5,7 +5,11 @@
       "option1": "Add Predefined Intents",
       "option2": "Edit Predefined Intents",
       "option3": "Train Predefined Models",
-      "option4": "Search Predefined Models"
+      "option4": "Search Predefined Models",
+      "option5": "Add Tier",
+      "option6": "Search Tier",
+      "option7": "Add Membership Plan",
+      "option8": "Search Membership Plans"
     },
     "maintainIntents": {
       "heading": "Maintain Intents",

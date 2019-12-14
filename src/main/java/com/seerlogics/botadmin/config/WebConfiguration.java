@@ -51,16 +51,16 @@ public class WebConfiguration implements WebMvcConfigurer, ResourceLoaderAware {
                  * This will return allowed origins in "Access-Control-Allow-Origin"
                  */
                 .allowedOrigins(allowedOrigins)
-                        /**
-                         * This will expose header "Access-Control-Allow-Credentials" telling browser that the server
-                         * is ready to accept cookies. The UI then will set "withCredentials=true" in JS to send
-                         * cookie with request
-                         * https://stackoverflow.com/questions/24687313/what-exactly-does-the-access-control-allow-credentials-header-do
-                         */
+                /**
+                 * This will expose header "Access-Control-Allow-Credentials" telling browser that the server
+                 * is ready to accept cookies. The UI then will set "withCredentials=true" in JS to send
+                 * cookie with request
+                 * https://stackoverflow.com/questions/24687313/what-exactly-does-the-access-control-allow-credentials-header-do
+                 */
                 .allowCredentials(true)
-                        /**
-                         * This will return allowed methods in "Access-Control-Allow-Methods"
-                         */
+                /**
+                 * This will return allowed methods in "Access-Control-Allow-Methods"
+                 */
                 .allowedMethods("PUT", "DELETE", "POST", "GET", "OPTIONS");
     }
 
@@ -135,7 +135,9 @@ public class WebConfiguration implements WebMvcConfigurer, ResourceLoaderAware {
     /*@Bean(name = "botAdminSystemProperties")
     public PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
         PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer = new PropertySourcesPlaceholderConfigurer();
-        *//**
+        */
+
+    /**
      * to make this work pass the following VM args to tomcat:
      * -DdepProfile=dev -DconfigLoc=/opt/installs/tomcat/8.5.9
      *//*
@@ -148,7 +150,6 @@ public class WebConfiguration implements WebMvcConfigurer, ResourceLoaderAware {
         propertySourcesPlaceholderConfigurer.setLocations(validatorResources);
         return propertySourcesPlaceholderConfigurer;
     }*/
-
     @Bean
     public ManageInstanceFactory deployToCloud() {
         return new ManageInstanceFactory();

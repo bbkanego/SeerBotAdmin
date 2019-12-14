@@ -163,7 +163,7 @@ newly created instances.
 
 - First SSH to bubuntu using the below command:
 ```
-    ssh bkane@ubuntu -p 821
+    ssh bkane@bubuntu -p 821
     
     // this will ask for pwd. enter the simplest pwd ever.
 ```
