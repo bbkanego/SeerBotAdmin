@@ -72,6 +72,7 @@ public class IntentService extends BaseServiceImpl<Intent> {
         }*/
         List<IntentResponse> newResponses = new ArrayList<>(intent.getResponses());
         intent.getResponses().clear();
+        intent.setOwner(accountService.getAuthenticatedUser());
         intent.getResponses().addAll(newResponses);
         Intent mayBeIntent = intent.getMayBeIntent();
         if (mayBeIntent != null && mayBeIntent.getId() == null) {
@@ -152,7 +153,7 @@ public class IntentService extends BaseServiceImpl<Intent> {
         Intent mainIntent = new Intent();
         this.addReferenceData(mainIntent);
         mainIntent.setIntentType(predefined.name());
-        mainIntent.setOwner(accountService.getAuthenticatedUser());
+        // mainIntent.setOwner(accountService.getAuthenticatedUser());
 
         // set may be intent
         Intent mayBeIntent = new Intent();

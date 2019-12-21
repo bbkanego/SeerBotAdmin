@@ -3,6 +3,7 @@ package com.seerlogics.botadmin.controller;
 import com.lingoace.spring.controller.BaseController;
 import com.lingoace.spring.controller.CrudController;
 import com.lingoace.validation.Validate;
+import com.seerlogics.botadmin.service.AccountService;
 import com.seerlogics.botadmin.service.CategoryService;
 import com.seerlogics.botadmin.service.IntentService;
 import com.seerlogics.commons.dto.SearchIntents;
@@ -24,10 +25,12 @@ public class CustomIntentController extends BaseController implements CrudContro
     private final IntentService customIntentService;
 
     private final CategoryService categoryService;
+    private final AccountService accountService;
 
-    public CustomIntentController(IntentService customIntentService, CategoryService categoryService) {
+    public CustomIntentController(IntentService customIntentService, CategoryService categoryService, AccountService accountService) {
         this.customIntentService = customIntentService;
         this.categoryService = categoryService;
+        this.accountService = accountService;
     }
 
     /**
@@ -115,6 +118,7 @@ public class CustomIntentController extends BaseController implements CrudContro
     @ResponseBody
     public List<Intent> searchIntents(@Validate("validateSearchIntentRule")
                                       @RequestBody SearchIntents searchIntents) {
+        searchIntents.setOwnerAccount(accountService.getAuthenticatedUser());
         return customIntentService.findIntentsAndUtterances(searchIntents);
     }
 }

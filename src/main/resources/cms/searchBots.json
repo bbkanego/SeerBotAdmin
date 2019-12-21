@@ -8,6 +8,7 @@
     "messageTest": "Search Bot to test.",
     "resultsTable": {
       "heading": "Following Bots were found",
+      "headingNoResults": "No Bots were found",
       "colHeaders": {
         "col1": "Name",
         "col2": "Display Name",

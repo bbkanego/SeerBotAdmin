@@ -22,8 +22,8 @@ public class SubscriptionController extends BaseController {
     }
 
     @ResponseBody
-    @PostMapping(value = {"", "/"})
-    public AccountDetail createAccountDetail(@PathVariable String type) {
-        return this.maintainSubscriptionService.initAccountDetail(type);
+    @PostMapping(value = {"/signup"})
+    public AccountDetail createAccountDetail(@RequestBody AccountDetail accountDetail) {
+        return this.maintainSubscriptionService.saveAccountDetail(accountDetail);
     }
 }

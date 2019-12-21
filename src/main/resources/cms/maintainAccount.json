@@ -16,8 +16,11 @@
       "zip": "Zip"
     },
     "accountDetailsHeading": "Enter below details to signup",
-    "personInfoHeading": "Personal Information",
+    "personInfoHeading": "About You",
     "addressInfoHeading": "Address Information",
-    "realm": "Company Name"
+    "planDetailsHeading": "Plans Options",
+    "realm": "Company Name/Code",
+    "selectPlans": "Select Plan",
+    "planDetails": "Plan Details"
   }
 }

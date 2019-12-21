@@ -121,7 +121,7 @@
             </field>
             <field id="botCat" property="category" depends="required"/>
             <field id="botSupportedLanguages" classType="java.util.Set"
-                        property="supportedLanguages" depends="required"/>
+                   property="supportedLanguages" depends="required"/>
         </form>
 
         <form name="validatePersonRule" classType="com.seerlogics.commons.model.Party">
@@ -157,75 +157,53 @@
             </field>
         </form>
 
-        <form name="validateAccountRule" classType="com.seerlogics.commons.model.Account">
-            <field id="userName" property="userName" depends="required,containsChars,validateEmail,validateMaxLength">
-                <var>
-                    <var-name>maxLength</var-name>
-                    <var-value>100</var-value>
-                </var>
-                <var>
-                    <!-- Check if valid email -->
-                    <var-name>regEx</var-name>
-                    <var-value>^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$</var-value>
-                </var>
-            </field>
-            <field id="realm" property="realm" depends="required,containsChars,validateMaxLength">
-                <var>
-                    <var-name>maxLength</var-name>
-                    <var-value>50</var-value>
-                </var>
-                <var>
-                    <var-name>regEx</var-name>
-                    <var-value>^[a-zA-Z0-9-_]+$</var-value>
-                </var>
-            </field>
-            <field id="passwordCaptureReenter" property="passwordCaptureReenter" depends="required,validateMaxLength">
-                <var>
-                    <var-name>maxLength</var-name>
-                    <var-value>50</var-value>
-                </var>
-            </field>
-            <field id="passwordCapture" property="passwordCapture" depends="required,validateMaxLength">
-                <var>
-                    <var-name>maxLength</var-name>
-                    <var-value>50</var-value>
-                </var>
-            </field>
-<!--
-            <field property="roles" classType="java.util.Set" id="roles" depends="required"/>
--->
-            <field property="owner" classType="com.seerlogics.commons.model.Person" id="personOwner"
-                   depends="required">
-                <arg key="label.person" position="0"/>
-                <field property="firstName" id="personOwner_firstName"
+        <form name="validateAccountRule" classType="com.seerlogics.commons.dto.AccountDetail">
+            <field id="membershipPlanCode" property="membershipPlanCode" depends="required"/>
+            <field id="accountDetails" property="account" depends="required">
+                <field id="userName" property="userName"
                        depends="required,containsChars,validateMaxLength">
-                    <arg key="label.firstName" position="0"/>
+                    <var>
+                        <var-name>maxLength</var-name>
+                        <var-value>100</var-value>
+                    </var>
+                    <var>
+                        <!-- Check if valid email -->
+                        <var-name>regEx</var-name>
+                        <var-value>^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$</var-value>
+                    </var>
+                </field>
+                <field id="realm" property="realm" depends="required,containsChars,validateMaxLength">
                     <var>
                         <var-name>maxLength</var-name>
                         <var-value>50</var-value>
                     </var>
                     <var>
                         <var-name>regEx</var-name>
-                        <var-value>^[a-zA-Z0-9-_\s]+$</var-value>
+                        <var-value>^[a-zA-Z0-9-_]+$</var-value>
                     </var>
                 </field>
-                <field property="lastName" id="personOwner_lastName" depends="required,containsChars,validateMaxLength">
-                    <arg key="label.lastName" position="0"/>
+                <field id="passwordCaptureReenter" property="passwordCaptureReenter"
+                       depends="required,validateMaxLength">
                     <var>
                         <var-name>maxLength</var-name>
                         <var-value>50</var-value>
                     </var>
+                </field>
+                <field id="passwordCapture" property="passwordCapture" depends="required,validateMaxLength">
                     <var>
-                        <var-name>regEx</var-name>
-                        <var-value>^[a-zA-Z0-9-_\s]+$</var-value>
+                        <var-name>maxLength</var-name>
+                        <var-value>50</var-value>
                     </var>
                 </field>
-                <!--<field property="contactModes" classType="java.util.Set" id="personOwner_contactModes"
+                <!--
+                            <field property="roles" classType="java.util.Set" id="roles" depends="required"/>
+                -->
+                <field property="owner" classType="com.seerlogics.commons.model.Person" id="personOwner"
                        depends="required">
-                    <arg key="label.utterances" position="0"/>
-                    <field property="street" id="personOwner_contactModes_street"
+                    <arg key="label.person" position="0"/>
+                    <field property="firstName" id="personOwner_firstName"
                            depends="required,containsChars,validateMaxLength">
-                        <arg key="label.street" position="0"/>
+                        <arg key="label.firstName" position="0"/>
                         <var>
                             <var-name>maxLength</var-name>
                             <var-value>50</var-value>
@@ -235,9 +213,9 @@
                             <var-value>^[a-zA-Z0-9-_\s]+$</var-value>
                         </var>
                     </field>
-                    <field property="city" id="personOwner_contactModes_city"
+                    <field property="lastName" id="personOwner_lastName"
                            depends="required,containsChars,validateMaxLength">
-                        <arg key="label.city" position="0"/>
+                        <arg key="label.lastName" position="0"/>
                         <var>
                             <var-name>maxLength</var-name>
                             <var-value>50</var-value>
@@ -247,32 +225,61 @@
                             <var-value>^[a-zA-Z0-9-_\s]+$</var-value>
                         </var>
                     </field>
-                    <field property="state" id="personOwner_contactModes_state"
-                           depends="required,containsChars,validateMaxLength">
-                        <arg key="label.state" position="0"/>
-                        <var>
-                            <var-name>maxLength</var-name>
-                            <var-value>50</var-value>
-                        </var>
-                        <var>
-                            <var-name>regEx</var-name>
-                            <var-value>^[a-zA-Z0-9-_\s]+$</var-value>
-                        </var>
-                    </field>
-                    <field property="zip" id="personOwner_contactModes_zip"
-                           depends="required,containsChars,validateMaxLength">
-                        <arg key="label.zip" position="0"/>
-                        <var>
-                            <var-name>maxLength</var-name>
-                            <var-value>20</var-value>
-                        </var>
-                        <var>
-                            <var-name>regEx</var-name>
-                            <var-value>^[a-zA-Z0-9-_]+$</var-value>
-                        </var>
-                    </field>
-                </field>-->
+                    <!--<field property="contactModes" classType="java.util.Set" id="personOwner_contactModes"
+                           depends="required">
+                        <arg key="label.utterances" position="0"/>
+                        <field property="street" id="personOwner_contactModes_street"
+                               depends="required,containsChars,validateMaxLength">
+                            <arg key="label.street" position="0"/>
+                            <var>
+                                <var-name>maxLength</var-name>
+                                <var-value>50</var-value>
+                            </var>
+                            <var>
+                                <var-name>regEx</var-name>
+                                <var-value>^[a-zA-Z0-9-_\s]+$</var-value>
+                            </var>
+                        </field>
+                        <field property="city" id="personOwner_contactModes_city"
+                               depends="required,containsChars,validateMaxLength">
+                            <arg key="label.city" position="0"/>
+                            <var>
+                                <var-name>maxLength</var-name>
+                                <var-value>50</var-value>
+                            </var>
+                            <var>
+                                <var-name>regEx</var-name>
+                                <var-value>^[a-zA-Z0-9-_\s]+$</var-value>
+                            </var>
+                        </field>
+                        <field property="state" id="personOwner_contactModes_state"
+                               depends="required,containsChars,validateMaxLength">
+                            <arg key="label.state" position="0"/>
+                            <var>
+                                <var-name>maxLength</var-name>
+                                <var-value>50</var-value>
+                            </var>
+                            <var>
+                                <var-name>regEx</var-name>
+                                <var-value>^[a-zA-Z0-9-_\s]+$</var-value>
+                            </var>
+                        </field>
+                        <field property="zip" id="personOwner_contactModes_zip"
+                               depends="required,containsChars,validateMaxLength">
+                            <arg key="label.zip" position="0"/>
+                            <var>
+                                <var-name>maxLength</var-name>
+                                <var-value>20</var-value>
+                            </var>
+                            <var>
+                                <var-name>regEx</var-name>
+                                <var-value>^[a-zA-Z0-9-_]+$</var-value>
+                            </var>
+                        </field>
+                    </field>-->
+                </field>
             </field>
+
         </form>
 
         <form name="validateIntentRule"
@@ -286,7 +293,7 @@
                 </var>
                 <var>
                     <var-name>regEx</var-name>
-                    <var-value>^[a-zA-Z]+$</var-value>
+                    <var-value>^[a-zA-Z0-9-_]+$</var-value>
                 </var>
             </field>
             <field property="utterances" classType="java.util.Set" id="utterances" depends="required">
@@ -300,7 +307,7 @@
                     </var>
                     <var>
                         <var-name>regEx</var-name>
-                        <var-value>^[a-zA-Z\s]+$</var-value>
+                        <var-value>^[a-zA-Z0-9-_\s]+$</var-value>
                     </var>
                 </field>
                 <field property="locale" id="utterances_locale" depends="required,validateMaxLength">
@@ -491,7 +498,8 @@
         </form>
 
         <form name="validateTier" extends="referenceDataNoCodeRule">
-            <field property="tierDurationString" id="tierDurationString" depends="required,containsChars,validateMaxLength">
+            <field property="tierDurationString" id="tierDurationString"
+                   depends="required,containsChars,validateMaxLength">
                 <var>
                     <var-name>regEx</var-name>
                     <var-value>^[a-zA-Z]+$</var-value>
@@ -511,7 +519,8 @@
                     <var-value>50</var-value>
                 </var>
             </field>
-            <field property="maxTransactions" id="maxTransactions" depends="required,containsChars,validateMaxLength,validateLong">
+            <field property="maxTransactions" id="maxTransactions"
+                   depends="required,containsChars,validateMaxLength,validateLong">
                 <var>
                     <var-name>regEx</var-name>
                     <var-value>^[0-9]+$</var-value>
@@ -521,7 +530,8 @@
                     <var-value>10</var-value>
                 </var>
             </field>
-            <field property="minTransactions" id="minTransactions" depends="required,containsChars,validateMaxLength,validateLong">
+            <field property="minTransactions" id="minTransactions"
+                   depends="required,containsChars,validateMaxLength,validateLong">
                 <var>
                     <var-name>regEx</var-name>
                     <var-value>^[0-9]+$</var-value>
@@ -552,7 +562,8 @@
                     <var-value>10</var-value>
                 </var>
             </field>
-            <field property="minTransactions" id="minTransactions" depends="required,containsChars,validateMaxLength,validateLong">
+            <field property="minTransactions" id="minTransactions"
+                   depends="required,containsChars,validateMaxLength,validateLong">
                 <var>
                     <var-name>regEx</var-name>
                     <var-value>^[0-9]+$</var-value>
