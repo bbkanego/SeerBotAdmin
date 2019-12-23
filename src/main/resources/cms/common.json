@@ -10,8 +10,11 @@
     "revertButton": "Revert",
     "cancelButton": "Cancel",
     "okButton": "Ok",
+    "noButton": "No",
     "resultsHeading": "Search Results",
     "thisIsRequired": "This is required",
+    "deleteHeading": "Delete?",
+    "deleteMessage": "Do you want to really delete?",
     "requiredIndicator": "<span class='glyphicon glyphicon-asterisk icon-required'></span>&nbsp;Indicate Required Fields",
     "entity": {
       "name": "Name",

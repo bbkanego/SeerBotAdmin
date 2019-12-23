@@ -3,8 +3,10 @@ package com.seerlogics.botadmin.service;
 import com.seerlogics.commons.model.Account;
 import com.seerlogics.commons.model.ReferenceData;
 import org.apache.commons.text.RandomStringGenerator;
+import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.*;
 
 @Service
@@ -12,6 +14,9 @@ public class HelperService {
 
     private final AccountService accountService;
     private final RandomStringGenerator generator;
+
+    @Resource(name = "appMessageResource")
+    private MessageSource messageSource;
 
     public HelperService(AccountService accountService) {
         this.accountService = accountService;
@@ -39,5 +44,9 @@ public class HelperService {
             referenceDataList.add(localesMap);
         }
         return referenceDataList;
+    }
+
+    public String getMessage(String messagekey, String[] arguments) {
+        return messageSource.getMessage(messagekey, arguments, Locale.getDefault());
     }
 }

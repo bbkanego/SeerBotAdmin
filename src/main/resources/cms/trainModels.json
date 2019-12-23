@@ -4,7 +4,10 @@
       "pageHeading": "Train Model",
       "nameLabel": "Name",
       "descriptionNameLabel": "Description",
-      "categoryLabel": "Category"
+      "categoryLabel": "Category",
+      "deleteHeading": "Delete Model",
+      "deleteMessage": "Do you want to delete the Model?",
+      "deleteNotAllowed": "You cannot delete the model"
     },
     "searchTrainedModel": {
       "pageHeading": "Search Trained Models",

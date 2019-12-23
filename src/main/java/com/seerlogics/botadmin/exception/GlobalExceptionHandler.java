@@ -1,5 +1,6 @@
 package com.seerlogics.botadmin.exception;
 
+import com.lingoace.common.exception.GeneralErrorException;
 import com.seerlogics.commons.exception.BaseRuntimeException;
 import opennlp.tools.util.InsufficientTrainingDataException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -37,6 +38,11 @@ public class GlobalExceptionHandler extends com.lingoace.common.GlobalExceptionH
         Map<String, String> errorResponse = new HashMap<>();
         errorResponse.put(MESSAGE, "Invalid user name or password");
         return new ResponseEntity<>(errorResponse, HttpStatus.UNAUTHORIZED);
+    }
+
+    @ExceptionHandler(GeneralErrorException.class)
+    public ResponseEntity handleGeneralErrorException(GeneralErrorException ge) {
+        return new ResponseEntity<>(ge.getErrors(), HttpStatus.BAD_REQUEST);
     }
 
     @Override

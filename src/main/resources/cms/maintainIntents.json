@@ -29,7 +29,9 @@
       "intentLabel": "Intent",
       "responseLabel": "Response",
       "utteranceLabel": "Utterance",
-      "categoryLabel": "Category"
+      "categoryLabel": "Category",
+      "deleteHeading": "Delete Intent",
+      "deleteMessage": "Do you want to delete the intent?"
     },
     "mayBeIntent": {
       "intent": "Close match intent",

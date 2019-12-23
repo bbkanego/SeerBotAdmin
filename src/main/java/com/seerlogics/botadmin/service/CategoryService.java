@@ -1,11 +1,16 @@
 package com.seerlogics.botadmin.service;
 
+import com.lingoace.common.exception.GeneralErrorException;
 import com.lingoace.spring.service.BaseServiceImpl;
 import com.seerlogics.botadmin.exception.ErrorCodes;
+import com.seerlogics.commons.dto.SearchBots;
+import com.seerlogics.commons.dto.SearchTrainedModel;
 import com.seerlogics.commons.exception.BaseRuntimeException;
 import com.seerlogics.commons.model.Account;
 import com.seerlogics.commons.model.Category;
+import com.seerlogics.commons.repository.BotRepository;
 import com.seerlogics.commons.repository.CategoryRepository;
+import com.seerlogics.commons.repository.TrainedModelRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -25,11 +30,17 @@ public class CategoryService extends BaseServiceImpl<Category> {
     private final CategoryRepository categoryRepository;
     private final AccountService accountService;
     private final HelperService helperService;
+    private final BotRepository botRepository;
+    private final TrainedModelRepository trainedModelRepository;
 
-    public CategoryService(CategoryRepository categoryRepository, AccountService accountService, HelperService helperService) {
+    public CategoryService(CategoryRepository categoryRepository, AccountService accountService,
+                           HelperService helperService, BotRepository botRepository,
+                           TrainedModelRepository trainedModelRepository) {
         this.categoryRepository = categoryRepository;
         this.accountService = accountService;
         this.helperService = helperService;
+        this.botRepository = botRepository;
+        this.trainedModelRepository = trainedModelRepository;
     }
 
     @Override
@@ -75,11 +86,31 @@ public class CategoryService extends BaseServiceImpl<Category> {
     public void delete(Long id) {
         Category category = categoryRepository.getOne(id);
 
+        if (!isAllowedToDelete(category)) {
+            GeneralErrorException generalErrorException = new GeneralErrorException();
+            generalErrorException.addError("notAllowedToDeleteCategory",
+                    this.helperService.getMessage("message.category.cannot.delete", null), null);
+            throw generalErrorException;
+        }
+
         if (this.helperService.isAllowedToEdit(category.getOwnerAccount())) {
             categoryRepository.delete(category);
         } else {
             throw new BaseRuntimeException(ErrorCodes.UNAUTHORIZED_ACCESS);
         }
+    }
+
+    public boolean isAllowedToDelete(Category category) {
+        SearchBots searchBots = new SearchBots();
+        searchBots.setCategory(category);
+        searchBots.setOwnerAccount(this.accountService.getAuthenticatedUser());
+
+        SearchTrainedModel searchTrainedModel = new SearchTrainedModel();
+        searchTrainedModel.setCategory(category);
+        searchTrainedModel.setOwnerAccount(this.accountService.getAuthenticatedUser());
+
+        return this.botRepository.findBots(searchBots).isEmpty()
+                && this.trainedModelRepository.findTrainedModel(searchTrainedModel).isEmpty();
     }
 
     public Category initModel() {

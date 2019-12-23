@@ -1,5 +1,6 @@
 package com.seerlogics.botadmin.service;
 
+import com.lingoace.common.exception.GeneralErrorException;
 import com.lingoace.exception.nlp.TrainModelException;
 import com.lingoace.nlp.opennlp.NLPModelTrainer;
 import com.lingoace.spring.service.BaseServiceImpl;
@@ -34,13 +35,17 @@ public class TrainedModelService extends BaseServiceImpl<TrainedModel> {
 
     private final LaunchInfoRepository launchInfoRepository;
 
+    private final HelperService helperService;
+
     public TrainedModelService(TrainedModelRepository trainedModelRepository, AccountService accountService,
-                               IntentService intentService, CategoryService categoryService, LaunchInfoRepository launchInfoRepository) {
+                               IntentService intentService, CategoryService categoryService,
+                               LaunchInfoRepository launchInfoRepository, HelperService helperService) {
         this.trainedModelRepository = trainedModelRepository;
         this.accountService = accountService;
         this.intentService = intentService;
         this.categoryService = categoryService;
         this.launchInfoRepository = launchInfoRepository;
+        this.helperService = helperService;
     }
 
     @Override
@@ -69,7 +74,15 @@ public class TrainedModelService extends BaseServiceImpl<TrainedModel> {
 
     @Override
     public void delete(Long id) {
-        trainedModelRepository.deleteById(id);
+        TrainedModel trainedModel = this.getSingle(id);
+        if (!this.launchInfoRepository.findByTrainedModel(trainedModel).isEmpty()) {
+            GeneralErrorException generalErrorException = new GeneralErrorException();
+            generalErrorException.addError("cannotDeleteModel",
+                    this.helperService.getMessage("message.trainedModel.cannot.delete",
+                            null), null);
+            throw generalErrorException;
+        }
+        trainedModelRepository.delete(trainedModel);
     }
 
     @Override
@@ -161,7 +174,7 @@ public class TrainedModelService extends BaseServiceImpl<TrainedModel> {
         return trainedModel;
     }
 
-    public TrainedModel getModelForDelete(Long id) {
+    public TrainedModel getModelForUpdate(Long id) {
         TrainedModel trainedModel = this.getSingle(id);
         // now check if there are any bots using this model.
         if (this.launchInfoRepository.findByTrainedModel(trainedModel).size() == 0) {

@@ -12,7 +12,9 @@
       "nameLabel": "Name",
       "displayNameLabel": "Display Name",
       "categoryLabel": "Category",
-      "descriptionLabel": "Description"
+      "descriptionLabel": "Description",
+      "deleteHeading": "Delete Bot",
+      "deleteMessage": "Do you want to delete the Bot?"
     }
   }
 }
