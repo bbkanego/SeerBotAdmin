@@ -9,13 +9,10 @@ git pull origin eventGenie-develop
 cd ~/svn/code/java/SpringMVC/eg-spring
 git pull origin eventGenie-develop
 
-cd ~/svn/code/java/SpringMVC/eg-cloud-support
-git pull origin eventGenie-develop
-
 cd ~/svn/code/java/SeerlogicsCloud
 git pull origin develop
 
-cd ~/svn/code/java/SeerlogicsCommons
+cd ~/svn/code/java/SeerlogicsBotCommons
 git pull origin develop
 
 cd ~/svn/code/java/SeerlogicsBotAdmin
