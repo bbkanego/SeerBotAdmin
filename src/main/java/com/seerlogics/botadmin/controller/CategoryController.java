@@ -37,7 +37,7 @@ public class CategoryController extends BaseController {
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<String> delete(@PathVariable("id") Long id) {
         this.categoryService.delete(id);
-        return ResponseEntity.ok("success");
+        return returnSuccessResponse();
     }
 
     @GetMapping(value = {"/init"})
