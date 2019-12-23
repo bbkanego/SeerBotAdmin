@@ -17,7 +17,12 @@
       "testNow": "Test Now",
       "modelName": "Model Name",
       "testMessage": "Click 'Test Now' to launch your bot for Testing.",
-      "typeYourMessage": "Type your message here and hit enter..."
+      "typeYourMessage": "Type your message here and hit enter...",
+      "pageSubsectionHeading": "Bot Details",
+      "stopBotHeading": "Stop Bot?",
+      "stopBotMessage": "Do you want to stop the bot?",
+      "launchBotHeading": "Launch Bot?",
+      "launchBotMessage": "Do you want to launch the bot to production? By doing so the bot will be available for customers to use on the internet"
     },
     "launched": {
       "pageHeading": "Bot Launched",
