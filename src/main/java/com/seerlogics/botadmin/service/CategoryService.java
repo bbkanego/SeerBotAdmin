@@ -4,20 +4,19 @@ import com.lingoace.common.exception.GeneralErrorException;
 import com.lingoace.spring.service.BaseServiceImpl;
 import com.seerlogics.botadmin.exception.ErrorCodes;
 import com.seerlogics.commons.dto.SearchBots;
+import com.seerlogics.commons.dto.SearchIntents;
 import com.seerlogics.commons.dto.SearchTrainedModel;
 import com.seerlogics.commons.exception.BaseRuntimeException;
 import com.seerlogics.commons.model.Account;
 import com.seerlogics.commons.model.Category;
-import com.seerlogics.commons.repository.BotRepository;
-import com.seerlogics.commons.repository.CategoryRepository;
-import com.seerlogics.commons.repository.TrainedModelRepository;
+import com.seerlogics.commons.repository.*;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Collection;
-import java.util.UUID;
+import java.util.List;
 
 /**
  * Created by bkane on 11/1/18.
@@ -32,15 +31,17 @@ public class CategoryService extends BaseServiceImpl<Category> {
     private final HelperService helperService;
     private final BotRepository botRepository;
     private final TrainedModelRepository trainedModelRepository;
+    private final IntentRepository intentRepository;
 
     public CategoryService(CategoryRepository categoryRepository, AccountService accountService,
                            HelperService helperService, BotRepository botRepository,
-                           TrainedModelRepository trainedModelRepository) {
+                           TrainedModelRepository trainedModelRepository, IntentRepository intentRepository) {
         this.categoryRepository = categoryRepository;
         this.accountService = accountService;
         this.helperService = helperService;
         this.botRepository = botRepository;
         this.trainedModelRepository = trainedModelRepository;
+        this.intentRepository = intentRepository;
     }
 
     @Override
@@ -48,8 +49,14 @@ public class CategoryService extends BaseServiceImpl<Category> {
         return categoryRepository.findAll();
     }
 
-    public Collection<Category> findForEdit(Category category) {
-        return categoryRepository.findByOwnerAccounts(accountService.getAuthenticatedUser());
+    public Collection<Category> findForEdit() {
+        List<Category> categoryList = categoryRepository.findByOwnerAccounts(accountService.getAuthenticatedUser());
+
+        for (Category currentCategory : categoryList) {
+            currentCategory.setDeleteAllowed(isAllowedToDelete(currentCategory));
+        }
+
+        return categoryList;
     }
 
     @PreAuthorize("hasAnyRole('ACCT_ADMIN', 'UBER_ADMIN', 'ACCT_USER')")
@@ -66,7 +73,7 @@ public class CategoryService extends BaseServiceImpl<Category> {
     @Override
     public Category save(Category category) {
         if (StringUtils.isBlank(category.getCode())) {
-            category.setCode("CAT-" + UUID.randomUUID());
+            category.setCode("CAT-" + helperService.generateRandomCode());
         }
         // is new category?
         if (category.getId() == null) {
@@ -109,7 +116,12 @@ public class CategoryService extends BaseServiceImpl<Category> {
         searchTrainedModel.setCategory(category);
         searchTrainedModel.setOwnerAccount(this.accountService.getAuthenticatedUser());
 
+        SearchIntents searchIntents = new SearchIntents();
+        searchIntents.setCategory(category);
+        searchIntents.setOwnerAccount(this.accountService.getAuthenticatedUser());
+
         return this.botRepository.findBots(searchBots).isEmpty()
+                && this.intentRepository.findIntentsAndUtterances(searchIntents).isEmpty()
                 && this.trainedModelRepository.findTrainedModel(searchTrainedModel).isEmpty();
     }
 

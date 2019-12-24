@@ -135,14 +135,18 @@ Web Console server running at http://192.168.0.113:8082 (others can connect)
 ```
 
 ##### You can connect to the server both the Web app, IDE(DB client) and H2 console at the same time using URL:
-BotAdminDB URL:
+
+Make sure that you select "Connection Type=Remote" if its not already selected for you based on the URLs below.
+
+**BotAdminDB URL:**
 ```
 jdbc:h2:tcp://localhost/~/svn/code/java/SeerlogicsBotAdmin/h2/botDB
 ```
-ChatBot DB URL:
+**ChatBot DB URL:**
 ```
 jdbc:h2:tcp://localhost/~/svn/code/java/SeerlogicsBotAdmin/h2/chatBotServerDB
 ```
+
 
 ## Deploy Bot Admin and Chat Bot on AWS
 

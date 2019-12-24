@@ -45,8 +45,8 @@ public class CategoryController extends BaseController {
         return ResponseEntity.ok(this.categoryService.initModel());
     }
 
-    @PostMapping(value = {"/get-for-edit"})
-    public ResponseEntity<Collection<Category>> getForEdit(@RequestBody Category category) {
-        return ResponseEntity.ok(this.categoryService.findForEdit(category));
+    @GetMapping(value = {"/get-for-edit"})
+    public ResponseEntity<Collection<Category>> getForEdit() {
+        return ResponseEntity.ok(this.categoryService.findForEdit());
     }
 }
