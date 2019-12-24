@@ -67,7 +67,9 @@ public class CategoryService extends BaseServiceImpl<Category> {
 
     @Override
     public Category getSingle(Long id) {
-        return categoryRepository.getOne(id);
+        Category category = categoryRepository.getOne(id);
+        category.setDeleteAllowed(this.isAllowedToDelete(category));
+        return category;
     }
 
     @Override
