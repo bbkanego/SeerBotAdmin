@@ -3,6 +3,7 @@ package com.seerlogics.botadmin.service;
 import com.seerlogics.commons.model.Account;
 import com.seerlogics.commons.model.ReferenceData;
 import org.apache.commons.text.RandomStringGenerator;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,20 @@ public class HelperService {
 
     @Resource(name = "appMessageResource")
     private MessageSource messageSource;
+
+    @Value("${seerapp.generic.category.code}")
+    private String genericCategoryCode;
+
+    @Value("${seerapp.uber.admin.account.code:admin}")
+    private String uberAdminAccountCode;
+
+    public String getUberAdminAccountCode() {
+        return uberAdminAccountCode;
+    }
+
+    public String getGenericCategoryCode() {
+        return genericCategoryCode;
+    }
 
     public HelperService(AccountService accountService) {
         this.accountService = accountService;

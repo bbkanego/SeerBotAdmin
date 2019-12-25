@@ -31,13 +31,16 @@ public class IntentService extends BaseServiceImpl<Intent> {
 
     private final AccountService accountService;
 
+    private final HelperService helperService;
+
     public IntentService(IntentRepository intentRepository,
                          CategoryService categoryService, LanguageService languageService,
-                         AccountService accountService) {
+                         AccountService accountService, HelperService helperService) {
         this.intentRepository = intentRepository;
         this.categoryService = categoryService;
         this.languageService = languageService;
         this.accountService = accountService;
+        this.helperService = helperService;
     }
 
     @Override
@@ -104,7 +107,7 @@ public class IntentService extends BaseServiceImpl<Intent> {
         return intentRepository.findIntentsByCode(catCode);
     }
 
-    public List<Intent> findIntentsByCategoryAndType(String catCode, String intentType) {
+    public List<Intent> findIntentsByCategoryAndType(List<String> catCode, String intentType) {
         return intentRepository.findIntentsByCodeAndType(catCode, intentType);
     }
 
@@ -115,16 +118,17 @@ public class IntentService extends BaseServiceImpl<Intent> {
     public SearchIntents initSearchIntentsCriteria(String type) {
         SearchIntents searchIntents = new SearchIntents();
         searchIntents.setIntentType(type);
-        searchIntents.getReferenceData().put("categories", categoryService.finaAllForSelection());
+        searchIntents.getReferenceData().put("categories", categoryService.findFilteredCategoriesAllForSelection());
         return searchIntents;
     }
 
     public List<Intent> findIntentsAndUtterances(SearchIntents searchIntents) {
+        searchIntents.setOwnerAccount(this.accountService.getAuthenticatedUser());
         return intentRepository.findIntentsAndUtterances(searchIntents);
     }
 
     private void addReferenceData(Intent intent) {
-        intent.getReferenceData().put("categories", categoryService.finaAllForSelection());
+        intent.getReferenceData().put("categories", categoryService.findFilteredCategoriesAllForSelection());
         List<Map<String, String>> responseTypes = new ArrayList<>();
         for (IntentResponse.RESPONSE_TYPE responseType : IntentResponse.RESPONSE_TYPE.values()) {
             Map<String, String> dynamicResponseType = new HashMap<>();
@@ -175,7 +179,7 @@ public class IntentService extends BaseServiceImpl<Intent> {
             try {
                 String fileContent = new String(file.getBytes(), StandardCharsets.UTF_8);
                 String[] rows = fileContent.split("\n");
-                Collection<Category> categories = this.categoryService.getAll();
+                Collection<Category> categories = this.categoryService.findFilteredCategoriesAllForSelection();
                 Category category = categories.stream().filter(categoryOne
                         -> categoryCode.equals(categoryOne.getCode())).findAny().orElse(null);
                 Map<String, Intent> intents = new HashMap<>();
@@ -222,7 +226,8 @@ public class IntentService extends BaseServiceImpl<Intent> {
     }
 
     public List<Intent> copyPredefinedIntents(String categoryCode) {
-        List<Intent> predefinedIntents = this.findIntentsByCategoryAndType(categoryCode,
+        List<String> categoryCodes = Arrays.asList(categoryCode, this.helperService.getGenericCategoryCode());
+        List<Intent> predefinedIntents = this.findIntentsByCategoryAndType(categoryCodes,
                 Intent.INTENT_TYPE.PREDEFINED.name());
         List<Intent> customIntents = new ArrayList<>();
         for (Intent predefinedIntentUtterance : predefinedIntents) {

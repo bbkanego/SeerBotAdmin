@@ -69,7 +69,7 @@ public class BotService extends BaseServiceImpl<Bot> {
     }
 
     public Bot initModel(String type) {
-        Collection<Category> categories = categoryService.getAll();
+        Collection<Category> categories = categoryService.findFilteredCategoriesAllForSelection();
         Collection<Language> languages = languageService.getAll();
         Collection<Status> statuses = statusService.getAll();
         Bot bot = null;
@@ -121,7 +121,7 @@ public class BotService extends BaseServiceImpl<Bot> {
             throw new BaseRuntimeException(ErrorCodes.UNAUTHORIZED_ACCESS);
         }
 
-        Collection<Category> categories = categoryService.getAll();
+        Collection<Category> categories = categoryService.findFilteredCategoriesAllForSelection();
         Collection<Language> languages = languageService.getAll();
         bot.getReferenceData().put("categories", categories);
         bot.getReferenceData().put("languages", languages);
@@ -205,7 +205,7 @@ public class BotService extends BaseServiceImpl<Bot> {
 
     public SearchBots initSearchBots() {
         SearchBots searchBots = new SearchBots();
-        searchBots.getReferenceData().put("category", categoryService.getAll());
+        searchBots.getReferenceData().put("category", categoryService.findFilteredCategoriesAllForSelection());
         return searchBots;
     }
 

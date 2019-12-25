@@ -7,7 +7,6 @@ import com.seerlogics.botadmin.service.AccountService;
 import com.seerlogics.botadmin.service.CategoryService;
 import com.seerlogics.botadmin.service.IntentService;
 import com.seerlogics.commons.dto.SearchIntents;
-import com.seerlogics.commons.model.Category;
 import com.seerlogics.commons.model.Intent;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -31,14 +30,6 @@ public class CustomIntentController extends BaseController implements CrudContro
         this.customIntentService = customIntentService;
         this.categoryService = categoryService;
         this.accountService = accountService;
-    }
-
-    /**
-     * This method allows you to select categtory and copy standard intents to your custom intent table.
-     */
-    @ResponseBody
-    public Collection<Category> initCopyStandardIntents() {
-        return categoryService.getAll();
     }
 
     @PreAuthorize("hasAnyRole('ACCT_ADMIN', 'UBER_ADMIN')")

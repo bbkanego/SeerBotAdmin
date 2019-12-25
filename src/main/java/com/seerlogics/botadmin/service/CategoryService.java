@@ -9,12 +9,17 @@ import com.seerlogics.commons.dto.SearchTrainedModel;
 import com.seerlogics.commons.exception.BaseRuntimeException;
 import com.seerlogics.commons.model.Account;
 import com.seerlogics.commons.model.Category;
-import com.seerlogics.commons.repository.*;
+import com.seerlogics.commons.repository.BotRepository;
+import com.seerlogics.commons.repository.CategoryRepository;
+import com.seerlogics.commons.repository.IntentRepository;
+import com.seerlogics.commons.repository.TrainedModelRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
@@ -50,7 +55,9 @@ public class CategoryService extends BaseServiceImpl<Category> {
     }
 
     public Collection<Category> findForEdit() {
-        List<Category> categoryList = categoryRepository.findByOwnerAccounts(accountService.getAuthenticatedUser());
+        List<Account> accounts = Arrays.asList(accountService.getAuthenticatedUser());
+        List<String> catsToIgnore = new ArrayList<>();
+        List<Category> categoryList = categoryRepository.findByOwnerAccounts(accounts, catsToIgnore);
 
         for (Category currentCategory : categoryList) {
             currentCategory.setDeleteAllowed(isAllowedToDelete(currentCategory));
@@ -60,9 +67,15 @@ public class CategoryService extends BaseServiceImpl<Category> {
     }
 
     @PreAuthorize("hasAnyRole('ACCT_ADMIN', 'UBER_ADMIN', 'ACCT_USER')")
-    public Collection<Category> finaAllForSelection() {
-        Account admin = accountService.getAccountByUsername("admin");
-        return categoryRepository.findByOwnerAccounts(admin, accountService.getAuthenticatedUser());
+    public Collection<Category> findFilteredCategoriesAllForSelection() {
+        Account loggedInUser = accountService.getAuthenticatedUser();
+        Account admin = accountService.getAccountByUsername(this.helperService.getUberAdminAccountCode());
+        List<Account> accounts = Arrays.asList(admin, loggedInUser);
+        List<String> catsToIgnore = new ArrayList<>();
+        if (!loggedInUser.getUserName().equals(this.helperService.getUberAdminAccountCode())) {
+            catsToIgnore.add(this.helperService.getGenericCategoryCode());
+        }
+        return categoryRepository.findByOwnerAccounts(accounts, catsToIgnore);
     }
 
     @Override

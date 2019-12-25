@@ -170,14 +170,14 @@ public class TrainedModelService extends BaseServiceImpl<TrainedModel> {
             throw new TrainModelException("The model type defined is incorrect: " + modelType);
         }
         trainedModel.setType(modelType.toUpperCase());
-        trainedModel.getReferenceData().put("categories", this.categoryService.getAll());
+        trainedModel.getReferenceData().put("categories", this.categoryService.findFilteredCategoriesAllForSelection());
         return trainedModel;
     }
 
     public TrainedModel getModelForUpdate(Long id) {
         TrainedModel trainedModel = this.getSingle(id);
         // now check if there are any bots using this model.
-        if (this.launchInfoRepository.findByTrainedModel(trainedModel).size() == 0) {
+        if (this.launchInfoRepository.findByTrainedModel(trainedModel).isEmpty()) {
             trainedModel.setDeleteAllowed(true);
         }
         return trainedModel;
