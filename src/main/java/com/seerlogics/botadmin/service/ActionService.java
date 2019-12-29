@@ -1,6 +1,7 @@
 package com.seerlogics.botadmin.service;
 
 import com.lingoace.spring.service.BaseServiceImpl;
+import com.seerlogics.commons.CommonConstants;
 import com.seerlogics.commons.model.Action;
 import com.seerlogics.commons.repository.ActionRepository;
 import org.apache.commons.lang3.StringUtils;
@@ -13,7 +14,7 @@ import java.util.UUID;
 
 @Transactional("botAdminTransactionManager")
 @Service(value = "actionService")
-@PreAuthorize("hasAnyRole('UBER_ADMIN')")
+@PreAuthorize(CommonConstants.HAS_UBER_ADMIN_ROLE)
 public class ActionService extends BaseServiceImpl<Action> {
 
     private final ActionRepository actionRepository;

@@ -3,6 +3,7 @@
     "addIntent": {
       "pageHeadingPredefined": "Add Predefined Intent",
       "pageHeadingCustom": "Add Custom Intent",
+      "pageSubHeading": "Add Intents as required. You can also copy 'Predefined Intents' that will help you get started faster",
       "intentLabel": "Intent",
       "utteranceLabel": "Utterance",
       "responseLabel": "Response",

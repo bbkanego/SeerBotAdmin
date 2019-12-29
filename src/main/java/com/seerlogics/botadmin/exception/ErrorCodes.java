@@ -15,4 +15,6 @@ public final class ErrorCodes {
     public static String UNAUTHORIZED_ACCESS = "SBA-10008";
     public static String CONSTRAINT_VIOLATION_ERROR = "SBA-10009";
     public static String DATA_INTEGRITY_VIOLATION_ERROR = "SBA-10010";
+    public static String PREDEFINED_INTENTS_ALREADY_COPIED = "SBA-10011";
+    public static String BOT_RE_INITIALIZATION_FAILED = "SBA-10012";
 }

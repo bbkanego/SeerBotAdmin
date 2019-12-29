@@ -2,8 +2,10 @@ package com.seerlogics.botadmin.controller;
 
 import com.lingoace.spring.controller.BaseController;
 import com.seerlogics.botadmin.service.ActionService;
+import com.seerlogics.commons.CommonConstants;
 import com.seerlogics.commons.model.Action;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 /**
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
  */
 @RestController
 @RequestMapping(value = "/api/v1/action")
+@PreAuthorize(CommonConstants.HAS_UBER_ADMIN_ROLE)
 public class ActionController extends BaseController {
 
     private final ActionService actionService;

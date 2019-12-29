@@ -4,10 +4,11 @@ import com.lingoace.spring.controller.BaseController;
 import com.lingoace.spring.controller.CrudController;
 import com.lingoace.validation.Validate;
 import com.seerlogics.botadmin.service.IntentService;
+import com.seerlogics.commons.CommonConstants;
 import com.seerlogics.commons.dto.SearchIntents;
 import com.seerlogics.commons.model.Intent;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,9 +21,14 @@ import java.util.List;
  */
 @RestController
 @RequestMapping(value = "/api/v1/predefined-intent")
+@PreAuthorize(CommonConstants.HAS_UBER_ADMIN_ROLE)
 public class PredefinedIntentController extends BaseController implements CrudController<Intent> {
-    @Autowired
-    private IntentService predefinedIntentService;
+
+    private final IntentService predefinedIntentService;
+
+    public PredefinedIntentController(IntentService predefinedIntentService) {
+        this.predefinedIntentService = predefinedIntentService;
+    }
 
     @PostMapping(value = {"", "/",})
     @ResponseBody
@@ -66,7 +72,7 @@ public class PredefinedIntentController extends BaseController implements CrudCo
     @GetMapping(value = "/search/{category}")
     @ResponseBody
     public List<Intent> searchByCat(@PathVariable("category") String category) {
-        return predefinedIntentService.findIntentsByCategory(category);
+        return predefinedIntentService.findAllByCategoryCodeAndOwner(category);
     }
 
     @PostMapping(value = "/upload")

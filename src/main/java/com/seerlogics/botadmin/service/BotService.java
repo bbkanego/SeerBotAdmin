@@ -1,5 +1,6 @@
 package com.seerlogics.botadmin.service;
 
+import com.lingoace.common.exception.GeneralErrorException;
 import com.lingoace.exception.jpa.UnknownTypeException;
 import com.lingoace.spring.service.BaseServiceImpl;
 import com.seerlogics.botadmin.config.AppProperties;
@@ -9,13 +10,17 @@ import com.seerlogics.commons.dto.SearchBots;
 import com.seerlogics.commons.exception.BaseRuntimeException;
 import com.seerlogics.commons.model.*;
 import com.seerlogics.commons.repository.BotRepository;
+import com.seerlogics.commons.repository.LaunchInfoRepository;
 import com.seerlogics.commons.repository.TrainedModelRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Collection;
 import java.util.List;
@@ -48,15 +53,25 @@ public class BotService extends BaseServiceImpl<Bot> {
 
     private final HelperService helperService;
 
+    private final LaunchInfoRepository launchInfoRepository;
+
+    private final RestTemplate restTemplate;
+
     private AppProperties appProperties;
 
     @Value("${app.botType:simple}")
     private String botType;
 
+    @Value(("${seerapp.chatbot.reinit.url:http://localhost:8099/chatbot/api/chats/re-init}"))
+    private String chatbotReInitUrl;
+
+    @Value(("${seerapp.authCode:2478360d-530d-4435-bf49-bf07c0e7e35b}"))
+    private String authCode;
+
     public BotService(BotRepository botRepository, CategoryService categoryService,
                       StatusService statusService, LanguageService languageService,
                       AccountService accountService, TrainedModelRepository trainedModelRepository,
-                      BotLauncher botLauncher, HelperService helperService, AppProperties appProperties) {
+                      BotLauncher botLauncher, HelperService helperService, LaunchInfoRepository launchInfoRepository, RestTemplate restTemplate, AppProperties appProperties) {
         this.botRepository = botRepository;
         this.categoryService = categoryService;
         this.statusService = statusService;
@@ -65,6 +80,8 @@ public class BotService extends BaseServiceImpl<Bot> {
         this.trainedModelRepository = trainedModelRepository;
         this.botLauncher = botLauncher;
         this.helperService = helperService;
+        this.launchInfoRepository = launchInfoRepository;
+        this.restTemplate = restTemplate;
         this.appProperties = appProperties;
     }
 
@@ -199,7 +216,20 @@ public class BotService extends BaseServiceImpl<Bot> {
             throw new BaseRuntimeException(ErrorCodes.UNAUTHORIZED_ACCESS);
         }
 
-        botLauncher.restartBotAsync(id);
+        LaunchInfo launchInfo = this.launchInfoRepository.findByTargetBotId(bot.getId());
+        String uniqueBotId = launchInfo.getUniqueBotId();
+
+        ResponseEntity<String> response
+                = this.restTemplate.getForEntity(this.chatbotReInitUrl + "/" + this.authCode + "/"
+                        + uniqueBotId, String.class);
+
+        if (!response.getStatusCode().equals(HttpStatus.OK)) {
+            GeneralErrorException generalErrorException = new GeneralErrorException();
+            generalErrorException.addError(ErrorCodes.BOT_RE_INITIALIZATION_FAILED,
+                    "Bot re-initialization failed", null);
+            throw generalErrorException;
+        }
+
         return bot;
     }
 

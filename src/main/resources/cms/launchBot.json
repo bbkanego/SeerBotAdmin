@@ -12,6 +12,7 @@
       "allowedOrigin": "Allowed Origin",
       "launchNowButton": "Launch Bot",
       "stopNowButton": "Stop Bot",
+      "reinitializeNowButton": "Re-Initialize Bot",
       "chatNowLabel": "Chat Now",
       "sendLabel": "Send",
       "testNow": "Test Now",
@@ -21,6 +22,8 @@
       "pageSubsectionHeading": "Bot Details",
       "stopBotHeading": "Stop Bot?",
       "stopBotMessage": "Do you want to stop the bot?",
+      "reInitBotHeading": "Re-Init Bot?",
+      "reInitBotMessage": "Do you want to re-initialize/re-start the bot?",
       "launchBotHeading": "Launch Bot?",
       "launchBotMessage": "Do you want to launch the bot to production? By doing so the bot will be available for customers to use on the internet"
     },

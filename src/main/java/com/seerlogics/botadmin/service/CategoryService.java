@@ -23,6 +23,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 
+import static com.seerlogics.commons.CommonConstants.HAS_UBER_ADMIN_OR_ADMIN_OR_USER_ROLE;
+
 /**
  * Created by bkane on 11/1/18.
  */
@@ -66,7 +68,7 @@ public class CategoryService extends BaseServiceImpl<Category> {
         return categoryList;
     }
 
-    @PreAuthorize("hasAnyRole('ACCT_ADMIN', 'UBER_ADMIN', 'ACCT_USER')")
+    @PreAuthorize(HAS_UBER_ADMIN_OR_ADMIN_OR_USER_ROLE)
     public Collection<Category> findFilteredCategoriesAllForSelection() {
         Account loggedInUser = accountService.getAuthenticatedUser();
         Account admin = accountService.getAccountByUsername(this.helperService.getUberAdminAccountCode());

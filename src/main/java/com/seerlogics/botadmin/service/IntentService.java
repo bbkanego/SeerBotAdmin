@@ -1,7 +1,9 @@
 package com.seerlogics.botadmin.service;
 
+import com.lingoace.common.exception.GeneralErrorException;
 import com.lingoace.spring.service.BaseServiceImpl;
 import com.seerlogics.botadmin.exception.ErrorCodes;
+import com.seerlogics.commons.CommonConstants;
 import com.seerlogics.commons.dto.SearchIntents;
 import com.seerlogics.commons.exception.BaseRuntimeException;
 import com.seerlogics.commons.model.*;
@@ -21,8 +23,10 @@ import java.util.*;
  */
 @Service
 @Transactional("botAdminTransactionManager")
+@PreAuthorize(CommonConstants.HAS_UBER_ADMIN_OR_ADMIN_OR_USER_ROLE)
 public class IntentService extends BaseServiceImpl<Intent> {
 
+    public static final String MAYBE = "Maybe";
     private final IntentRepository intentRepository;
 
     private final CategoryService categoryService;
@@ -44,7 +48,7 @@ public class IntentService extends BaseServiceImpl<Intent> {
     }
 
     @Override
-    @PreAuthorize("hasAnyRole('ACCT_ADMIN', 'UBER_ADMIN', 'ACCT_USER')")
+    @PreAuthorize(CommonConstants.HAS_UBER_ADMIN_OR_ADMIN_OR_USER_ROLE)
     public Collection<Intent> getAll() {
         return intentRepository.findAll();
     }
@@ -57,6 +61,7 @@ public class IntentService extends BaseServiceImpl<Intent> {
     }
 
     @Override
+    @PreAuthorize(CommonConstants.HAS_UBER_ADMIN_OR_ADMIN_OR_USER_ROLE)
     public Intent save(Intent intent) {
         /*// validate the intent. The intent should have only 1 response and MayBeResponse for a locale.
         Set<IntentResponse> intentResponses = intent.getResponses();
@@ -80,7 +85,7 @@ public class IntentService extends BaseServiceImpl<Intent> {
         Intent mayBeIntent = intent.getMayBeIntent();
         if (mayBeIntent != null && mayBeIntent.getId() == null) {
             mayBeIntent.setOwner(intent.getOwner());
-            mayBeIntent.setIntent("Maybe" + intent.getIntent());
+            mayBeIntent.setIntent(MAYBE + intent.getIntent());
             mayBeIntent.setIntentType(Intent.INTENT_TYPE.MAYBE.name());
             mayBeIntent.setCategory(intent.getCategory());
             IntentResponse intentResponses = (IntentResponse) mayBeIntent.getResponses().toArray()[0];
@@ -94,17 +99,18 @@ public class IntentService extends BaseServiceImpl<Intent> {
         intentRepository.deleteById(id);
     }
 
+    public void deleteAll(List<Intent> intents) {
+        this.intentRepository.deleteAll(intents);
+    }
+
     @Override
+    @PreAuthorize(CommonConstants.HAS_UBER_ADMIN_OR_ADMIN_OR_USER_ROLE)
     public List<Intent> saveAll(Collection<Intent> predefinedIntentUtterances1) {
         return intentRepository.saveAll(predefinedIntentUtterances1);
     }
 
-    public List<Intent> findByCategory(Category cat) {
-        return intentRepository.findByCategory(cat);
-    }
-
-    public List<Intent> findIntentsByCategory(String catCode) {
-        return intentRepository.findIntentsByCode(catCode);
+    public List<Intent> findAllByCategoryCodeAndOwner(String catCode) {
+        return intentRepository.findAllByCategoryCodeAndOwnerEquals(catCode, this.accountService.getAuthenticatedUser());
     }
 
     public List<Intent> findIntentsByCategoryAndType(List<String> catCode, String intentType) {
@@ -225,34 +231,92 @@ public class IntentService extends BaseServiceImpl<Intent> {
         return false;
     }
 
-    public List<Intent> copyPredefinedIntents(String categoryCode) {
-        List<String> categoryCodes = Arrays.asList(categoryCode, this.helperService.getGenericCategoryCode());
+    public List<Intent> copyPredefinedIntents(String categoryCodeDesiredByUser) {
+
+        List<Intent> copiedIntents = this.intentRepository.
+                findIntentsByCategoryCodeAndOwnerAndCopyOfPredefinedIntentNotNull(categoryCodeDesiredByUser,
+                        accountService.getAuthenticatedUser());
+        if (!copiedIntents.isEmpty()) {
+            GeneralErrorException generalErrorException = new GeneralErrorException();
+            generalErrorException.addError(ErrorCodes.PREDEFINED_INTENTS_ALREADY_COPIED,
+                    this.helperService.getMessage("message.intents.predefined.intent.copied", null), null);
+            throw generalErrorException;
+        }
+
+        /**
+         * We will copy the intents, maybe intents and responses from the Generic category code and from the category
+         * that the user selected.
+         */
+        Category categoryDesiredByUser = this.categoryService.getCategoryByCode(categoryCodeDesiredByUser);
+        List<String> categoryCodes = Arrays.asList(categoryCodeDesiredByUser, this.helperService.getGenericCategoryCode());
         List<Intent> predefinedIntents = this.findIntentsByCategoryAndType(categoryCodes,
                 Intent.INTENT_TYPE.PREDEFINED.name());
         List<Intent> customIntents = new ArrayList<>();
+        Account targetOwner = accountService.getAuthenticatedUser();
         for (Intent predefinedIntentUtterance : predefinedIntents) {
             Intent customIntent = new Intent();
-            customIntent.setOwner(accountService.getAuthenticatedUser());
-            customIntent.setCategory(predefinedIntentUtterance.getCategory());
+            customIntent.setOwner(targetOwner);
+            customIntent.setCategory(categoryDesiredByUser);
             customIntent.setIntent(predefinedIntentUtterance.getIntent());
             customIntent.setIntentType(Intent.INTENT_TYPE.CUSTOM.name());
-            for (IntentUtterance predefinedUtterance : predefinedIntentUtterance.getUtterances()) {
-                IntentUtterance customUtterance = new IntentUtterance();
-                customIntent.addIntentUtterance(customUtterance);
-                customUtterance.setLocale(predefinedUtterance.getLocale());
-                customUtterance.setUtterance(predefinedUtterance.getUtterance());
+            customIntent.setCopyOfPredefinedIntent(predefinedIntentUtterance.getId());
+
+            // copy the maybe intent
+            Intent predefinedMayBeIntent = predefinedIntentUtterance.getMayBeIntent();
+            if (predefinedMayBeIntent != null) {
+                Intent mayBeIntent = new Intent();
+                mayBeIntent.setCopyOfPredefinedIntent(predefinedMayBeIntent.getId());
+                mayBeIntent.setIntentType(predefinedMayBeIntent.getIntentType());
+                mayBeIntent.setCategory(categoryDesiredByUser);
+                mayBeIntent.setOwner(targetOwner);
+                mayBeIntent.setIntent(predefinedMayBeIntent.getIntent());
+
+                // copy the predefined utterances
+                for (IntentUtterance predefinedUtterance : predefinedMayBeIntent.getUtterances()) {
+                    copyIntentUtterance(mayBeIntent, predefinedUtterance);
+                }
+
+                // copy the predefined responses
+                for (IntentResponse predefinedResponse : predefinedMayBeIntent.getResponses()) {
+                    copyIntentResponse(mayBeIntent, predefinedResponse);
+                }
+
+                // add the maybe intent to the custom intent
+                customIntent.setMayBeIntent(mayBeIntent);
             }
+
+            // copy the utterances
+            for (IntentUtterance predefinedUtterance : predefinedIntentUtterance.getUtterances()) {
+                copyIntentUtterance(customIntent, predefinedUtterance);
+            }
+
+            // copy the responses
             for (IntentResponse predefinedResponse : predefinedIntentUtterance.getResponses()) {
-                IntentResponse customResponse = new IntentResponse();
-                customIntent.addIntentResponse(customResponse);
-                customResponse.setLocale(predefinedResponse.getLocale());
-                customResponse.setResponse(predefinedResponse.getResponse());
-                customResponse.setResponseType(predefinedResponse.getResponseType());
+                copyIntentResponse(customIntent, predefinedResponse);
             }
             customIntents.add(customIntent);
         }
         this.saveAll(customIntents);
         return customIntents;
+    }
+
+    private void copyIntentResponse(Intent mayBeIntent, IntentResponse predefinedResponse) {
+        IntentResponse customResponse = new IntentResponse();
+        customResponse.setLocale(predefinedResponse.getLocale());
+        customResponse.setResponse(predefinedResponse.getResponse());
+        customResponse.setResponseType(predefinedResponse.getResponseType());
+
+        // add the response to the custom intent
+        mayBeIntent.addIntentResponse(customResponse);
+    }
+
+    private void copyIntentUtterance(Intent targetCustomIntent, IntentUtterance predefinedUtterance) {
+        IntentUtterance customUtterance = new IntentUtterance();
+        customUtterance.setLocale(predefinedUtterance.getLocale());
+        customUtterance.setUtterance(predefinedUtterance.getUtterance());
+
+        // add the utterance to custom intent
+        targetCustomIntent.addIntentUtterance(customUtterance);
     }
 
     /**

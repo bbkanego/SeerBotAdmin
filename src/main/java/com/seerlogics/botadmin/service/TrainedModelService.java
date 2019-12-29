@@ -106,17 +106,16 @@ public class TrainedModelService extends BaseServiceImpl<TrainedModel> {
                 trainedModel.getType());
         for (Intent currentIntent : intents) {
             Set<IntentUtterance> intentUtterances = currentIntent.getUtterances();
-            int j = 0;
             for (IntentUtterance intentUtterance : intentUtterances) {
-                j++;
                 buffer.append(currentIntent.getIntent());
                 buffer.append(" ");
                 buffer.append(intentUtterance.getUtterance());
-                if (j < (intentUtterances.size() - 1)) {
-                    buffer.append(System.lineSeparator());
-                }
+                buffer.append(System.lineSeparator());
             }
         }
+        LOGGER.debug("-------------------------------");
+        LOGGER.debug("Trained Model buffer = {}", buffer);
+        LOGGER.debug("-------------------------------");
         ByteArrayOutputStream outStream = NLPModelTrainer.trainDoccatModel(buffer);
         trainedModel.setFile(outStream.toByteArray());
     }
