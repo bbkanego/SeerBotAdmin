@@ -217,7 +217,7 @@ bkane@bubuntu:~/installs/killbill$ mvn clean install -DskipTests
 
 #### Add kill bill users
 ```
-bkane@bubuntu:~/installs/killbill$ mysql -u root -p
+bkane@bubuntu:~/installs/killbill$ mysql -u root -p  [pwd=simplest pwd ever]
 
 mysql>CREATE USER 'killbill'@'%' IDENTIFIED BY 'killbill';
 
@@ -274,4 +274,24 @@ bkane@bubuntu:~/installs/killbill$ ./bin/start-server -s
 
 // logs
 bkane@bubuntu:~/installs/killbill$ ./profiles/killbill/logs
+```
+
+## SeerBot Admin MySQL DB creation
+
+```
+mysql> create user 'bkane'@'%' identified by 'bkane';
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> create database seerBotAdminDB;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> create database seerBotDB;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> grant all privileges on seerBotAdminDB.* to 'bkane'@'%';
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> grant all privileges on seerBotDB.* to 'bkane'@'%';
+Query OK, 0 rows affected (0.00 sec)
+
 ```

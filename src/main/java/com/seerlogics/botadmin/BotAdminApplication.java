@@ -25,7 +25,7 @@ import java.util.concurrent.Executor;
  * <p>
  * Since ALL the JPA repository and Entities and controllers are under 'com.seerlogics.botadmin',
  * the "@SpringBootApplication's" auto configuration is able to do component scans
- *
+ * <p>
  * SpringBootServletInitializer: allows WAR deployment & initialization of Spring boot app
  */
 @SpringBootApplication // same as adding @Configuration @EnableAutoConfiguration @ComponentScan
