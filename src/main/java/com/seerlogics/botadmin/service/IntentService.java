@@ -18,6 +18,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 
+import static com.seerlogics.botadmin.exception.ErrorCodes.INTENT_ALREADY_ADDED;
+
 /**
  * Created by bkane on 11/3/18.
  */
@@ -63,21 +65,21 @@ public class IntentService extends BaseServiceImpl<Intent> {
     @Override
     @PreAuthorize(CommonConstants.HAS_UBER_ADMIN_OR_ADMIN_OR_USER_ROLE)
     public Intent save(Intent intent) {
-        /*// validate the intent. The intent should have only 1 response and MayBeResponse for a locale.
-        Set<IntentResponse> intentResponses = intent.getResponses();
-        for (IntentResponse intentResponse : intentResponses) {
-            List<IntentResponse> tempIntentResponses =
-                    intent.getIntentResponsesForLocale(intentResponse.getLocale());
-            if (tempIntentResponses.size() > 2) {
-                throw new BaseRuntimeException(ErrorCodes.INTENTS_RESPONSE_NUM_ERROR);
-            } else if (tempIntentResponses.size() == 2) {
-                IntentResponse intentResponse1 = tempIntentResponses.get(0);
-                IntentResponse intentResponse2 = tempIntentResponses.get(1);
-                if (intentResponse1.getResponseType().equals(intentResponse2.getResponseType())) {
-                    throw new BaseRuntimeException(ErrorCodes.DUPLICATE_INTENTS_RESPONSE_TYPE_ERROR);
-                }
-            }
-        }*/
+
+        // get existing intents for the category
+        List<Intent> existingIntents =
+                this.intentRepository.findAllByCategoryCodeAndOwnerEquals(intent.getCategory().getCode(),
+                        this.accountService.getAuthenticatedUser());
+
+        // add the new intent to the existing intents to check if its duplicate
+        if (intent.getId() == null) {
+            existingIntents.add(intent);
+            checkForDuplicateIntent(existingIntents);
+        }
+
+        // check for duplicate utterance
+        checkForDuplicateIntentUtterance(intent.getUtterances());
+
         List<IntentResponse> newResponses = new ArrayList<>(intent.getResponses());
         intent.getResponses().clear();
         intent.setOwner(accountService.getAuthenticatedUser());
@@ -104,9 +106,46 @@ public class IntentService extends BaseServiceImpl<Intent> {
     }
 
     @Override
-    @PreAuthorize(CommonConstants.HAS_UBER_ADMIN_OR_ADMIN_OR_USER_ROLE)
-    public List<Intent> saveAll(Collection<Intent> predefinedIntentUtterances1) {
-        return intentRepository.saveAll(predefinedIntentUtterances1);
+    @PreAuthorize(CommonConstants.HAS_UBER_ADMIN_OR_ACCT_ADMIN_ROLE)
+    public List<Intent> saveAll(Collection<Intent> intentsAndUtternaces) {
+
+        checkForDuplicateIntent(intentsAndUtternaces);
+
+        for (Intent intent : intentsAndUtternaces) {
+            checkForDuplicateIntentUtterance(intent.getUtterances());
+        }
+
+        return intentRepository.saveAll(intentsAndUtternaces);
+    }
+
+    private void checkForDuplicateIntentUtterance(Collection<IntentUtterance> intentUtterances) {
+        // check for any duplicate intents.
+        Set<String> setToCheckDuplicates = new HashSet<>();
+        for (IntentUtterance intentUtterance : intentUtterances) {
+            // check for duplicate utterance in the same Intent
+            if (!setToCheckDuplicates.add(intentUtterance.getUtterance())) {
+                GeneralErrorException duplicateUtterance = new GeneralErrorException();
+                duplicateUtterance.addError(INTENT_ALREADY_ADDED,
+                        this.helperService.getMessage("message.intents.utterance.already.added",
+                                new String[]{intentUtterance.getUtterance()}), null);
+                throw duplicateUtterance;
+            }
+        }
+    }
+
+    private void checkForDuplicateIntent(Collection<Intent> intentsAndUtterances) {
+        // check for any duplicate intents.
+        Set<String> setToCheckDuplicates = new HashSet<>();
+        // check for duplicate Intents
+        for (Intent intent : intentsAndUtterances) {
+            if (!setToCheckDuplicates.add(intent.getIntent())) {
+                GeneralErrorException duplicateIntent = new GeneralErrorException();
+                duplicateIntent.addError(INTENT_ALREADY_ADDED,
+                        this.helperService.getMessage("message.intents.already.added",
+                                new String[]{intent.getIntent()}), null);
+                throw duplicateIntent;
+            }
+        }
     }
 
     public List<Intent> findAllByCategoryCodeAndOwner(String catCode) {

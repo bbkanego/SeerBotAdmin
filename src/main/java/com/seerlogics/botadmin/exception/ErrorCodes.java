@@ -17,4 +17,6 @@ public final class ErrorCodes {
     public static String DATA_INTEGRITY_VIOLATION_ERROR = "SBA-10010";
     public static String PREDEFINED_INTENTS_ALREADY_COPIED = "SBA-10011";
     public static String BOT_RE_INITIALIZATION_FAILED = "SBA-10012";
+    public static String INTENT_ALREADY_ADDED = "SBA-10013";
+    public static String INTENT_UTTERANCE_ALREADY_ADDED = "SBA-10014";
 }
