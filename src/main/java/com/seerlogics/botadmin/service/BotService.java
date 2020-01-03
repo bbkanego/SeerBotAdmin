@@ -1,13 +1,13 @@
 package com.seerlogics.botadmin.service;
 
 import com.lingoace.common.exception.GeneralErrorException;
+import com.lingoace.common.exception.NotAuthorizedException;
 import com.lingoace.exception.jpa.UnknownTypeException;
 import com.lingoace.spring.service.BaseServiceImpl;
 import com.seerlogics.botadmin.config.AppProperties;
 import com.seerlogics.botadmin.exception.ErrorCodes;
 import com.seerlogics.commons.dto.LaunchModel;
 import com.seerlogics.commons.dto.SearchBots;
-import com.seerlogics.commons.exception.BaseRuntimeException;
 import com.seerlogics.commons.model.*;
 import com.seerlogics.commons.repository.BotRepository;
 import com.seerlogics.commons.repository.LaunchInfoRepository;
@@ -27,12 +27,14 @@ import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+import static com.seerlogics.commons.CommonConstants.HAS_UBER_ADMIN_OR_ACCT_ADMIN_ROLE;
+
 /**
  * Created by bkane on 10/31/18.
  */
 @Service
 @Transactional("botAdminTransactionManager")
-@PreAuthorize("hasAnyRole('ACCT_ADMIN')")
+@PreAuthorize(HAS_UBER_ADMIN_OR_ACCT_ADMIN_ROLE)
 public class BotService extends BaseServiceImpl<Bot> {
 
     protected static final Logger LOGGER = LoggerFactory.getLogger(BotService.class);
@@ -71,7 +73,8 @@ public class BotService extends BaseServiceImpl<Bot> {
     public BotService(BotRepository botRepository, CategoryService categoryService,
                       StatusService statusService, LanguageService languageService,
                       AccountService accountService, TrainedModelRepository trainedModelRepository,
-                      BotLauncher botLauncher, HelperService helperService, LaunchInfoRepository launchInfoRepository, RestTemplate restTemplate, AppProperties appProperties) {
+                      BotLauncher botLauncher, HelperService helperService, LaunchInfoRepository launchInfoRepository,
+                      RestTemplate restTemplate, AppProperties appProperties) {
         this.botRepository = botRepository;
         this.categoryService = categoryService;
         this.statusService = statusService;
@@ -90,9 +93,9 @@ public class BotService extends BaseServiceImpl<Bot> {
         Collection<Language> languages = languageService.getAll();
         Collection<Status> statuses = statusService.getAll();
         Bot bot = null;
-        if (Bot.BOT_TYPE.CHAT_BOT.name().toLowerCase().equals(type)) {
+        if (Bot.BOT_TYPE.CHAT_BOT.name().equalsIgnoreCase(type)) {
             bot = new ChatBot();
-        } else if (Bot.BOT_TYPE.VOICE_BOT.name().toLowerCase().equals(type)) {
+        } else if (Bot.BOT_TYPE.VOICE_BOT.name().equalsIgnoreCase(type)) {
             bot = new VoiceBot();
         } else {
             throw new UnknownTypeException("Unknown type = " + type);
@@ -110,7 +113,7 @@ public class BotService extends BaseServiceImpl<Bot> {
 
     @Override
     public Collection<Bot> getAll() {
-        return this.botRepository.findAll();
+        return this.botRepository.findByOwner(this.accountService.getAuthenticatedUser());
     }
 
     @Override
@@ -119,7 +122,7 @@ public class BotService extends BaseServiceImpl<Bot> {
             bot.setOwner(accountService.getAuthenticatedUser());
         } else {
             if (!this.helperService.isAllowedToEdit(bot.getOwner())) {
-                throw new BaseRuntimeException(ErrorCodes.UNAUTHORIZED_ACCESS);
+                throw new NotAuthorizedException(ErrorCodes.UNAUTHORIZED_ACCESS);
             }
         }
         return this.botRepository.save(bot);
@@ -127,6 +130,13 @@ public class BotService extends BaseServiceImpl<Bot> {
 
     @Override
     public void delete(Long id) {
+
+        Bot bot = this.botRepository.getOne(id);
+
+        if (!this.helperService.isAllowedToEdit(bot.getOwner())) {
+            throw new NotAuthorizedException(ErrorCodes.UNAUTHORIZED_ACCESS);
+        }
+
         this.botRepository.deleteById(id);
     }
 
@@ -135,7 +145,7 @@ public class BotService extends BaseServiceImpl<Bot> {
         Bot bot = this.botRepository.getOne(id);
 
         if (!this.helperService.isAllowedToEdit(bot.getOwner())) {
-            throw new BaseRuntimeException(ErrorCodes.UNAUTHORIZED_ACCESS);
+            throw new NotAuthorizedException(ErrorCodes.UNAUTHORIZED_ACCESS);
         }
 
         Collection<Category> categories = categoryService.findFilteredCategoriesAllForSelection();
@@ -148,7 +158,7 @@ public class BotService extends BaseServiceImpl<Bot> {
     public Bot changeStatus(Long id, String code) {
         Bot bot = this.getSingle(id);
         if (!this.helperService.isAllowedToEdit(bot.getOwner())) {
-            throw new BaseRuntimeException(ErrorCodes.UNAUTHORIZED_ACCESS);
+            throw new NotAuthorizedException(ErrorCodes.UNAUTHORIZED_ACCESS);
         }
         bot.setStatus(statusService.findByCode(Status.STATUS_CODES.valueOf(code).name()));
         return save(bot);
@@ -160,7 +170,7 @@ public class BotService extends BaseServiceImpl<Bot> {
         Bot targetBot = this.botRepository.getOne(launchModel.getBot().getId());
 
         if (!this.helperService.isAllowedToEdit(targetBot.getOwner())) {
-            throw new BaseRuntimeException(ErrorCodes.UNAUTHORIZED_ACCESS);
+            throw new NotAuthorizedException(ErrorCodes.UNAUTHORIZED_ACCESS);
         }
 
         if ("async".equals(this.botType)) {
@@ -177,7 +187,7 @@ public class BotService extends BaseServiceImpl<Bot> {
         Bot targetBot = this.botRepository.getOne(id);
 
         if (!this.helperService.isAllowedToEdit(targetBot.getOwner())) {
-            throw new BaseRuntimeException(ErrorCodes.UNAUTHORIZED_ACCESS);
+            throw new NotAuthorizedException(ErrorCodes.UNAUTHORIZED_ACCESS);
         }
 
         targetBot.setStatus(statusService.findByCode(Status.STATUS_CODES.LAUNCHED.name()));
@@ -198,7 +208,7 @@ public class BotService extends BaseServiceImpl<Bot> {
         Bot bot = this.botRepository.getOne(id);
 
         if (!this.helperService.isAllowedToEdit(bot.getOwner())) {
-            throw new BaseRuntimeException(ErrorCodes.UNAUTHORIZED_ACCESS);
+            throw new NotAuthorizedException(ErrorCodes.UNAUTHORIZED_ACCESS);
         }
 
         //botLauncher.stopBotAsync(id);
@@ -213,7 +223,7 @@ public class BotService extends BaseServiceImpl<Bot> {
         Bot bot = this.botRepository.getOne(id);
 
         if (!this.helperService.isAllowedToEdit(bot.getOwner())) {
-            throw new BaseRuntimeException(ErrorCodes.UNAUTHORIZED_ACCESS);
+            throw new NotAuthorizedException(ErrorCodes.UNAUTHORIZED_ACCESS);
         }
 
         LaunchInfo launchInfo = this.launchInfoRepository.findByTargetBotId(bot.getId());
@@ -221,7 +231,7 @@ public class BotService extends BaseServiceImpl<Bot> {
 
         ResponseEntity<String> response
                 = this.restTemplate.getForEntity(this.chatbotReInitUrl + "/" + this.authCode + "/"
-                        + uniqueBotId, String.class);
+                + uniqueBotId, String.class);
 
         if (!response.getStatusCode().equals(HttpStatus.OK)) {
             GeneralErrorException generalErrorException = new GeneralErrorException();

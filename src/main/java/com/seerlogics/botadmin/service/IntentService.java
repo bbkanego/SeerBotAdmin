@@ -28,7 +28,6 @@ import static com.seerlogics.botadmin.exception.ErrorCodes.INTENT_ALREADY_ADDED;
 @PreAuthorize(CommonConstants.HAS_UBER_ADMIN_OR_ADMIN_OR_USER_ROLE)
 public class IntentService extends BaseServiceImpl<Intent> {
 
-    public static final String MAYBE = "Maybe";
     private final IntentRepository intentRepository;
 
     private final CategoryService categoryService;
@@ -87,7 +86,7 @@ public class IntentService extends BaseServiceImpl<Intent> {
         Intent mayBeIntent = intent.getMayBeIntent();
         if (mayBeIntent != null && mayBeIntent.getId() == null) {
             mayBeIntent.setOwner(intent.getOwner());
-            mayBeIntent.setIntent(MAYBE + intent.getIntent());
+            mayBeIntent.setIntent(CommonConstants.MAY_BE + intent.getIntent());
             mayBeIntent.setIntentType(Intent.INTENT_TYPE.MAYBE.name());
             mayBeIntent.setCategory(intent.getCategory());
             IntentResponse intentResponses = (IntentResponse) mayBeIntent.getResponses().toArray()[0];

@@ -10,6 +10,7 @@ import com.seerlogics.commons.model.TrainedModel;
 import com.seerlogics.commons.repository.LaunchInfoRepository;
 import com.seerlogics.commons.repository.TrainedModelRepository;
 import org.apache.commons.io.FileUtils;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.ResourceUtils;
@@ -22,8 +23,11 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+import static com.seerlogics.commons.CommonConstants.HAS_UBER_ADMIN_OR_ACCT_ADMIN_ROLE;
+
 @Service
 @Transactional("botAdminTransactionManager")
+@PreAuthorize(HAS_UBER_ADMIN_OR_ACCT_ADMIN_ROLE)
 public class TrainedModelService extends BaseServiceImpl<TrainedModel> {
     private final TrainedModelRepository trainedModelRepository;
 

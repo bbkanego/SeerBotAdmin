@@ -11,18 +11,21 @@ import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
 
+import static com.seerlogics.commons.CommonConstants.HAS_UBER_ADMIN_OR_ACCT_ADMIN_ROLE;
+
 @RestController
 @RequestMapping(value = "/api/v1/model")
+@PreAuthorize(HAS_UBER_ADMIN_OR_ACCT_ADMIN_ROLE)
 public class TrainedModelController extends BaseController implements CrudController<TrainedModel> {
     @Autowired
     private TrainedModelService trainedModelService;
 
     @GetMapping(value = "/train/init/{modelType}")
-    @ResponseBody
     public TrainedModel initTrainModel(@PathVariable("modelType") String modelType) {
         return trainedModelService.initTrainedModel(modelType);
     }
@@ -34,14 +37,12 @@ public class TrainedModelController extends BaseController implements CrudContro
      * @return
      */
     @PostMapping(value = "/train")
-    @ResponseBody
     public Boolean trainModel(@Validate("validateTrainModelRule") @RequestBody TrainedModel trainedModel) {
         this.trainedModelService.trainModel(trainedModel);
         return true;
     }
 
     @GetMapping(value = "/re-train/{id}")
-    @ResponseBody
     public Boolean reTrainModel(@PathVariable Long id) {
         this.trainedModelService.reTrainModel(id);
         return true;
@@ -68,7 +69,6 @@ public class TrainedModelController extends BaseController implements CrudContro
 
     @Override
     @PostMapping(value = {"", "/"})
-    @ResponseBody
     public Boolean save(TrainedModel object) {
         this.trainedModelService.save(object);
         return true;
@@ -76,21 +76,18 @@ public class TrainedModelController extends BaseController implements CrudContro
 
     @Override
     @GetMapping(value = {"", "/"})
-    @ResponseBody
     public Collection<TrainedModel> getAll() {
         return this.trainedModelService.findModelByOwner();
     }
 
     @Override
     @GetMapping(value = {"/{id}"})
-    @ResponseBody
     public TrainedModel getById(@PathVariable("id") Long id) {
         return this.trainedModelService.getModelForUpdate(id);
     }
 
     @Override
     @DeleteMapping(value = {"/{id}"})
-    @ResponseBody
     public Boolean delete(@PathVariable("id") Long id) {
         this.trainedModelService.delete(id);
         return true;

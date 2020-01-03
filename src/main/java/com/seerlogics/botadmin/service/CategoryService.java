@@ -1,12 +1,12 @@
 package com.seerlogics.botadmin.service;
 
 import com.lingoace.common.exception.GeneralErrorException;
+import com.lingoace.common.exception.NotAuthorizedException;
 import com.lingoace.spring.service.BaseServiceImpl;
 import com.seerlogics.botadmin.exception.ErrorCodes;
 import com.seerlogics.commons.dto.SearchBots;
 import com.seerlogics.commons.dto.SearchIntents;
 import com.seerlogics.commons.dto.SearchTrainedModel;
-import com.seerlogics.commons.exception.BaseRuntimeException;
 import com.seerlogics.commons.model.Account;
 import com.seerlogics.commons.model.Category;
 import com.seerlogics.commons.repository.BotRepository;
@@ -101,7 +101,7 @@ public class CategoryService extends BaseServiceImpl<Category> {
             if (this.helperService.isAllowedToEdit(tempCat.getOwnerAccount())) {
                 return categoryRepository.save(category);
             } else {
-                throw new BaseRuntimeException(ErrorCodes.UNAUTHORIZED_ACCESS);
+                throw new NotAuthorizedException(ErrorCodes.UNAUTHORIZED_ACCESS);
             }
         }
     }
@@ -120,7 +120,7 @@ public class CategoryService extends BaseServiceImpl<Category> {
         if (this.helperService.isAllowedToEdit(category.getOwnerAccount())) {
             categoryRepository.delete(category);
         } else {
-            throw new BaseRuntimeException(ErrorCodes.UNAUTHORIZED_ACCESS);
+            throw new NotAuthorizedException(ErrorCodes.UNAUTHORIZED_ACCESS);
         }
     }
 

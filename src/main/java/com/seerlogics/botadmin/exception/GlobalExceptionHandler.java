@@ -29,7 +29,6 @@ import static com.seerlogics.botadmin.exception.ErrorCodes.DATA_INTEGRITY_VIOLAT
 @ControllerAdvice
 public class GlobalExceptionHandler extends com.lingoace.common.GlobalExceptionHandler {
 
-    public static final String MESSAGE = "message";
     @Resource(name = "appMessageResource")
     private MessageSource messageSource;
 
