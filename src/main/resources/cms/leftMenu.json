@@ -23,7 +23,8 @@
       "option1": "Create Bot",
       "option2": "Edit Bot",
       "option3": "Launch Bot",
-      "option4": "Test Bot"
+      "option4": "Test Bot",
+      "option5": "Retrain Bots"
     },
     "refData": {
       "heading": "Reference Data",

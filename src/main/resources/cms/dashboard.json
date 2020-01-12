@@ -1,0 +1,34 @@
+{
+  "dashboard": {
+    "pageHeading": "Dashboard",
+    "refresh": "Refresh",
+    "botPerformance": {
+      "heading": "Bot Performance",
+      "botName": "Bot",
+      "actionsLabel": "Actions",
+      "totalChats": "Total Chats",
+      "successChats": "Success Chats",
+      "partialChats": "Partial Chats",
+      "failedChats": "Failed Chats",
+      "success": "Success",
+      "partial": "Partial",
+      "failed": "Failed",
+      "actions": {
+        "last7Days": "Last 7 days",
+        "last1Days": "1 day",
+        "today": "Today",
+        "last30Days": "Last 30 days",
+        "last180Days": "Last 6 months",
+        "last360Days": "Last 360 days"
+      }
+    },
+    "notifications": {
+      "totalTransactions": "Total Transactions",
+      "maxAllowedTransactions": "Max Allowed Transactions (per min)",
+      "monthlyTransactions": "Avg Monthly Transactions (per min)",
+      "dailyTransactions": "Avg Daily Transactions (per min)",
+      "hourlyTransactions": "Avg Hourly Transactions (per min)",
+      "nextBillingOn": "Next Billing On"
+    }
+  }
+}

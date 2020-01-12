@@ -5,6 +5,7 @@ import com.seerlogics.botadmin.service.TransactionService;
 import com.seerlogics.chatbot.model.Transaction;
 import com.seerlogics.commons.dto.BotDetail;
 import com.seerlogics.commons.dto.SearchBots;
+import com.seerlogics.commons.dto.SearchTransaction;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -46,7 +47,7 @@ public class TransactionController extends BaseController {
     }
 
     @PostMapping(value = "/all-bots")
-    public List<BotDetail> getAllTransactionsForBots(@RequestBody SearchBots searchBots) {
-        return this.transactionService.findAllBotsAndTransaction(searchBots);
+    public List<BotDetail> getAllTransactionsForBots(@RequestBody SearchTransaction searchTransaction) {
+        return this.transactionService.findAllBotsAndTransaction(searchTransaction);
     }
 }

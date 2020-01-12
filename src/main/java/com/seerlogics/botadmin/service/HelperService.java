@@ -2,6 +2,7 @@ package com.seerlogics.botadmin.service;
 
 import com.seerlogics.commons.model.Account;
 import com.seerlogics.commons.model.ReferenceData;
+import com.seerlogics.commons.model.Role;
 import org.apache.commons.text.RandomStringGenerator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.MessageSource;
@@ -44,6 +45,11 @@ public class HelperService {
 
     boolean isAllowedToEdit(Account target) {
         return target.getId().equals(accountService.getAuthenticatedUser().getId());
+    }
+
+    boolean isAllowedFullAccess(Account target) {
+        return target.getRoles().stream().
+                anyMatch(role -> role.getCode().equals(Role.ROLE_TYPE.UBER_ADMIN.name()));
     }
 
     String generateRandomCode() {

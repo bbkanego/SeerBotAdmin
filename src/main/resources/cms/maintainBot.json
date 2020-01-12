@@ -15,6 +15,32 @@
       "descriptionLabel": "Description",
       "deleteHeading": "Delete Bot",
       "deleteMessage": "Do you want to delete the Bot?"
+    },
+    "reTrainBot": {
+      "pageHeading": "Retrain Active Bots",
+      "heading": "Below provides the overall bot performance for all your active bots.",
+      "failedHeading": "Below utterances were not identified by the bot. Please select the specific 'Intent' to associate with each utterance",
+      "maybeHeading": "Below utterances were partially matched with 'Intent' by the bot. Please select the specific 'Intent' to associate with each utterance",
+      "botName": "Bot",
+      "associateButton": "Associate and Re-train",
+      "actionsLabel": "Actions",
+      "totalChats": "Total Chats",
+      "successChats": "Success Chats",
+      "partialChats": "Partial Chats",
+      "failedChats": "Failed Chats",
+      "success": "Success",
+      "partial": "Partial",
+      "failed": "Failed",
+      "utterance": "Utterance",
+      "intent": "Intent",
+      "actions": {
+        "last7Days": "Last 7 days",
+        "last1Days": "1 day",
+        "today": "Today",
+        "last30Days": "Last 30 days",
+        "last180Days": "Last 6 months",
+        "last360Days": "Last 360 days"
+      }
     }
   }
 }

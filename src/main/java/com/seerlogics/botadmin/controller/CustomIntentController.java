@@ -6,6 +6,7 @@ import com.lingoace.validation.Validate;
 import com.seerlogics.botadmin.service.AccountService;
 import com.seerlogics.botadmin.service.CategoryService;
 import com.seerlogics.botadmin.service.IntentService;
+import com.seerlogics.commons.dto.ReTrainBot;
 import com.seerlogics.commons.dto.SearchIntents;
 import com.seerlogics.commons.model.Intent;
 import org.springframework.http.ResponseEntity;
@@ -100,5 +101,10 @@ public class CustomIntentController extends BaseController implements CrudContro
         List<Intent> intents = customIntentService.findAllByCategoryCodeAndOwner(category);
         this.customIntentService.deleteAll(intents);
         return returnSuccessResponse();
+    }
+
+    @PostMapping("/associateIntents")
+    public ReTrainBot associateAndRetrain(@RequestBody ReTrainBot reTrainBot) {
+        return this.customIntentService.associateUtteranceToIntents(reTrainBot);
     }
 }

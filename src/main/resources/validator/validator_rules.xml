@@ -116,7 +116,7 @@
                 </var>
                 <var>
                     <var-name>regEx</var-name>
-                    <var-value>^[a-zA-Z0-9-_\s]+$</var-value>
+                    <var-value>^[a-zA-Z0-9-:_\s]+$</var-value>
                 </var>
             </field>
             <field id="botCat" property="category" depends="required"/>
@@ -307,7 +307,7 @@
                     </var>
                     <var>
                         <var-name>regEx</var-name>
-                        <var-value>^[a-zA-Z0-9-_\s]+$</var-value>
+                        <var-value>^[a-zA-Z0-9-?.,_\s]+$</var-value>
                     </var>
                 </field>
                 <field property="locale" id="utterances_locale" depends="required,validateMaxLength">
@@ -572,6 +572,26 @@
                     <var-name>maxLength</var-name>
                     <var-value>10</var-value>
                 </var>
+            </field>
+        </form>
+
+        <form name="validateAssociateIntent">
+            <field property="utteranceToIntents" classType="java.util.List" id="utteranceToIntents" depends="required">
+                <arg key="label.utterances" position="0"/>
+                <field property="utterance" id="utterances_utterance"
+                       depends="required,containsChars,validateMaxLength">
+                    <arg key="label.utterance" position="0"/>
+                    <var>
+                        <var-name>maxLength</var-name>
+                        <var-value>300</var-value>
+                    </var>
+                    <var>
+                        <var-name>regEx</var-name>
+                        <var-value>^[a-zA-Z0-9-?.,_\s]+$</var-value>
+                    </var>
+                </field>
+                <field property="intentId" id="utterances_locale" depends="required">
+                </field>
             </field>
         </form>
 
