@@ -436,15 +436,20 @@ public class IntentService extends BaseServiceImpl<Intent> {
                     }
                 }
 
-                // remove the existing Utterance so it can be added to another intent
-                if (existingIntentUtterance != null) {
+                if (existingIntentUtterance != null && !existingIntentUtterance.getOwner().getId().equals(intent.getId())) {
+                    // remove the existing Utterance so it can be added to another intent
                     this.intentUtteranceRepository.delete(existingIntentUtterance);
-                }
 
-                IntentUtterance intentUtterance = new IntentUtterance();
-                intentUtterance.setUtterance(utteranceToIntent.getUtterance());
-                intent.addIntentUtterance(intentUtterance);
-                this.intentRepository.save(intent);
+                    IntentUtterance intentUtterance = new IntentUtterance();
+                    intentUtterance.setUtterance(utteranceToIntent.getUtterance());
+                    intent.addIntentUtterance(intentUtterance);
+                    this.intentRepository.save(intent);
+                } else if (existingIntentUtterance == null) {
+                    IntentUtterance intentUtterance = new IntentUtterance();
+                    intentUtterance.setUtterance(utteranceToIntent.getUtterance());
+                    intent.addIntentUtterance(intentUtterance);
+                    this.intentRepository.save(intent);
+                }
             }
         });
 
