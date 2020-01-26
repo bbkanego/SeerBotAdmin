@@ -1,7 +1,8 @@
 package com.seerlogics.botadmin.config;
 
+import com.seerlogics.commons.config.HibernateConfig;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
@@ -31,17 +32,8 @@ import java.util.Map;
 )
 public class ChatDbConfig {
 
-    @Value("${chatbot.datasource.hibernate.ddl-auto:update}")
-    private String hibernateHbm2ddlValue;
-
-    @Value("${chatbot.datasource.hibernate.jdbc.time_zone:UTC}")
-    private String hibernateJDBCTimezone;
-
-    @Value("${chatbot.datasource.hibernate.show_sql:false}")
-    private Boolean hibernateShowSQL;
-
-    @Value("${botadmin.datasource.hibernate.naming.physical-strategy:com.seerlogics.commons.naming.CustomPhysicalNamingStrategy}")
-    private String namingStrategy;
+    @Autowired
+    private HibernateConfig hibernateConfig;
 
     @Bean(name = "chatBotDataSource")
     @ConfigurationProperties(prefix = "chatbot.datasource")
@@ -56,10 +48,11 @@ public class ChatDbConfig {
             @Qualifier("chatBotDataSource") DataSource dataSource
     ) {
         Map<String, Object> properties = new HashMap<>();
-        properties.put("hibernate.hbm2ddl.auto", this.hibernateHbm2ddlValue);
-        properties.put("hibernate.jdbc.time_zone", this.hibernateJDBCTimezone);
-        properties.put("hibernate.show_sql", this.hibernateShowSQL);
-        properties.put("hibernate.physical_naming_strategy", this.namingStrategy);
+        properties.put("hibernate.hbm2ddl.auto", this.hibernateConfig.getChatBotHibernateHbm2ddlValue());
+        properties.put("hibernate.jdbc.time_zone", this.hibernateConfig.getChatBotHibernateJDBCTimezone());
+        properties.put("hibernate.show_sql", this.hibernateConfig.getChatBotHibernateShowSQL());
+        properties.put("hibernate.physical_naming_strategy", this.hibernateConfig.getChatBotNamingStrategy());
+        properties.put("hibernate.dialect", this.hibernateConfig.getChatBotHibernateDialect());
 
         return builder
                 .dataSource(dataSource)
