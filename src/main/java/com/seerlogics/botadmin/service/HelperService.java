@@ -47,7 +47,7 @@ public class HelperService {
         return target.getId().equals(accountService.getAuthenticatedUser().getId());
     }
 
-    boolean isAllowedFullAccess(Account target) {
+    static boolean isAllowedFullAccess(Account target) {
         return target.getRoles().stream().
                 anyMatch(role -> role.getCode().equals(Role.ROLE_TYPE.UBER_ADMIN.name()));
     }

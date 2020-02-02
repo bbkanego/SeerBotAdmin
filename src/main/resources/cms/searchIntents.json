@@ -3,6 +3,10 @@
     "pageHeading": "Search Intents",
     "pageHeadingPredefined": "Search Predefined Intents",
     "pageHeadingCustom": "Search Custom Intents",
+    "intentLabel": "Intent",
+    "categoryLabel": "Category",
+    "utteranceLikeLabel": "Utterance like",
+    "searchVerbiage": "Enter your desired criteria to search for your intents. Or you can just click on 'Search' button to fetch all.",
     "resultsTable": {
       "headingPredefined": "Following predefined intents were found",
       "headingCustom": "Following custom intents were found",

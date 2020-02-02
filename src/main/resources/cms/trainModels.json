@@ -7,6 +7,7 @@
       "categoryLabel": "Category",
       "deleteHeading": "Delete Model",
       "deleteMessage": "Do you want to delete the Model?",
+      "createTrainedModel": "You can create a new model by entering the below data. The model once created will be trained for the intents defined for the category selected.",
       "deleteNotAllowed": "You cannot delete the model"
     },
     "searchTrainedModel": {
@@ -15,6 +16,7 @@
       "fileNameLabel": "File Name",
       "descriptionNameLabel": "Description",
       "categoryLabel": "Category",
+      "searchVerbiage": "Below trained models were found. You can retrain the models again by clicking on the model.",
       "fileTypeLabel": "File Type"
     }
   }

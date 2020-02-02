@@ -19,15 +19,16 @@ public class MaintainSubscriptionService extends BaseServiceImpl {
     private final SubscriptionRepository subscriptionRepository;
     private final MembershipPlanRepository membershipPlanRepository;
     private final AccountService accountService;
-    private final HelperService helperService;
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
 
-    public MaintainSubscriptionService(SubscriptionRepository subscriptionRepository, MembershipPlanRepository membershipPlanRepository, AccountService accountService, HelperService helperService, RoleService roleService, PasswordEncoder passwordEncoder) {
+    public MaintainSubscriptionService(SubscriptionRepository subscriptionRepository,
+                                       MembershipPlanRepository membershipPlanRepository,
+                                       AccountService accountService,
+                                       RoleService roleService, PasswordEncoder passwordEncoder) {
         this.subscriptionRepository = subscriptionRepository;
         this.membershipPlanRepository = membershipPlanRepository;
         this.accountService = accountService;
-        this.helperService = helperService;
         this.roleService = roleService;
         this.passwordEncoder = passwordEncoder;
     }

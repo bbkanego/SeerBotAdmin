@@ -1,6 +1,5 @@
 package com.seerlogics.botadmin.config;
 
-import com.lingoace.common.CustomHttpServletRequestWrapperFilter;
 import com.lingoace.spring.authentication.JWTAuthenticationFilter;
 import com.lingoace.spring.authentication.RestAuthenticationEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,10 +61,6 @@ public class MultiHttpSecurityConfig {
             return jwtAuthenticationFilter;
         }
 
-        CustomHttpServletRequestWrapperFilter customHttpServletRequestWrapperFilter() {
-            return new CustomHttpServletRequestWrapperFilter();
-        }
-
         RestAuthenticationEntryPoint unauthorizedHandler() {
             return new RestAuthenticationEntryPoint();
         }
@@ -110,7 +105,7 @@ public class MultiHttpSecurityConfig {
                     .exceptionHandling().authenticationEntryPoint(unauthorizedHandler()).and()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and()
-                    .addFilterBefore(customHttpServletRequestWrapperFilter(), UsernamePasswordAuthenticationFilter.class)
+                    // .addFilterBefore(customHttpServletRequestWrapperFilter(), UsernamePasswordAuthenticationFilter.class)
                     .addFilterAt(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
         }
     }

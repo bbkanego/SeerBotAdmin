@@ -1,16 +1,13 @@
 package com.seerlogics.botadmin.service;
 
 import com.lingoace.common.exception.GeneralErrorException;
-import com.lingoace.common.exception.NotAuthorizedException;
 import com.lingoace.spring.service.BaseServiceImpl;
 import com.seerlogics.botadmin.exception.ErrorCodes;
 import com.seerlogics.commons.CommonConstants;
-import com.seerlogics.commons.dto.ReTrainBot;
 import com.seerlogics.commons.dto.SearchIntents;
 import com.seerlogics.commons.exception.BaseRuntimeException;
 import com.seerlogics.commons.model.*;
 import com.seerlogics.commons.repository.IntentRepository;
-import com.seerlogics.commons.repository.IntentUtteranceRepository;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -32,7 +29,6 @@ import static com.seerlogics.botadmin.exception.ErrorCodes.INTENT_ALREADY_ADDED;
 public class IntentService extends BaseServiceImpl<Intent> {
 
     private final IntentRepository intentRepository;
-    private final IntentUtteranceRepository intentUtteranceRepository;
 
     private final CategoryService categoryService;
 
@@ -43,10 +39,9 @@ public class IntentService extends BaseServiceImpl<Intent> {
     private final HelperService helperService;
 
     public IntentService(IntentRepository intentRepository,
-                         IntentUtteranceRepository intentUtteranceRepository, CategoryService categoryService, LanguageService languageService,
+                         CategoryService categoryService, LanguageService languageService,
                          AccountService accountService, HelperService helperService) {
         this.intentRepository = intentRepository;
-        this.intentUtteranceRepository = intentUtteranceRepository;
         this.categoryService = categoryService;
         this.languageService = languageService;
         this.accountService = accountService;
@@ -57,7 +52,7 @@ public class IntentService extends BaseServiceImpl<Intent> {
     @PreAuthorize(CommonConstants.HAS_UBER_ADMIN_OR_ADMIN_OR_USER_ROLE)
     public Collection<Intent> getAll() {
         Account currentAccount = this.accountService.getAuthenticatedUser();
-        if (this.helperService.isAllowedFullAccess(currentAccount)) {
+        if (HelperService.isAllowedFullAccess(currentAccount)) {
             return intentRepository.findAll();
         } else {
             // get intents based on the owner
@@ -396,67 +391,7 @@ public class IntentService extends BaseServiceImpl<Intent> {
         return allIntents;
     }
 
-
-    /**
-     * This method will associate any failed or partial utterance with intents/category
-     *
-     * @param reTrainBot
-     * @return
-     */
-    public ReTrainBot associateUtteranceToIntents(ReTrainBot reTrainBot) {
-
-        Account currentUser = this.accountService.getAuthenticatedUser();
-
-        /**
-         * now check if the utterance was already for the category
-         * check to see if the utterance is already part of the intent
-         * first get the bot to know the category
-         */
-        SearchIntents searchIntents = new SearchIntents();
-        searchIntents.setCategory(this.categoryService.getCategoryByCode(reTrainBot.getCategoryCode()));
-        List<IntentUtterance> utterancesForCategory = this.findUtterance(searchIntents);
-
-        reTrainBot.getUtteranceToIntents().forEach(utteranceToIntent -> {
-            if (utteranceToIntent.getIntentId() != null) {
-                Intent intent = this.intentRepository.getOne(utteranceToIntent.getIntentId());
-
-                if (this.helperService.isAllowedFullAccess(currentUser)
-                        || !intent.getOwner().getUserName().equals(currentUser.getUserName())) {
-                    throw new NotAuthorizedException();
-                }
-
-                /**
-                 * check to see if the utterance is already part of the category. If there keep track and delete it
-                 * so that the utterance can be added to another intent.
-                 */
-                IntentUtterance existingIntentUtterance = null;
-                for (IntentUtterance intentUtterance : utterancesForCategory) {
-                    if (intentUtterance.getUtterance().equals(utteranceToIntent.getUtterance())) {
-                        existingIntentUtterance = intentUtterance;
-                    }
-                }
-
-                if (existingIntentUtterance != null && !existingIntentUtterance.getOwner().getId().equals(intent.getId())) {
-                    // remove the existing Utterance so it can be added to another intent
-                    this.intentUtteranceRepository.delete(existingIntentUtterance);
-
-                    IntentUtterance intentUtterance = new IntentUtterance();
-                    intentUtterance.setUtterance(utteranceToIntent.getUtterance());
-                    intent.addIntentUtterance(intentUtterance);
-                    this.intentRepository.save(intent);
-                } else if (existingIntentUtterance == null) {
-                    IntentUtterance intentUtterance = new IntentUtterance();
-                    intentUtterance.setUtterance(utteranceToIntent.getUtterance());
-                    intent.addIntentUtterance(intentUtterance);
-                    this.intentRepository.save(intent);
-                }
-            }
-        });
-
-        return reTrainBot;
-    }
-
-    public List<IntentUtterance> findUtterance(SearchIntents searchIntents) {
+    public List<IntentUtterance> findUtterances(SearchIntents searchIntents) {
         return this.intentRepository.findUtterances(searchIntents);
     }
 }

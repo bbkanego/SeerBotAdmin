@@ -412,7 +412,7 @@
                     <var-value>^[a-zA-Z]+$</var-value>
                 </var>
             </field>
-            <field property="utterance" id="utterances_utterance"
+            <field property="utteranceLike" id="utteranceLike"
                    depends="containsChars,validateMaxLength">
                 <arg key="label.utterance" position="0"/>
                 <var>
@@ -421,10 +421,10 @@
                 </var>
                 <var>
                     <var-name>regEx</var-name>
-                    <var-value>^[a-zA-Z\s]+$</var-value>
+                    <var-value>^[a-zA-Z0-9-?.,_\s]+$</var-value>
                 </var>
             </field>
-            <field id="intentCategory" property="category" depends="required"/>
+            <!--<field id="intentCategory" property="category" depends="required"/>-->
         </form>
 
         <form name="validateSearchBotsRule" classType="com.seerlogics.commons.dto.SearchBots">

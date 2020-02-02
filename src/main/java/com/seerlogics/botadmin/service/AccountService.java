@@ -1,5 +1,6 @@
 package com.seerlogics.botadmin.service;
 
+import com.lingoace.common.exception.NotAuthorizedException;
 import com.lingoace.spring.service.BaseServiceImpl;
 import com.seerlogics.commons.model.*;
 import com.seerlogics.commons.repository.AccountRepository;
@@ -85,8 +86,14 @@ public class AccountService extends BaseServiceImpl<Account> implements UserDeta
                 getAuthority(account), account);
     }
 
+    @PreAuthorize("hasAnyRole('ACCT_ADMIN', 'UBER_ADMIN')")
     public Account getAccountByUsername(String userName) {
-        return accountRepository.findByUserName(userName);
+        Account currentLoggedInUser = this.getAuthenticatedUser();
+        if (currentLoggedInUser.getUserName().equals(userName) || HelperService.isAllowedFullAccess(currentLoggedInUser)) {
+            return accountRepository.findByUserName(userName);
+        } else {
+            throw new NotAuthorizedException();
+        }
     }
 
     private Set<GrantedAuthority> getAuthority(Account account) {

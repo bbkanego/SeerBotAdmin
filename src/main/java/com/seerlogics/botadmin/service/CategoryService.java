@@ -59,6 +59,7 @@ public class CategoryService extends BaseServiceImpl<Category> {
     public Collection<Category> findForEdit() {
         List<Account> accounts = Arrays.asList(accountService.getAuthenticatedUser());
         List<String> catsToIgnore = new ArrayList<>();
+        catsToIgnore.add("NONE");
         List<Category> categoryList = categoryRepository.findByOwnerAccounts(accounts, catsToIgnore);
 
         for (Category currentCategory : categoryList) {

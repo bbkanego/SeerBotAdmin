@@ -2,6 +2,7 @@ package com.seerlogics.botadmin.config;
 
 import com.lingoace.cms.CmsClasspathResourceBootstraper;
 import com.lingoace.cms.CmsResource;
+import com.lingoace.common.CustomHttpServletRequestWrapperFilter;
 import com.lingoace.common.ExposedResourceMessageBundleSource;
 import com.lingoace.spring.controller.CmsController;
 import com.lingoace.spring.controller.ValidationController;
@@ -13,6 +14,8 @@ import com.lingoace.validation.ValidatorFactoryImpl;
 import com.seerlogics.botadmin.factory.ManageDataStoreFactory;
 import com.seerlogics.botadmin.factory.ManageInstanceFactory;
 import com.seerlogics.botadmin.factory.ManageLoadBalancerFactory;
+import com.seerlogics.commons.filter.JoltResponseTransformationFilter;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -101,6 +104,28 @@ public class WebConfiguration implements WebMvcConfigurer, ResourceLoaderAware {
         validatorFactory.setValidationConfigLocation(validatorResources);
         validatorFactory.afterPropertiesSet();
         return validatorFactory;
+    }
+
+    @Bean
+    public FilterRegistrationBean<CustomHttpServletRequestWrapperFilter> loggingFilter() {
+        FilterRegistrationBean<CustomHttpServletRequestWrapperFilter> registrationBean
+                = new FilterRegistrationBean<>();
+
+        registrationBean.setFilter(new CustomHttpServletRequestWrapperFilter());
+        registrationBean.addUrlPatterns("/api/*");
+
+        return registrationBean;
+    }
+
+    @Bean
+    public FilterRegistrationBean<JoltResponseTransformationFilter> joltTransformationFilter() {
+        FilterRegistrationBean<JoltResponseTransformationFilter> registrationBean
+                = new FilterRegistrationBean<>();
+
+        registrationBean.setFilter(new JoltResponseTransformationFilter());
+        registrationBean.addUrlPatterns("/api/*");
+
+        return registrationBean;
     }
 
     /*@Bean

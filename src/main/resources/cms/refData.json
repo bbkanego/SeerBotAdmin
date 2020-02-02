@@ -3,7 +3,9 @@
     "maintainCategory": {
       "pageHeadingCreate": "Create Category",
       "pageHeadingEdit": "Edit Category",
-      "pageHeadingSearch": "Search Category"
+      "pageHeadingSearch": "Search Category",
+      "createCategoryVerbiage": "Enter name and description below to create the desired Category.",
+      "editCategoryVerbiage": "Following Categories were found."
     },
     "maintainAction": {
       "pageHeadingSearch": "Search Action",

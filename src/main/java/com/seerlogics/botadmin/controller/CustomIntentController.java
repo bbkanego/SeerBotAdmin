@@ -6,6 +6,7 @@ import com.lingoace.validation.Validate;
 import com.seerlogics.botadmin.service.AccountService;
 import com.seerlogics.botadmin.service.CategoryService;
 import com.seerlogics.botadmin.service.IntentService;
+import com.seerlogics.botadmin.service.TransactionService;
 import com.seerlogics.commons.dto.ReTrainBot;
 import com.seerlogics.commons.dto.SearchIntents;
 import com.seerlogics.commons.model.Intent;
@@ -30,9 +31,13 @@ public class CustomIntentController extends BaseController implements CrudContro
 
     private final AccountService accountService;
 
-    public CustomIntentController(IntentService customIntentService, CategoryService categoryService, AccountService accountService) {
+    private final TransactionService transactionService;
+
+    public CustomIntentController(IntentService customIntentService, CategoryService categoryService,
+                                  AccountService accountService, TransactionService transactionService) {
         this.customIntentService = customIntentService;
         this.accountService = accountService;
+        this.transactionService = transactionService;
     }
 
     @GetMapping(value = "/copy-standard-intents/{catCode}")
@@ -105,6 +110,6 @@ public class CustomIntentController extends BaseController implements CrudContro
 
     @PostMapping("/associateIntents")
     public ReTrainBot associateAndRetrain(@RequestBody ReTrainBot reTrainBot) {
-        return this.customIntentService.associateUtteranceToIntents(reTrainBot);
+        return this.transactionService.associateUtteranceToIntents(reTrainBot);
     }
 }

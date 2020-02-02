@@ -1,5 +1,6 @@
 package com.seerlogics.botadmin.service;
 
+import com.lingoace.common.EntityNotFoundException;
 import com.lingoace.common.exception.NotAuthorizedException;
 import com.lingoace.spring.service.BaseServiceImpl;
 import com.lingoace.util.CommonUtil;
@@ -7,13 +8,13 @@ import com.seerlogics.botadmin.exception.ErrorCodes;
 import com.seerlogics.chatbot.model.Transaction;
 import com.seerlogics.chatbot.repository.TransactionRepository;
 import com.seerlogics.commons.CommonConstants;
-import com.seerlogics.commons.dto.BotDetail;
-import com.seerlogics.commons.dto.SearchIntents;
-import com.seerlogics.commons.dto.SearchInterval;
-import com.seerlogics.commons.dto.SearchTransaction;
+import com.seerlogics.commons.dto.*;
 import com.seerlogics.commons.model.Account;
 import com.seerlogics.commons.model.Bot;
+import com.seerlogics.commons.model.Intent;
 import com.seerlogics.commons.model.IntentUtterance;
+import com.seerlogics.commons.repository.IntentRepository;
+import com.seerlogics.commons.repository.IntentUtteranceRepository;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
@@ -31,16 +32,21 @@ public class TransactionService extends BaseServiceImpl<Transaction> {
     private final TransactionRepository transactionRepository;
     private final AccountService accountService;
     private final BotService botService;
-    private final HelperService helperService;
     private final IntentService intentService;
+    private final IntentRepository intentRepository;
+    private final CategoryService categoryService;
+    private final IntentUtteranceRepository intentUtteranceRepository;
 
     public TransactionService(TransactionRepository transactionRepository, AccountService accountService,
-                              BotService botService, HelperService helperService, IntentService intentService) {
+                              BotService botService, IntentService intentService,
+                              IntentRepository intentRepository, CategoryService categoryService, IntentUtteranceRepository intentUtteranceRepository) {
         this.transactionRepository = transactionRepository;
         this.accountService = accountService;
         this.botService = botService;
-        this.helperService = helperService;
         this.intentService = intentService;
+        this.intentRepository = intentRepository;
+        this.categoryService = categoryService;
+        this.intentUtteranceRepository = intentUtteranceRepository;
     }
 
     @PreAuthorize(HAS_UBER_ADMIN_OR_ACCT_ADMIN_ROLE)
@@ -68,7 +74,7 @@ public class TransactionService extends BaseServiceImpl<Transaction> {
          * UberAdmins can search ALL bots as needed.
          */
         Account currentAccount = this.accountService.getAuthenticatedUser();
-        boolean isUberAdmin = this.helperService.isAllowedFullAccess(currentAccount);
+        boolean isUberAdmin = HelperService.isAllowedFullAccess(currentAccount);
         if (!isUberAdmin) {
             searchTransaction.setOwnerAccount(currentAccount);
         }
@@ -119,9 +125,13 @@ public class TransactionService extends BaseServiceImpl<Transaction> {
         searchTransaction.setBotId(desiredBot.getId());
         botDetail.setCategoryCode(desiredBot.getCategory().getCode());
 
+        searchTransaction.setIgnoreIgnored(false);
+        searchTransaction.setIgnoreResolved(false);
+
         SearchIntents searchIntents = new SearchIntents();
         searchIntents.setCategory(desiredBot.getCategory());
-        List<IntentUtterance> utterancesForCategory = this.intentService.findUtterance(searchIntents);
+        searchIntents.setIntentType(SearchIntents.IntentType.CUSTOM.name());
+        List<IntentUtterance> utterancesForCategory = this.intentService.findUtterances(searchIntents);
 
         if (searchTransaction.getTransactionMaybe() != null) { // search for Maybe ONLY
             botDetail.getMaybeTransactions().addAll(this.transactionRepository.findTransactions(searchTransaction));
@@ -150,6 +160,12 @@ public class TransactionService extends BaseServiceImpl<Transaction> {
         }
     }
 
+    /**
+     * This method tries to find the Intent
+     *
+     * @param transaction
+     * @param utterancesForCategory
+     */
     private void findIntentsForTransaction(Transaction transaction, List<IntentUtterance> utterancesForCategory) {
         // check to see if the utterance is already part of the category
         int numOfUtteranceFound = 0;
@@ -159,7 +175,8 @@ public class TransactionService extends BaseServiceImpl<Transaction> {
                     numOfUtteranceFound++;
                     transaction.setIntentId(intentUtterance.getOwner().getId());
                 } else {
-                    throw new IllegalStateException("More than one intent found for the Utterance");
+                    throw new IllegalStateException("More than one intent '" + intentUtterance.getOwner().getIntent() + "' found " +
+                            "for the Utterance '" + transaction.getUtterance() + "'");
                 }
             }
         }
@@ -199,7 +216,7 @@ public class TransactionService extends BaseServiceImpl<Transaction> {
     }
 
     private boolean isUberAdminOrOwnerAccount(String userName, Account currentAccount) {
-        return this.helperService.isAllowedFullAccess(currentAccount)
+        return HelperService.isAllowedFullAccess(currentAccount)
                 || currentAccount.getUserName().equals(userName);
     }
 
@@ -208,7 +225,7 @@ public class TransactionService extends BaseServiceImpl<Transaction> {
     public Transaction getSingle(Long id) {
         Transaction transaction = this.transactionRepository.getOne(id);
         Account currentAccount = this.accountService.getAuthenticatedUser();
-        if (this.helperService.isAllowedFullAccess(currentAccount)
+        if (HelperService.isAllowedFullAccess(currentAccount)
                 || currentAccount.getId().equals(transaction.getAccountId())) {
             return transaction;
         } else {
@@ -220,5 +237,89 @@ public class TransactionService extends BaseServiceImpl<Transaction> {
     @PreAuthorize(HAS_UBER_ADMIN_ROLE)
     public Collection<Transaction> getAll() {
         return this.transactionRepository.findAll();
+    }
+
+    /**
+     * This method will associate any failed or partial transaction utterance with intents/category
+     *
+     * @param reTrainBot
+     * @return
+     */
+    public ReTrainBot associateUtteranceToIntents(ReTrainBot reTrainBot) {
+
+        Account currentUser = this.accountService.getAuthenticatedUser();
+
+        /**
+         * now check if the utterance was already for the category
+         * check to see if the utterance is already part of the intent
+         * first get the bot to know the category
+         */
+        SearchIntents searchIntents = new SearchIntents();
+        searchIntents.setCategory(this.categoryService.getCategoryByCode(reTrainBot.getCategoryCode()));
+        List<IntentUtterance> utterancesForCategory = this.intentRepository.findUtterances(searchIntents);
+
+        for (UtteranceToIntent utteranceToIntent : reTrainBot.getUtteranceToIntents()) {
+            if (utteranceToIntent.getIntentId() != null) {
+
+                // ignore if the intentId is the below
+                if (utteranceToIntent.getIntentId() == -999999) {
+                    Transaction transaction = this.transactionRepository.
+                                        findById(utteranceToIntent.getTransactionId()).orElse(null);
+                    if (transaction == null) {
+                        throw new EntityNotFoundException("Transaction with ID not found = "
+                                + utteranceToIntent.getTransactionId());
+                    }
+                    transaction.setIgnore(true);
+                    this.transactionRepository.save(transaction);
+                    continue;
+                }
+
+                Intent intent = this.intentRepository.getOne(utteranceToIntent.getIntentId());
+
+                if (HelperService.isAllowedFullAccess(currentUser)
+                        || !intent.getOwner().getUserName().equals(currentUser.getUserName())) {
+                    throw new NotAuthorizedException();
+                }
+
+                /**
+                 * check to see if the utterance is already part of the category. If there keep track and delete it
+                 * so that the utterance can be added to another intent.
+                 */
+                IntentUtterance existingIntentUtterance = null;
+                for (IntentUtterance intentUtterance : utterancesForCategory) {
+                    if (intentUtterance.getUtterance().equals(utteranceToIntent.getUtterance())) {
+                        existingIntentUtterance = intentUtterance;
+                    }
+                }
+
+                if (existingIntentUtterance != null && !existingIntentUtterance.getOwner().getId().equals(intent.getId())) {
+                    // remove the existing Utterance so it can be added to another intent
+                    this.intentUtteranceRepository.delete(existingIntentUtterance);
+
+                    IntentUtterance intentUtterance = new IntentUtterance();
+                    intentUtterance.setUtterance(utteranceToIntent.getUtterance());
+                    intent.addIntentUtterance(intentUtterance);
+                    this.intentRepository.save(intent);
+                } else if (existingIntentUtterance == null) {
+                    IntentUtterance intentUtterance = new IntentUtterance();
+                    intentUtterance.setUtterance(utteranceToIntent.getUtterance());
+                    intent.addIntentUtterance(intentUtterance);
+                    this.intentRepository.save(intent);
+                }
+
+                // once done mark the transaction as resolved.
+                Transaction transaction = this.transactionRepository.
+                        findById(utteranceToIntent.getTransactionId()).orElse(null);
+                if (transaction == null) {
+                    throw new EntityNotFoundException("Transaction with ID not found = "
+                            + utteranceToIntent.getTransactionId());
+                }
+                transaction.setIgnore(false);
+                transaction.setResolved(true);
+                this.transactionRepository.save(transaction);
+            }
+        }
+
+        return reTrainBot;
     }
 }

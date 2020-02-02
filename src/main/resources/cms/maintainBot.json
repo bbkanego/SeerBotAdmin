@@ -5,7 +5,8 @@
       "nameLabel": "Name",
       "displayNameLabel": "Display Name",
       "categoryLabel": "Category",
-      "descriptionLabel": "Description"
+      "descriptionLabel": "Description",
+      "addBotVerbiage": "Provide below details to create the bot. Once done you can train and launch the bot using the left menu."
     },
     "editBot": {
       "pageHeading": "Update Bot",
@@ -14,13 +15,15 @@
       "categoryLabel": "Category",
       "descriptionLabel": "Description",
       "deleteHeading": "Delete Bot",
-      "deleteMessage": "Do you want to delete the Bot?"
+      "deleteMessage": "Do you want to delete the Bot?",
+      "editBotVerbiage": "Provide below details to search and edit an existing bot"
     },
     "reTrainBot": {
       "pageHeading": "Retrain Active Bots",
       "heading": "Below provides the overall bot performance for all your active bots. Click on the percentage values in order to view partial matches/failed chats. You can then associate the 'Utterance' with desired 'Intent'.",
       "failedHeading": "Below utterances were not identified by the bot. Please select the specific 'Intent' to associate with each utterance. The 'Matched Against' indicates how the Bot matched the utterance.",
       "maybeHeading": "Below utterances were partially matched with 'Intent' by the bot. Please select the specific 'Intent' to associate with each utterance. The 'Matched Against' indicates how the Bot matched the utterance.",
+      "noRecordsHeading": "No records found. You have either resolved or ignored all the chats",
       "botName": "Bot",
       "associateButton": "Associate and Re-train",
       "actionsLabel": "Actions",

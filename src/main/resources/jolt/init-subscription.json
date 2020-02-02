@@ -1,0 +1,13 @@
+[
+  {
+    "operation": "remove",
+    "spec": {
+      "referenceData": "",
+      "account": {
+        "owner": "",
+        "roles": "",
+        "referenceData": ""
+      }
+    }
+  }
+]
