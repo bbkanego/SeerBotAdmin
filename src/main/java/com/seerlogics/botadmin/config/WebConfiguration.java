@@ -15,6 +15,7 @@ import com.seerlogics.botadmin.factory.ManageDataStoreFactory;
 import com.seerlogics.botadmin.factory.ManageInstanceFactory;
 import com.seerlogics.botadmin.factory.ManageLoadBalancerFactory;
 import com.seerlogics.commons.filter.JoltResponseTransformationFilter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.context.annotation.Bean;
@@ -27,6 +28,8 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by bkane on 10/31/18.
@@ -35,6 +38,9 @@ import java.io.IOException;
 public class WebConfiguration implements WebMvcConfigurer, ResourceLoaderAware {
 
     private ResourceLoader resourceLoader;
+
+    @Value("#{${seerapp.joltSpecs}}")
+    private Map<String, String> joltSpecs = new HashMap<>(0);
 
     /**
      * https://spring.io/blog/2015/06/08/cors-support-in-spring-framework#javaconfig
@@ -122,7 +128,7 @@ public class WebConfiguration implements WebMvcConfigurer, ResourceLoaderAware {
         FilterRegistrationBean<JoltResponseTransformationFilter> registrationBean
                 = new FilterRegistrationBean<>();
 
-        registrationBean.setFilter(new JoltResponseTransformationFilter());
+        registrationBean.setFilter(new JoltResponseTransformationFilter(joltSpecs));
         registrationBean.addUrlPatterns("/api/*");
 
         return registrationBean;

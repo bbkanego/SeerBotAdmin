@@ -25,7 +25,7 @@ import static com.seerlogics.botadmin.exception.ErrorCodes.INTENT_ALREADY_ADDED;
  */
 @Service
 @Transactional("botAdminTransactionManager")
-@PreAuthorize(CommonConstants.HAS_UBER_ADMIN_OR_ADMIN_OR_USER_ROLE)
+@PreAuthorize(CommonConstants.HAS_UBER_ADMIN_OR_ACCT_ADMIN_ROLE)
 public class IntentService extends BaseServiceImpl<Intent> {
 
     private final IntentRepository intentRepository;
@@ -49,7 +49,6 @@ public class IntentService extends BaseServiceImpl<Intent> {
     }
 
     @Override
-    @PreAuthorize(CommonConstants.HAS_UBER_ADMIN_OR_ADMIN_OR_USER_ROLE)
     public Collection<Intent> getAll() {
         Account currentAccount = this.accountService.getAuthenticatedUser();
         if (HelperService.isAllowedFullAccess(currentAccount)) {
@@ -68,7 +67,6 @@ public class IntentService extends BaseServiceImpl<Intent> {
     }
 
     @Override
-    @PreAuthorize(CommonConstants.HAS_UBER_ADMIN_OR_ADMIN_OR_USER_ROLE)
     public Intent save(Intent intent) {
 
         // get existing intents for the category

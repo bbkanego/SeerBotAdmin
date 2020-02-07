@@ -1,7 +1,7 @@
 package com.seerlogics.botadmin.service;
 
-import com.lingoace.common.exception.NotAuthorizedException;
 import com.lingoace.spring.service.BaseServiceImpl;
+import com.seerlogics.commons.CommonConstants;
 import com.seerlogics.commons.model.*;
 import com.seerlogics.commons.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,13 +40,13 @@ public class AccountService extends BaseServiceImpl<Account> implements UserDeta
     private RoleService roleService;
 
     @Override
-    @PreAuthorize("hasAnyRole('UBER_ADMIN')")
+    @PreAuthorize(CommonConstants.UBER_ADMIN)
     public Collection<Account> getAll() {
         return accountRepository.findAll();
     }
 
     @Override
-    @PreAuthorize("hasAnyRole('ACCT_ADMIN', 'UBER_ADMIN')")
+    @PreAuthorize(CommonConstants.HAS_UBER_ADMIN_OR_ACCT_ADMIN_ROLE)
     public Account getSingle(Long id) {
         if (doesUserHaveAnyRole("UBER_ADMIN")) {
             return accountRepository.getOne(id);
@@ -71,7 +71,7 @@ public class AccountService extends BaseServiceImpl<Account> implements UserDeta
     }
 
     @Override
-    @PreAuthorize("hasAnyRole('UBER_ADMIN')")
+    @PreAuthorize(CommonConstants.UBER_ADMIN)
     public void delete(Long id) {
         accountRepository.deleteById(id);
     }
@@ -86,14 +86,9 @@ public class AccountService extends BaseServiceImpl<Account> implements UserDeta
                 getAuthority(account), account);
     }
 
-    @PreAuthorize("hasAnyRole('ACCT_ADMIN', 'UBER_ADMIN')")
+    @PreAuthorize(CommonConstants.HAS_UBER_ADMIN_OR_ACCT_ADMIN_ROLE)
     public Account getAccountByUsername(String userName) {
-        Account currentLoggedInUser = this.getAuthenticatedUser();
-        if (currentLoggedInUser.getUserName().equals(userName) || HelperService.isAllowedFullAccess(currentLoggedInUser)) {
-            return accountRepository.findByUserName(userName);
-        } else {
-            throw new NotAuthorizedException();
-        }
+        return accountRepository.findByUserName(userName);
     }
 
     private Set<GrantedAuthority> getAuthority(Account account) {
