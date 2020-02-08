@@ -6,6 +6,9 @@
     "messageLaunch": "Search Bot to launch.",
     "pageHeadingTestBot": "Test Bot",
     "messageTest": "Search Bot to test.",
+    "editBotVerbiage": "Provide below details to search and edit an existing bot",
+    "launchBotVerbiage": "Provide below details to search and launch an existing bot",
+    "testBotVerbiage": "Provide below details to search and test an existing launched bot",
     "resultsTable": {
       "heading": "Following Bots were found",
       "headingNoResults": "No Bots were found",

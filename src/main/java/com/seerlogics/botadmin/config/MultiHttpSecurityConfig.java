@@ -3,6 +3,7 @@ package com.seerlogics.botadmin.config;
 import com.lingoace.spring.authentication.JWTAuthenticationFilter;
 import com.lingoace.spring.authentication.RestAuthenticationEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -20,6 +21,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.annotation.Resource;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by bkane on 11/4/18.
@@ -33,6 +36,9 @@ public class MultiHttpSecurityConfig {
     public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         @Resource(name = "accountService")
         private UserDetailsService userDetailsService;
+
+        @Value("#{${seerapp.joltSpecs}}")
+        private Map<String, String> joltSpecs = new HashMap<>(0);
 
         @Autowired
         private AppProperties appProperties;
@@ -92,8 +98,11 @@ public class MultiHttpSecurityConfig {
             /**
              * We are disabling CSRF here since we are using JWT to authenticate. We are not using "Cookie" for auth.
              * CSRF is possible when using "Cookie" method for auth.
+             * The cors() method will add the Spring-provided CorsFilter to the application context which in
+             * turn bypasses the authorization checks for OPTIONS requests.
              */
             http.cors().and().csrf().disable()
+                    // https://www.baeldung.com/spring-security-cors-preflight#secure
                     .authorizeRequests()
                     /**
                      * Here, we have configured that no authentication is required to access the url /token, /signup
@@ -105,7 +114,7 @@ public class MultiHttpSecurityConfig {
                     .exceptionHandling().authenticationEntryPoint(unauthorizedHandler()).and()
                     .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                     .and()
-                    // .addFilterBefore(customHttpServletRequestWrapperFilter(), UsernamePasswordAuthenticationFilter.class)
+                    //.addFilterBefore(new JoltResponseTransformationFilter(joltSpecs), UsernamePasswordAuthenticationFilter.class)
                     .addFilterAt(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
         }
     }
