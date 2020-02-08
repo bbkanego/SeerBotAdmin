@@ -1,6 +1,9 @@
 package com.seerlogics.botadmin.service;
 
+import com.lingoace.common.EntityNotFoundException;
+import com.lingoace.common.exception.NotAuthorizedException;
 import com.lingoace.spring.service.BaseServiceImpl;
+import com.seerlogics.commons.CommonConstants;
 import com.seerlogics.commons.dto.AccountDetail;
 import com.seerlogics.commons.model.Account;
 import com.seerlogics.commons.model.MembershipPlan;
@@ -8,6 +11,7 @@ import com.seerlogics.commons.model.Role;
 import com.seerlogics.commons.model.Subscription;
 import com.seerlogics.commons.repository.MembershipPlanRepository;
 import com.seerlogics.commons.repository.SubscriptionRepository;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,22 +19,23 @@ import java.util.List;
 
 @Service
 public class MaintainSubscriptionService extends BaseServiceImpl {
-
     private final SubscriptionRepository subscriptionRepository;
     private final MembershipPlanRepository membershipPlanRepository;
     private final AccountService accountService;
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
+    private final HelperService helperService;
 
     public MaintainSubscriptionService(SubscriptionRepository subscriptionRepository,
                                        MembershipPlanRepository membershipPlanRepository,
                                        AccountService accountService,
-                                       RoleService roleService, PasswordEncoder passwordEncoder) {
+                                       RoleService roleService, PasswordEncoder passwordEncoder, HelperService helperService) {
         this.subscriptionRepository = subscriptionRepository;
         this.membershipPlanRepository = membershipPlanRepository;
         this.accountService = accountService;
         this.roleService = roleService;
         this.passwordEncoder = passwordEncoder;
+        this.helperService = helperService;
     }
 
     public AccountDetail initAccountDetail(String type) {
@@ -57,6 +62,23 @@ public class MaintainSubscriptionService extends BaseServiceImpl {
 
         subscription.setPlan(this.membershipPlanRepository.findByCode(accountDetail.getMembershipPlanCode()));
         this.subscriptionRepository.save(subscription);
+        return accountDetail;
+    }
+
+    @PreAuthorize(CommonConstants.HAS_UBER_ADMIN_OR_ACCT_ADMIN_ROLE)
+    public AccountDetail getAccountDetail(Long accountId) {
+        Subscription subscription = this.subscriptionRepository.findByOwnerId(accountId);
+        if (subscription == null) {
+            throw new EntityNotFoundException("Subscription not found for id = " + accountId);
+        }
+
+        if (!this.helperService.isAllowedToEdit(subscription.getOwner())) {
+            throw new NotAuthorizedException();
+        }
+
+        AccountDetail accountDetail = new AccountDetail();
+        accountDetail.setAccount(subscription.getOwner());
+        accountDetail.setSubscription(subscription);
         return accountDetail;
     }
 }

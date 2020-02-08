@@ -44,7 +44,8 @@ public class HelperService {
     }
 
     boolean isAllowedToEdit(Account target) {
-        return target.getId().equals(accountService.getAuthenticatedUser().getId());
+        Account currentUser = accountService.getAuthenticatedUser();
+        return isAllowedFullAccess(currentUser) || target.getId().equals(currentUser.getId());
     }
 
     static boolean isAllowedFullAccess(Account target) {
