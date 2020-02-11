@@ -1,0 +1,78 @@
+[
+  {
+    "operation": "remove",
+    "spec": {
+      "referenceData": "",
+      "*": {
+        "id": "",
+        "creationDate": "",
+        "lastUpdateDate": "",
+        "startDate": "",
+        "endDate": ""
+      },
+      "account": {
+        "*": {
+          "id": "",
+          "creationDate": "",
+          "lastUpdateDate": "",
+          "startDate": "",
+          "endDate": "",
+          "*": {
+            "id": "",
+            "creationDate": "",
+            "lastUpdateDate": "",
+            "startDate": "",
+            "endDate": ""
+          }
+        },
+        "owner": "",
+        "creationDate": "",
+        "lastUpdateDate": "",
+        "startDate": "",
+        "endDate": "",
+        "roles": {
+          "*": {
+            "policies": ""
+          }
+        }
+      },
+      "subscription": {
+        "*": {
+          "id": "",
+          "creationDate": "",
+          "lastUpdateDate": "",
+          "startDate": "",
+          "endDate": "",
+          "*": {
+            "id": "",
+            "creationDate": "",
+            "lastUpdateDate": "",
+            "startDate": "",
+            "endDate": "",
+            "*": {
+              "id": "",
+              "creationDate": "",
+              "lastUpdateDate": "",
+              "startDate": "",
+              "endDate": "",
+              "*": {
+                "id": "",
+                "creationDate": "",
+                "lastUpdateDate": "",
+                "startDate": "",
+                "endDate": "",
+                "*": {
+                  "id": "",
+                  "creationDate": "",
+                  "lastUpdateDate": "",
+                  "startDate": "",
+                  "endDate": ""
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+]

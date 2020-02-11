@@ -66,19 +66,30 @@ public class MaintainSubscriptionService extends BaseServiceImpl {
     }
 
     @PreAuthorize(CommonConstants.HAS_UBER_ADMIN_OR_ACCT_ADMIN_ROLE)
-    public AccountDetail getAccountDetail(Long accountId) {
+    public AccountDetail getAccountDetailByAccountId(Long accountId) {
         Subscription subscription = this.subscriptionRepository.findByOwnerId(accountId);
         if (subscription == null) {
             throw new EntityNotFoundException("Subscription not found for id = " + accountId);
         }
+        return loadAccountDetail(subscription);
+    }
 
+    private AccountDetail loadAccountDetail(Subscription subscription) {
         if (!this.helperService.isAllowedToEdit(subscription.getOwner())) {
             throw new NotAuthorizedException();
         }
-
         AccountDetail accountDetail = new AccountDetail();
         accountDetail.setAccount(subscription.getOwner());
         accountDetail.setSubscription(subscription);
         return accountDetail;
+    }
+
+    @PreAuthorize(CommonConstants.HAS_UBER_ADMIN_OR_ACCT_ADMIN_ROLE)
+    public AccountDetail getAccountDetailByAccountUserName(String userName) {
+        Subscription subscription = this.subscriptionRepository.findByOwnerUserName(userName);
+        if (subscription == null) {
+            throw new EntityNotFoundException("Subscription not found for userName = " + userName);
+        }
+        return loadAccountDetail(subscription);
     }
 }

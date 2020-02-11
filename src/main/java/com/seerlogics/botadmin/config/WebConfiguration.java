@@ -2,6 +2,7 @@ package com.seerlogics.botadmin.config;
 
 import com.lingoace.cms.CmsClasspathResourceBootstraper;
 import com.lingoace.cms.CmsResource;
+import com.lingoace.common.CustomHttpServletRequestWrapperFilter;
 import com.lingoace.common.ExposedResourceMessageBundleSource;
 import com.lingoace.spring.controller.CmsController;
 import com.lingoace.spring.controller.ValidationController;
@@ -111,7 +112,7 @@ public class WebConfiguration implements WebMvcConfigurer, ResourceLoaderAware {
         return validatorFactory;
     }
 
-    /*@Bean
+    @Bean
     public FilterRegistrationBean<CustomHttpServletRequestWrapperFilter> loggingFilter() {
         FilterRegistrationBean<CustomHttpServletRequestWrapperFilter> registrationBean
                 = new FilterRegistrationBean<>();
@@ -120,7 +121,7 @@ public class WebConfiguration implements WebMvcConfigurer, ResourceLoaderAware {
         registrationBean.addUrlPatterns("/api/*");
 
         return registrationBean;
-    }*/
+    }
 
     @Bean
     public FilterRegistrationBean<JoltResponseTransformationFilter> joltTransformationFilter() {

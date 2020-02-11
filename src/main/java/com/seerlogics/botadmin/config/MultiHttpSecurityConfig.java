@@ -3,7 +3,6 @@ package com.seerlogics.botadmin.config;
 import com.lingoace.spring.authentication.JWTAuthenticationFilter;
 import com.lingoace.spring.authentication.RestAuthenticationEntryPoint;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
@@ -21,8 +20,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.annotation.Resource;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by bkane on 11/4/18.
@@ -36,9 +33,6 @@ public class MultiHttpSecurityConfig {
     public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         @Resource(name = "accountService")
         private UserDetailsService userDetailsService;
-
-        @Value("#{${seerapp.joltSpecs}}")
-        private Map<String, String> joltSpecs = new HashMap<>(0);
 
         @Autowired
         private AppProperties appProperties;

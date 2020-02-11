@@ -21,6 +21,9 @@
     "planDetailsHeading": "Plans Options",
     "realm": "Company Name/Code",
     "selectPlans": "Select Plan",
-    "planDetails": "Plan Details"
+    "planDetails": "Plan Details",
+    "maintainSubscription": {
+      "pageHeading": "Subscription/Account Details"
+    }
   }
 }

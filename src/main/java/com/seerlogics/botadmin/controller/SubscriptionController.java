@@ -7,6 +7,8 @@ import com.seerlogics.commons.dto.AccountDetail;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+
 @RestController
 @RequestMapping(value = "/api/v1/subscription")
 public class SubscriptionController extends BaseController {
@@ -18,7 +20,8 @@ public class SubscriptionController extends BaseController {
     }
 
     @GetMapping(value = "/init/{type}")
-    public AccountDetail initAccountDetail(@PathVariable String type) {
+    public AccountDetail initAccountDetail(@PathVariable String type, HttpServletRequest httpServletRequest) {
+        setJoltSpecKey("initSubscription", httpServletRequest);
         return this.maintainSubscriptionService.initAccountDetail(type);
     }
 
@@ -27,9 +30,10 @@ public class SubscriptionController extends BaseController {
         return this.maintainSubscriptionService.saveAccountDetail(accountDetail);
     }
 
-    @GetMapping(value = {"/{accountId}"})
+    @GetMapping(value = {"/{accountUserName}"})
     @PreAuthorize(CommonConstants.HAS_UBER_ADMIN_OR_ACCT_ADMIN_ROLE)
-    public AccountDetail getAccountDetail(@PathVariable Long accountId) {
-        return this.maintainSubscriptionService.getAccountDetail(accountId);
+    public AccountDetail getAccountDetail(@PathVariable String accountUserName, HttpServletRequest httpServletRequest) {
+        setJoltSpecKey("getSubscription", httpServletRequest);
+        return this.maintainSubscriptionService.getAccountDetailByAccountUserName(accountUserName);
     }
 }
