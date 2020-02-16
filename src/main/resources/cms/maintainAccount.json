@@ -5,7 +5,17 @@
     "userName": "User Name (email)",
     "password": "Password",
     "passwordRenter": "Renter Password",
-    "roles": "Roles",
+    "roles": "Roles/Entitlements",
+    "role": "Role",
+    "entity": "Item/Entity",
+    "access": "Access Options",
+    "statements": "Statement",
+    "policy": "Policy",
+    "resource": "Resource",
+    "action": "Action",
+    "actions": "Actions",
+    "description": "Description",
+    "active": "Active",
     "firstName": "First Name",
     "lastName": "Last Name",
     "address": {
@@ -15,6 +25,8 @@
       "state": "State",
       "zip": "Zip"
     },
+    "changePasswordButton": "Change Password",
+    "passwordChangedSuccess": "Password changed successfully!",
     "accountDetailsHeading": "Enter below details to signup",
     "personInfoHeading": "About You",
     "addressInfoHeading": "Address Information",
@@ -23,7 +35,8 @@
     "selectPlans": "Select Plan",
     "planDetails": "Plan Details",
     "maintainSubscription": {
-      "pageHeading": "Subscription/Account Details"
+      "pageHeading": "Subscription/Account Details",
+      "accountDetails": "Account Details"
     }
   }
 }

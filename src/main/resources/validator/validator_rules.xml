@@ -595,5 +595,34 @@
             </field>
         </form>
 
+        <form name="validateChangePassword" classType="com.seerlogics.commons.dto.ChangePassword">
+            <field property="userName" id="userName" depends="required">
+            </field>
+            <field property="passwordCapture" id="passwordCapture" depends="required">
+                <var>
+                    <var-name>regEx</var-name>
+                    <var-value>^[a-zA-Z0-9_%$*#\s]+$</var-value>
+                </var>
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>50</var-value>
+                </var>
+            </field>
+            <field property="passwordCaptureReenter" id="passwordCaptureReenter" depends="required,validateIfValueMatches">
+                <var>
+                    <var-name>regEx</var-name>
+                    <var-value>^[a-zA-Z0-9_%$*#\s]+$</var-value>
+                </var>
+                <var>
+                    <var-name>maxLength</var-name>
+                    <var-value>50</var-value>
+                </var>
+                <var>
+                    <var-name>compareToProperty</var-name>
+                    <var-value>passwordCapture</var-value>
+                </var>
+            </field>
+        </form>
+
     </formset>
 </form-validation>

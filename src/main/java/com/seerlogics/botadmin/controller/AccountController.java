@@ -1,7 +1,9 @@
 package com.seerlogics.botadmin.controller;
 
 import com.lingoace.spring.controller.BaseController;
+import com.lingoace.validation.Validate;
 import com.seerlogics.botadmin.service.AccountService;
+import com.seerlogics.commons.dto.ChangePassword;
 import com.seerlogics.commons.model.Account;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -46,7 +48,6 @@ public class AccountController extends BaseController {
         return new ResponseEntity<>(this.accountService.getAccountByUsername(username), HttpStatus.OK);
     }
 
-    @ResponseBody
     @GetMapping(value = "/init/{type}")
     public Account initAddress(@PathVariable String type) {
         return this.accountService.initAccount(type);
@@ -57,5 +58,15 @@ public class AccountController extends BaseController {
     public ResponseEntity delete(@PathVariable("id") Long id) {
         this.accountService.delete(id);
         return returnSuccessResponse();
+    }
+
+    @PostMapping(value = {"/changePassword"})
+    public ResponseEntity changePassword(@Validate("validateChangePassword") @RequestBody ChangePassword changePassword) {
+        boolean passwordChanged = this.accountService.changePassword(changePassword);
+        if (passwordChanged) {
+            return returnSuccessResponse();
+        } else {
+            return returnFailureResponse();
+        }
     }
 }

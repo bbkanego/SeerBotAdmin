@@ -2,6 +2,7 @@ package com.seerlogics.botadmin.service;
 
 import com.lingoace.spring.service.BaseServiceImpl;
 import com.seerlogics.commons.CommonConstants;
+import com.seerlogics.commons.dto.ChangePassword;
 import com.seerlogics.commons.model.*;
 import com.seerlogics.commons.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -155,5 +156,16 @@ public class AccountService extends BaseServiceImpl<Account> implements UserDeta
         acctView.setCode(Role.ROLE_TYPE.ACCT_VIEW.name());
         acctView.setName("Account View");
         roles.add(acctView);
+    }
+
+    @PreAuthorize(CommonConstants.HAS_UBER_ADMIN_OR_ACCT_ADMIN_ROLE)
+    public boolean changePassword(ChangePassword changePassword) {
+        if (!this.getAuthenticatedUser().getUserName().equals(changePassword.getUserName())) return false;
+
+        Account account = this.getAccountByUsername(changePassword.getUserName());
+        account.setPassword(passwordEncoder.encode(changePassword.getPasswordCapture()));
+        this.accountRepository.save(account);
+
+        return true;
     }
 }
