@@ -1,31 +1,31 @@
 #!/bin/sh
 
-cd ~/svn/code/java/SeerlogicsBom
+JAVA_CODE_PATH=~/Bhushan/code/java
+ANGULAR_CODE_PATH=~/Bhushan/code/angular
+
+cd $JAVA_CODE_PATH/SeerlogicsBom
 git pull origin develop
 
-cd ~/svn/code/java/SpringMVC/eg-commons
+cd $JAVA_CODE_PATH/EventGenie-Angular-Spring/eg-commons
 git pull origin eventGenie-develop
 
-cd ~/svn/code/java/SpringMVC/eg-spring
+cd $JAVA_CODE_PATH/EventGenie-Angular-Spring/eg-spring
 git pull origin eventGenie-develop
 
-cd ~/svn/code/java/SeerlogicsCloud
+cd $JAVA_CODE_PATH/SeerlogicsCloud
 git pull origin develop
 
-cd ~/svn/code/java/SeerlogicsBotCommons
+cd $JAVA_CODE_PATH/SeerlogicsBotCommons
 git pull origin develop
 
-cd ~/svn/code/java/SeerlogicsBotAdmin
+cd $JAVA_CODE_PATH/SeerlogicsBotAdmin
 git pull origin develop
 
-cd ~/svn/code/java/SeerLogicsReferenceBot
+cd ~/ANGULAR_CODE_PATH/Angular-Library-With-NgPackagr
 git pull origin develop
 
-cd ~/svn/code/angular/Angular-Library-With-NgPackagr
+cd ~/ANGULAR_CODE_PATH/SeerlogicsBotAdminUI
 git pull origin develop
 
-cd ~/svn/code/angular/SeerlogicsBotAdminUI
-git pull origin develop
-
-cd ~/svn/code/angular/SeerlogicsChatClientUI
+cd ~/ANGULAR_CODE_PATH/SeerlogicsChatClientUI
 git pull origin develop
