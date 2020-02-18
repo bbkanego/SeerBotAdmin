@@ -56,7 +56,7 @@ public class ChatDbConfig {
 
         return builder
                 .dataSource(dataSource)
-                .packages("com.seerlogics.chatbot")
+                .packages("com.seerlogics.chatbot.model")
                 .persistenceUnit("chatbot")
                 .properties(properties)
                 .build();

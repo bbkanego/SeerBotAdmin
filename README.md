@@ -191,7 +191,7 @@ sudo systemctl status gogs
 ## SQL Server admin
 ```
 bkane@bubuntu:~/installs/killbill$ mysql -u root -p
-Enter password: 
+Enter password: [enter simplest pwd ever]
 Welcome to the MySQL monitor.  Commands end with ; or \g.
 Your MySQL connection id is 226
 Server version: 5.7.22-0ubuntu0.16.04.1 (Ubuntu)
