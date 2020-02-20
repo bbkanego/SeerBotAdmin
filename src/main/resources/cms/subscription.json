@@ -8,6 +8,7 @@
       "maxTransactions": "Maximum Transactions",
       "tierDuration": "Duration",
       "tierType": "Type",
+      "perMinute": "per minute",
       "resultsTable": {
         "headingPredefined": "Following predefined intents were found",
         "headingCustom": "Following custom intents were found",
@@ -27,6 +28,7 @@
       "description": "Description",
       "price": "Price",
       "tier": "Tier",
+      "planVerbiage": "You will be charged on a monthly basis at a flat fee per below",
       "duration": "Duration",
       "resultsTable": {
         "headingPredefined": "Following plans were found",

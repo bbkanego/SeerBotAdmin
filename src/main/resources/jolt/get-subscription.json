@@ -25,16 +25,10 @@
             "endDate": ""
           }
         },
-        "owner": "",
         "creationDate": "",
         "lastUpdateDate": "",
         "startDate": "",
-        "endDate": "",
-        "roles": {
-          "*": {
-            "policies": ""
-          }
-        }
+        "endDate": ""
       },
       "subscription": {
         "*": {

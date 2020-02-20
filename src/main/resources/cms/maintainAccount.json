@@ -36,7 +36,13 @@
     "planDetails": "Plan Details",
     "maintainSubscription": {
       "pageHeading": "Subscription/Account Details",
-      "accountDetails": "Account Details"
+      "accountDetails": "Account Details",
+      "subscriptionHeading": "Subscription Details",
+      "subscriptionName": "Name",
+      "subscriptionDesc": "Description",
+      "maxTransactions": "Maximum Transaction",
+      "tierDuration": "Unit",
+      "perMinute": "per minute"
     }
   }
 }

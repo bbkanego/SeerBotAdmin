@@ -79,7 +79,7 @@ public class MaintainSubscriptionService extends BaseServiceImpl {
             throw new NotAuthorizedException();
         }
         AccountDetail accountDetail = new AccountDetail();
-        accountDetail.setAccount(subscription.getOwner());
+        //accountDetail.setAccount(subscription.getOwner());
         accountDetail.setSubscription(subscription);
         return accountDetail;
     }
