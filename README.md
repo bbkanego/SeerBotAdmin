@@ -295,3 +295,59 @@ mysql> grant all privileges on seerBotDB.* to 'bkane'@'%';
 Query OK, 0 rows affected (0.00 sec)
 
 ```
+
+## Convert MySQL All tables from MyISAM to InnoDB
+1. First run the below command that will show you all commands that you need to run for the conversion:
+    ```
+    SELECT CONCAT('ALTER TABLE ',TABLE_NAME,' ENGINE=InnoDB;') 
+     FROM INFORMATION_SCHEMA.TABLES
+     WHERE ENGINE='MyISAM'
+     AND table_schema = 'seerBotAdminDB';
+    ```
+
+2. Next the following will be output by above:
+    ```
+    +-----------------------------------------------------+
+    | CONCAT('ALTER TABLE ',TABLE_NAME,' ENGINE=InnoDB;') |
+    +-----------------------------------------------------+
+    | ALTER TABLE ACCOUNT ENGINE=InnoDB;                  |
+    | ALTER TABLE ACCOUNT_ROLE ENGINE=InnoDB;             |
+    | ALTER TABLE ACTION ENGINE=InnoDB;                   |
+    | ALTER TABLE ADDRESS ENGINE=InnoDB;                  |
+    | ALTER TABLE BOT ENGINE=InnoDB;                      |
+    | ALTER TABLE BOT_CONFIGURATION ENGINE=InnoDB;        |
+    | ALTER TABLE BOT_LANGUAGE ENGINE=InnoDB;             |
+    | ALTER TABLE BOT_LAUNCHINFO ENGINE=InnoDB;           |
+    | ALTER TABLE CATEGORY ENGINE=InnoDB;                 |
+    | ALTER TABLE CHAT_BOT ENGINE=InnoDB;                 |
+    | ALTER TABLE CONFIGURATION ENGINE=InnoDB;            |
+    | ALTER TABLE CONTACT_MODE ENGINE=InnoDB;             |
+    | ALTER TABLE EMAIL ENGINE=InnoDB;                    |
+    | ALTER TABLE INTENT ENGINE=InnoDB;                   |
+    | ALTER TABLE INTENT_RESPONSE ENGINE=InnoDB;          |
+    | ALTER TABLE INTENT_UTTERANCE ENGINE=InnoDB;         |
+    | ALTER TABLE LANGUAGE ENGINE=InnoDB;                 |
+    | ALTER TABLE LAUNCH_INFO ENGINE=InnoDB;              |
+    | ALTER TABLE MEMBERSHIP_PLAN ENGINE=InnoDB;          |
+    | ALTER TABLE ORGANIZATION ENGINE=InnoDB;             |
+    | ALTER TABLE PARTY ENGINE=InnoDB;                    |
+    | ALTER TABLE PARTY_CONTACT_MODE ENGINE=InnoDB;       |
+    | ALTER TABLE PAYMENT_HISTORY ENGINE=InnoDB;          |
+    | ALTER TABLE PERSON ENGINE=InnoDB;                   |
+    | ALTER TABLE POLICY ENGINE=InnoDB;                   |
+    | ALTER TABLE RESOURCE ENGINE=InnoDB;                 |
+    | ALTER TABLE ROLE ENGINE=InnoDB;                     |
+    | ALTER TABLE ROLE_POLICY ENGINE=InnoDB;              |
+    | ALTER TABLE STATEMENT ENGINE=InnoDB;                |
+    | ALTER TABLE STATEMENT_ACTION ENGINE=InnoDB;         |
+    | ALTER TABLE STATUS ENGINE=InnoDB;                   |
+    | ALTER TABLE SUBSCRIPTION ENGINE=InnoDB;             |
+    | ALTER TABLE TIER ENGINE=InnoDB;                     |
+    | ALTER TABLE TRAINED_MODEL ENGINE=InnoDB;            |
+    | ALTER TABLE VOICE_BOT ENGINE=InnoDB;                |
+    +-----------------------------------------------------+
+    35 rows in set (0.00 sec)
+    
+    ```
+3.  Next run the above ALTER commands to change the DB type to InnoDB
+
