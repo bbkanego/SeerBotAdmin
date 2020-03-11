@@ -28,6 +28,12 @@
       "name": "Name",
       "code": "Code",
       "description": "Description"
+    },
+    "login": {
+      "heading": "Login to SeerGab",
+      "loginSuccess": "Logout Success!",
+      "loginFailure": "Logout Failed!",
+      "copyright": "2020 SeerSense, LLC"
     }
   }
 }
