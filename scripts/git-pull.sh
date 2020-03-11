@@ -1,7 +1,7 @@
 #!/bin/sh
 
-JAVA_CODE_PATH=~/Bhushan/code/java
-ANGULAR_CODE_PATH=~/Bhushan/code/angular
+JAVA_CODE_PATH=~/svn/code/java
+ANGULAR_CODE_PATH=~/svn/code/angular
 
 cd $JAVA_CODE_PATH/SeerlogicsBom
 git pull origin develop

@@ -6,11 +6,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.*;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.instrument.classloading.LoadTimeWeaver;
+import org.springframework.instrument.classloading.tomcat.TomcatLoadTimeWeaver;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -26,6 +25,7 @@ import java.util.Map;
  * https://medium.com/@joeclever/using-multiple-datasources-with-spring-boot-and-spring-data-6430b00c02e7
  */
 @Configuration
+@EnableLoadTimeWeaving(aspectjWeaving = EnableLoadTimeWeaving.AspectJWeaving.ENABLED)
 @ComponentScan(basePackages = {"com.seerlogics.commons.config"})
 @EnableTransactionManagement
 @EnableJpaRepositories(
@@ -33,7 +33,7 @@ import java.util.Map;
         entityManagerFactoryRef = "botAdminEntityManagerFactory",
         basePackages = {"com.seerlogics.commons.repository"}
 )
-public class BotAdminDbConfig {
+public class BotAdminDbConfig implements LoadTimeWeavingConfigurer {
 
     @Autowired
     private HibernateConfig hibernateConfig;
@@ -75,5 +75,10 @@ public class BotAdminDbConfig {
                     entityManagerFactory
     ) {
         return new JpaTransactionManager(entityManagerFactory);
+    }
+
+    @Override
+    public LoadTimeWeaver getLoadTimeWeaver() {
+        return new TomcatLoadTimeWeaver();
     }
 }
