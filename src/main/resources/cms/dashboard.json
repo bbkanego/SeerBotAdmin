@@ -3,7 +3,8 @@
     "pageHeading": "Dashboard",
     "refresh": "Refresh",
     "botPerformance": {
-      "heading": "Bot Performance",
+      "heading": "All Bots Performance",
+      "headingAll": "All Bots Performance",
       "botName": "Bot",
       "actionsLabel": "Actions",
       "totalChats": "Total Chats",
