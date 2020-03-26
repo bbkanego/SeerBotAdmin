@@ -1,5 +1,7 @@
 create schema seerBotDB collate utf8_unicode_ci;
 
+use seerBotDB;
+
 create table CHAT
 (
     ID bigint auto_increment

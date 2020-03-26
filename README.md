@@ -72,7 +72,7 @@ You can also test using Postman collection located in:
 2. You should launch the bot from the Bot Admin application and instance will be launched.
 3. You can connect to instance using the below command:
 ```
-ssh -i ~/svn/bhushan/theory/AWS/SeerLogics/keyPairs/bizBotAdminLogin.pem ec2-user@ec2-3-14-73-84.us-east-2.compute.amazonaws.com
+ssh -i ~/Bhushan/code/java/SeerlogicsBotAdmin/docs/AWS/keyPairs/bizBotAdminLogin.pem ec2-3-20-234-107.us-east-2.compute.amazonaws.com
 ```
 
 ## Possible Errors
@@ -102,7 +102,7 @@ Permission denied (publickey).
 ```
 To fix this run the below command:
 ```
-chmod 0400 ~/svn/bhushan/theory/AWS/SeerLogics/keyPairs/*.pem
+chmod 0400 ~/Bhushan/code/java/SeerlogicsBotAdmin/docs/AWS/keyPairs/*.pem
 ```
 
 ## Unit Testing and SonarQube
@@ -162,6 +162,23 @@ newly created instances.
 /Users/bkane/svn/code/java/SeerlogicsBotAdmin/docs/AWS/scripts/onLaunchScript.sh
 ```
 
+2. Once the instances start up, you can check 
+status using the ELB URL (not that domain for the below URL may be different for you):
+```
+http://bizbotadminelb-2131207929.us-east-2.elb.amazonaws.com/botadmin/actuator/info
+```
+
+3. To check logs you can do the following. You will need to SSH to the instance:
+```
+# check the user-data logs
+cat /var/log/seer-user-data.log
+
+# to check the start up logs check these:
+cat ~/seerBotAdmin/logs/vendorInfo.log
+cat ~/seerBotAdmin/logs/appDebug.log
+
+```
+
 ## Install Gogs
 
 1. Gogs service is installed in: /etc/systemd/system/gogs.service
@@ -188,7 +205,7 @@ sudo systemctl enable gogs
 sudo systemctl status gogs
 ```
 
-## SQL Server admin
+## MySQL Server admin
 ```
 bkane@bubuntu:~/installs/killbill$ mysql -u root -p
 Enter password: [enter simplest pwd ever]

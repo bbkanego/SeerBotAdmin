@@ -1,7 +1,7 @@
 #!/bin/sh
 
-JAVA_CODE_PATH=~/svn/code/java
-ANGULAR_CODE_PATH=~/svn/code/angular
+JAVA_CODE_PATH=$code_home/java
+ANGULAR_CODE_PATH=$code_home/angular
 
 cd $JAVA_CODE_PATH/SeerlogicsBom
 git pull origin develop
@@ -21,11 +21,11 @@ git pull origin develop
 cd $JAVA_CODE_PATH/SeerlogicsBotAdmin
 git pull origin develop
 
-cd ~/ANGULAR_CODE_PATH/Angular-Library-With-NgPackagr
+cd $ANGULAR_CODE_PATH/Angular-Library-With-NgPackagr
 git pull origin develop
 
-cd ~/ANGULAR_CODE_PATH/SeerlogicsBotAdminUI
+cd $ANGULAR_CODE_PATH/SeerlogicsBotAdminUI
 git pull origin develop
 
-cd ~/ANGULAR_CODE_PATH/SeerlogicsChatClientUI
+cd $ANGULAR_CODE_PATH/SeerlogicsChatClientUI
 git pull origin develop

@@ -1,5 +1,7 @@
 create schema seerBotAdminDB collate utf8_unicode_ci;
 
+use seerBotAdminDB;
+
 create table ACCOUNT
 (
     ID bigint auto_increment
