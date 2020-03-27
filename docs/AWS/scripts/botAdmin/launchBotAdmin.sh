@@ -52,5 +52,5 @@ echo 'Launching instances now: https://docs.aws.amazon.com/cli/latest/reference/
 aws ec2 run-instances --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=BizBotAdmin}]' --user-data file://onLaunchScript.sh --region us-east-2 --iam-instance-profile Name="S3_biz_bot_artifact_Readonly" --image-id ami-0cd3dfa4e37921605 --key-name seerLogicsBotAdminKeyPair --security-groups bizBotSecurityGroup --instance-type t2.micro --placement AvailabilityZone=us-east-2c --count 2
 
 echo 'create ELB and configure it'
-aws elb create-load-balancer --load-balancer-name BizBotAdminELB --listeners "Protocol=HTTP,LoadBalancerPort=80,InstanceProtocol=HTTP,InstancePort=8099" --subnets subnet-5adb8617 --security-groups sg-066e46dd3f09492bd
-aws elb configure-health-check --load-balancer-name BizBotAdminELB --health-check Target=HTTP:8099/botadmin/actuator/info,Interval=30,UnhealthyThreshold=2,HealthyThreshold=2,Timeout=3
+#aws elb create-load-balancer --load-balancer-name BizBotAdminELB --listeners "Protocol=HTTP,LoadBalancerPort=80,InstanceProtocol=HTTP,InstancePort=8099" --subnets subnet-5adb8617 --security-groups sg-066e46dd3f09492bd
+#aws elb configure-health-check --load-balancer-name BizBotAdminELB --health-check Target=HTTP:8099/botadmin/actuator/info,Interval=30,UnhealthyThreshold=2,HealthyThreshold=2,Timeout=3

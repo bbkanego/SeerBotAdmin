@@ -59,5 +59,5 @@ echo "---->>> Instance id is = " $instanceId
 aws elb register-instances-with-load-balancer --region us-east-2 --load-balancer-name SeerBotELB --instances $instanceId
 
 echo 'Deleting deployable artifact' $s3commonKeyPrefix
-su - ec2-user -c 'aws s3api delete-object --bucket biz-bot-artifact --key bkane/BotAdminApp/seerBot/seerlogics-shared-bot-1.0.0-SNAPSHOT.war'
-su - ec2-user -c 'aws s3api delete-object --bucket biz-bot-artifact --key bkane/BotAdminApp/seerBot/server.xml'
+#su - ec2-user -c 'aws s3api delete-object --bucket biz-bot-artifact --key bkane/BotAdminApp/seerBot/seerlogics-shared-bot-1.0.0-SNAPSHOT.war'
+#su - ec2-user -c 'aws s3api delete-object --bucket biz-bot-artifact --key bkane/BotAdminApp/seerBot/server.xml'
