@@ -1,11 +1,14 @@
 package com.seerlogics.botadmin.service;
 
 import com.lingoace.spring.service.BaseServiceImpl;
+import com.lingoace.validation.ValidationException;
+import com.lingoace.validation.ValidationResult;
 import com.seerlogics.commons.CommonConstants;
 import com.seerlogics.commons.dto.ChangePassword;
 import com.seerlogics.commons.model.*;
 import com.seerlogics.commons.repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,6 +22,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
 import java.util.*;
 
 /**
@@ -39,6 +43,9 @@ public class AccountService extends BaseServiceImpl<Account> implements UserDeta
     // cannot do constructor injection since it causes cyclic dependency issue
     @Autowired
     private RoleService roleService;
+
+    @Resource(name = "appMessageResource")
+    private MessageSource messageSource;
 
     @Override
     @PreAuthorize(CommonConstants.UBER_ADMIN)
@@ -61,6 +68,14 @@ public class AccountService extends BaseServiceImpl<Account> implements UserDeta
     public Account save(Account account) {
         // means that a new account is being created
         if (account.getId() == null) {
+            Account existingAccount = this.accountRepository.findByUserName(account.getUserName());
+            if (existingAccount != null) {
+                String userNameAlreadyExists =
+                        this.messageSource.getMessage("message.username.already.exists", new String[]{}, null);
+                ValidationResult validationResult = new ValidationResult();
+                validationResult.addFieldError("", "", userNameAlreadyExists);
+                throw new ValidationException(userNameAlreadyExists, validationResult);
+            }
             account.setPassword(account.getPasswordCapture());
         }
         account.setPassword(passwordEncoder.encode(account.getPassword()));

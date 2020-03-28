@@ -3,12 +3,15 @@ package com.seerlogics.botadmin.service;
 import com.lingoace.common.EntityNotFoundException;
 import com.lingoace.common.exception.NotAuthorizedException;
 import com.lingoace.spring.service.BaseServiceImpl;
+import com.lingoace.validation.ValidationException;
+import com.lingoace.validation.ValidationResult;
 import com.seerlogics.commons.CommonConstants;
 import com.seerlogics.commons.dto.AccountDetail;
 import com.seerlogics.commons.model.Account;
 import com.seerlogics.commons.model.MembershipPlan;
 import com.seerlogics.commons.model.Role;
 import com.seerlogics.commons.model.Subscription;
+import com.seerlogics.commons.repository.AccountRepository;
 import com.seerlogics.commons.repository.MembershipPlanRepository;
 import com.seerlogics.commons.repository.SubscriptionRepository;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -22,6 +25,7 @@ public class MaintainSubscriptionService extends BaseServiceImpl {
     private final SubscriptionRepository subscriptionRepository;
     private final MembershipPlanRepository membershipPlanRepository;
     private final AccountService accountService;
+    private final AccountRepository accountRepository;
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
     private final HelperService helperService;
@@ -29,10 +33,11 @@ public class MaintainSubscriptionService extends BaseServiceImpl {
     public MaintainSubscriptionService(SubscriptionRepository subscriptionRepository,
                                        MembershipPlanRepository membershipPlanRepository,
                                        AccountService accountService,
-                                       RoleService roleService, PasswordEncoder passwordEncoder, HelperService helperService) {
+                                       AccountRepository accountRepository, RoleService roleService, PasswordEncoder passwordEncoder, HelperService helperService) {
         this.subscriptionRepository = subscriptionRepository;
         this.membershipPlanRepository = membershipPlanRepository;
         this.accountService = accountService;
+        this.accountRepository = accountRepository;
         this.roleService = roleService;
         this.passwordEncoder = passwordEncoder;
         this.helperService = helperService;
@@ -53,6 +58,17 @@ public class MaintainSubscriptionService extends BaseServiceImpl {
 
     public AccountDetail saveAccountDetail(AccountDetail accountDetail) {
         Subscription subscription = new Subscription();
+
+        Account existingAccount = this.accountRepository.findByUserName(accountDetail.getAccount().getUserName());
+        if (existingAccount != null) {
+            String userNameAlreadyExists =
+                    this.helperService.getMessage("message.username.already.exists", new String[]{});
+            ValidationResult validationResult = new ValidationResult();
+            validationResult.addPageLevelError(userNameAlreadyExists);
+            validationResult.addFieldError("userName", "userName", userNameAlreadyExists);
+            throw new ValidationException(userNameAlreadyExists, validationResult);
+        }
+
         accountDetail.getAccount().setPassword(passwordEncoder.encode(accountDetail.getAccount().getPasswordCapture()));
         subscription.setOwner(accountDetail.getAccount());
 

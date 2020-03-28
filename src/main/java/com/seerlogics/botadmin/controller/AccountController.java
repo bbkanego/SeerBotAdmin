@@ -26,8 +26,8 @@ public class AccountController extends BaseController {
     }
 
     @PostMapping(value = {"", "/signup",})
-    public ResponseEntity save(@RequestBody Account category) {
-        this.accountService.save(category);
+    public ResponseEntity save(@RequestBody Account account) {
+        this.accountService.save(account);
         return returnSuccessResponse();
     }
 
