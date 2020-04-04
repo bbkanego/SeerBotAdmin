@@ -24,6 +24,7 @@ create table CHAT
 create index FKklhkvnrqyh32jejao0a9hv5lm
     on CHAT (PREVIOUS_CHAT_ID);
 
+use seerBotDB;
 create table TRANSACTION
 (
     ID               bigint auto_increment
@@ -41,5 +42,5 @@ create table TRANSACTION
     UTTERANCE        varchar(255)     not null,
     RESOLVED         bit              null,
     -- IGNORE is a reserved keyword and is thus quoted.
-    `IGNORE`         bit default b'0' null
+    IGNORE_TRANS         bit default b'0' null
 );
