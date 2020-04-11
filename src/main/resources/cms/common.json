@@ -31,8 +31,8 @@
     },
     "login": {
       "heading": "Login to SeerGab",
-      "loginSuccess": "Logout Success!",
-      "loginFailure": "Logout Failed!",
+      "logoutSuccess": "Logout Success!",
+      "loginFailure": "Login failed! Username/Password not found",
       "copyright": "2020 SeerSense, LLC"
     }
   }
