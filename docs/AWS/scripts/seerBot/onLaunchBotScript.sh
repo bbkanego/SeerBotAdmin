@@ -56,7 +56,7 @@ su - ec2-user -c '/home/ec2-user/installs/tomcat/bin/startup.sh'
 echo 'register the instance with elb'
 instanceId="`wget -q -O - http://169.254.169.254/latest/meta-data/instance-id`"
 echo "---->>> Instance id is = " $instanceId
-aws elb register-instances-with-load-balancer --region us-east-2 --load-balancer-name SeerBotELB --instances $instanceId
+aws elb register-instances-with-load-balancer --region us-east-1 --load-balancer-name SeerBotELB --instances $instanceId
 
 echo 'Deleting deployable artifact' $s3commonKeyPrefix
 #su - ec2-user -c 'aws s3api delete-object --bucket biz-bot-artifact --key bkane/BotAdminApp/seerBot/seerlogics-shared-bot-1.0.0-SNAPSHOT.war'
