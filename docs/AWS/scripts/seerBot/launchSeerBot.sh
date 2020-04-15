@@ -51,6 +51,6 @@ echo 'Launching instances now: https://docs.aws.amazon.com/cli/latest/reference/
 # AWS Amazon linux image id: ami-0cd3dfa4e37921605
 aws ec2 run-instances --tag-specifications 'ResourceType=instance,Tags=[{Key=Name,Value=SeerBotInstance}]' --user-data file://onLaunchBotScript.sh --placement AvailabilityZone=us-east-1c --iam-instance-profile Name="S3_biz_bot_artifact_Readonly" --image-id ami-0915e09cc7ceee3ab --key-name SeerGabAdminKeyPair --security-group-ids sg-06772c33fac14313f --instance-type t2.micro --count 2
 
-echo 'create ELB and configure it'
-aws elb create-load-balancer --load-balancer-name SeerBotELB --listeners "Protocol=HTTP,LoadBalancerPort=80,InstanceProtocol=HTTP,InstancePort=8099" --security-groups sg-06772c33fac14313f --subnets subnet-223bec0c
-aws elb configure-health-check --load-balancer-name SeerBotELB --health-check Target=HTTP:8099/chatbot/actuator/info,Interval=30,UnhealthyThreshold=2,HealthyThreshold=2,Timeout=3
+#echo 'create ELB and configure it'
+#aws elb create-load-balancer --load-balancer-name SeerBotELB --listeners "Protocol=HTTP,LoadBalancerPort=80,InstanceProtocol=HTTP,InstancePort=8099" --security-groups sg-06772c33fac14313f --subnets subnet-223bec0c
+#aws elb configure-health-check --load-balancer-name SeerBotELB --health-check Target=HTTP:8099/chatbot/actuator/info,Interval=30,UnhealthyThreshold=2,HealthyThreshold=2,Timeout=3
