@@ -72,7 +72,7 @@ You can also test using Postman collection located in:
 2. You should launch the bot from the Bot Admin application and instance will be launched.
 3. You can connect to instance using the below command:
 ```
-ssh -i ~/Bhushan/code/java/SeerlogicsBotAdmin/docs/AWS/keyPairs/bizBotAdminLogin.pem ec2-3-20-234-107.us-east-2.compute.amazonaws.com
+ssh -i ~/Bhushan/code/java/SeerlogicsBotAdmin/docs/AWS/keyPairs/SeerGabAdminKeyPair.pem ec2-user@ec2-3-89-238-103.compute-1.amazonaws.com
 ```
 
 ## Possible Errors
