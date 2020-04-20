@@ -2,6 +2,7 @@ package com.seerlogics.botadmin.exception;
 
 import com.lingoace.common.exception.GeneralErrorException;
 import com.seerlogics.commons.exception.BaseRuntimeException;
+import com.seerlogics.commons.exception.UIDisplayException;
 import opennlp.tools.util.InsufficientTrainingDataException;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.hibernate.exception.ConstraintViolationException;
@@ -72,6 +73,14 @@ public class GlobalExceptionHandler extends com.lingoace.common.GlobalExceptionH
         Map<String, String> errorResponse = new HashMap<>();
         errorResponse.put(MESSAGE, "You are not authorized to access this resource");
         return new ResponseEntity<>(errorResponse, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(UIDisplayException.class)
+    public Object catchUIDisplayException(UIDisplayException e) {
+        this.buildUnknownErrorMessageResponse(e);
+        Map<String, String> errorResponse = new HashMap<>();
+        errorResponse.put(MESSAGE, e.getMessage());
+        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     // define the catch all here!!!

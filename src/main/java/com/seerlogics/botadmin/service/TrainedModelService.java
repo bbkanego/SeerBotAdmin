@@ -4,6 +4,7 @@ import com.lingoace.common.exception.GeneralErrorException;
 import com.lingoace.exception.nlp.TrainModelException;
 import com.lingoace.nlp.opennlp.NLPModelTrainer;
 import com.lingoace.spring.service.BaseServiceImpl;
+import com.seerlogics.commons.dto.SearchTrainedModel;
 import com.seerlogics.commons.model.Intent;
 import com.seerlogics.commons.model.IntentUtterance;
 import com.seerlogics.commons.model.TrainedModel;
@@ -57,8 +58,12 @@ public class TrainedModelService extends BaseServiceImpl<TrainedModel> {
         return trainedModelRepository.findAll();
     }
 
-    public Collection<TrainedModel> findModelByOwner() {
+    public Collection<TrainedModel> findModelsByOwner() {
         return trainedModelRepository.findByOwner(accountService.getAuthenticatedUser());
+    }
+
+    public Collection<TrainedModel> findModels(SearchTrainedModel searchTrainedModel) {
+        return trainedModelRepository.findTrainedModel(searchTrainedModel);
     }
 
     @Override
