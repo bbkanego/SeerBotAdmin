@@ -3,17 +3,20 @@ package com.seerlogics.botadmin.service;
 import com.lingoace.common.exception.GeneralErrorException;
 import com.lingoace.common.exception.NotAuthorizedException;
 import com.lingoace.spring.service.BaseServiceImpl;
+import com.seerlogics.botadmin.event.CategoryCreatedEvent;
 import com.seerlogics.botadmin.exception.ErrorCodes;
 import com.seerlogics.commons.dto.SearchBots;
 import com.seerlogics.commons.dto.SearchIntents;
 import com.seerlogics.commons.dto.SearchTrainedModel;
 import com.seerlogics.commons.model.Account;
 import com.seerlogics.commons.model.Category;
+import com.seerlogics.commons.model.Intent;
 import com.seerlogics.commons.repository.BotRepository;
 import com.seerlogics.commons.repository.CategoryRepository;
 import com.seerlogics.commons.repository.IntentRepository;
 import com.seerlogics.commons.repository.TrainedModelRepository;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -39,16 +42,18 @@ public class CategoryService extends BaseServiceImpl<Category> {
     private final BotRepository botRepository;
     private final TrainedModelRepository trainedModelRepository;
     private final IntentRepository intentRepository;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     public CategoryService(CategoryRepository categoryRepository, AccountService accountService,
                            HelperService helperService, BotRepository botRepository,
-                           TrainedModelRepository trainedModelRepository, IntentRepository intentRepository) {
+                           TrainedModelRepository trainedModelRepository, IntentRepository intentRepository, ApplicationEventPublisher applicationEventPublisher) {
         this.categoryRepository = categoryRepository;
         this.accountService = accountService;
         this.helperService = helperService;
         this.botRepository = botRepository;
         this.trainedModelRepository = trainedModelRepository;
         this.intentRepository = intentRepository;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     @Override
@@ -96,7 +101,24 @@ public class CategoryService extends BaseServiceImpl<Category> {
         // is new category?
         if (category.getId() == null) {
             category.setOwnerAccount(accountService.getAuthenticatedUser());
-            return categoryRepository.save(category);
+            Category createCategory = categoryRepository.save(category);
+
+            LOGGER.debug("Creating Initiate intent for Category");
+            Intent initiateIntent = IntentService.createStandardIntents(createCategory,
+                    createCategory.getOwnerAccount(), "Initiate", "Initiate");
+            intentRepository.save(initiateIntent);
+
+            LOGGER.debug("Creating Salutation/HI intent for Category");
+            Intent hiIntent = IntentService.createStandardIntents(createCategory,
+                    createCategory.getOwnerAccount(), "Hi", "Hi");
+            intentRepository.save(hiIntent);
+
+            LOGGER.debug("Creating DoNotUnderstandIntent for Category");
+            Intent doNotUnderstandIntent = IntentService.createStandardIntents(createCategory,
+                    createCategory.getOwnerAccount(), "DoNotUnderstandIntent", "NONE");
+            intentRepository.save(doNotUnderstandIntent);
+
+            return createCategory;
         } else {
             Category tempCat = categoryRepository.getOne(category.getId());
             if (this.helperService.isAllowedToEdit(tempCat.getOwnerAccount())) {

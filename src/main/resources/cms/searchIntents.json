@@ -17,6 +17,7 @@
       }
     },
     "deleteAll": "Delete All",
+    "addIntent": "Add Intent",
     "deleteAllMessage": "Do you want to delete all intents",
     "pageSubHeading": "Following intents where found. These include intents that you copied from predefined intents and any new intents"
   }

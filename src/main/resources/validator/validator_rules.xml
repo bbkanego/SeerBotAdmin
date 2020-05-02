@@ -424,7 +424,7 @@
                     <var-value>^[a-zA-Z0-9-?.,_\s]+$</var-value>
                 </var>
             </field>
-            <!--<field id="intentCategory" property="category" depends="required"/>-->
+            <field id="intentCategory" property="category" depends="required"/>
         </form>
 
         <form name="validateSearchBotsRule" classType="com.seerlogics.commons.dto.SearchBots">

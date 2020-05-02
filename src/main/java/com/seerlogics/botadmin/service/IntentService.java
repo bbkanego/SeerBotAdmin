@@ -1,7 +1,9 @@
 package com.seerlogics.botadmin.service;
 
-import com.lingoace.common.exception.GeneralErrorException;
 import com.lingoace.spring.service.BaseServiceImpl;
+import com.lingoace.validation.ValidationException;
+import com.lingoace.validation.ValidationResult;
+import com.seerlogics.botadmin.event.CategoryCreatedEvent;
 import com.seerlogics.botadmin.exception.ErrorCodes;
 import com.seerlogics.commons.CommonConstants;
 import com.seerlogics.commons.dto.SearchIntents;
@@ -9,6 +11,9 @@ import com.seerlogics.commons.exception.BaseRuntimeException;
 import com.seerlogics.commons.model.*;
 import com.seerlogics.commons.repository.IntentRepository;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.EventListener;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,11 +73,15 @@ public class IntentService extends BaseServiceImpl<Intent> {
 
     @Override
     public Intent save(Intent intent) {
+        return saveIntentLocal(intent, this.accountService.getAuthenticatedUser());
 
+    }
+
+    private Intent saveIntentLocal(Intent intent, Account ownerAccount) {
         // get existing intents for the category
         List<Intent> existingIntents =
                 this.intentRepository.findAllByCategoryCodeAndOwnerEquals(intent.getCategory().getCode(),
-                        this.accountService.getAuthenticatedUser());
+                        ownerAccount);
 
         // add the new intent to the existing intents to check if its duplicate
         if (intent.getId() == null) {
@@ -85,7 +94,7 @@ public class IntentService extends BaseServiceImpl<Intent> {
 
         List<IntentResponse> newResponses = new ArrayList<>(intent.getResponses());
         intent.getResponses().clear();
-        intent.setOwner(accountService.getAuthenticatedUser());
+        intent.setOwner(ownerAccount);
         intent.getResponses().addAll(newResponses);
         Intent mayBeIntent = intent.getMayBeIntent();
         if (mayBeIntent != null && mayBeIntent.getId() == null) {
@@ -124,30 +133,46 @@ public class IntentService extends BaseServiceImpl<Intent> {
     private void checkForDuplicateIntentUtterance(Collection<IntentUtterance> intentUtterances) {
         // check for any duplicate intents.
         Set<String> setToCheckDuplicates = new HashSet<>();
+        List<String> duplicateUtteranceList = new ArrayList<>();
         for (IntentUtterance intentUtterance : intentUtterances) {
             // check for duplicate utterance in the same Intent
             if (!setToCheckDuplicates.add(intentUtterance.getUtterance())) {
-                GeneralErrorException duplicateUtterance = new GeneralErrorException();
-                duplicateUtterance.addError(INTENT_ALREADY_ADDED,
-                        this.helperService.getMessage("message.intents.utterance.already.added",
-                                new String[]{intentUtterance.getUtterance()}), null);
-                throw duplicateUtterance;
+                duplicateUtteranceList.add(intentUtterance.getUtterance());
             }
+        }
+
+        if (duplicateUtteranceList.size() > 0) {
+            ValidationResult validationResult = new ValidationResult();
+            ValidationException validationException = new ValidationException("DuplicateUtterances", validationResult);
+            for (String utterance : duplicateUtteranceList) {
+                validationResult.addPageLevelError(this.helperService.getMessage(
+                        "message.intents.utterance.already.added",
+                        new String[]{utterance}));
+            }
+            throw validationException;
         }
     }
 
     private void checkForDuplicateIntent(Collection<Intent> intentsAndUtterances) {
         // check for any duplicate intents.
         Set<String> setToCheckDuplicates = new HashSet<>();
+        List<String> duplicateIntents = new ArrayList<>();
         // check for duplicate Intents
         for (Intent intent : intentsAndUtterances) {
             if (!setToCheckDuplicates.add(intent.getIntent())) {
-                GeneralErrorException duplicateIntent = new GeneralErrorException();
-                duplicateIntent.addError(INTENT_ALREADY_ADDED,
-                        this.helperService.getMessage("message.intents.already.added",
-                                new String[]{intent.getIntent()}), null);
-                throw duplicateIntent;
+                duplicateIntents.add(intent.getIntent());
             }
+        }
+
+        if (duplicateIntents.size() > 0) {
+            ValidationResult validationResult = new ValidationResult();
+            ValidationException validationException = new ValidationException("DuplicateIntents", validationResult);
+            for (String utterance : duplicateIntents) {
+                validationResult.addPageLevelError(this.helperService.getMessage(
+                        "message.intents.already.added",
+                        new String[]{utterance}));
+            }
+            throw validationException;
         }
     }
 
@@ -279,10 +304,12 @@ public class IntentService extends BaseServiceImpl<Intent> {
                 findIntentsByCategoryCodeAndOwnerAndCopyOfPredefinedIntentNotNull(categoryCodeDesiredByUser,
                         accountService.getAuthenticatedUser());
         if (!copiedIntents.isEmpty()) {
-            GeneralErrorException generalErrorException = new GeneralErrorException();
-            generalErrorException.addError(ErrorCodes.PREDEFINED_INTENTS_ALREADY_COPIED,
-                    this.helperService.getMessage("message.intents.predefined.intent.copied", null), null);
-            throw generalErrorException;
+
+            ValidationResult validationResult = new ValidationResult();
+            ValidationException validationException = new ValidationException("DuplicateUtterances", validationResult);
+            validationResult.addPageLevelError(this.helperService.getMessage(
+                    "message.intents.predefined.intent.copied", new String[]{}));
+            throw validationException;
         }
 
         /**
@@ -391,5 +418,36 @@ public class IntentService extends BaseServiceImpl<Intent> {
 
     public List<IntentUtterance> findUtterances(SearchIntents searchIntents) {
         return this.intentRepository.findUtterances(searchIntents);
+    }
+
+    protected static Intent createStandardIntents(Category category, Account currentAccount, String intentName, String utterance) {
+        // main intent
+        Intent intent = new Intent();
+        intent.setIntentType(Intent.INTENT_TYPE.CUSTOM.name());
+        intent.setCategory(category);
+        intent.setOwner(currentAccount);
+        intent.setIntent(intentName);
+        intent.addIntentResponse(createIntentResponse(intentName));
+
+        // Maybe Intent
+        Intent mayBeIntent = new Intent();
+        mayBeIntent.setIntent("Maybe" + intentName);
+        mayBeIntent.setOwner(currentAccount);
+        mayBeIntent.setCategory(category);
+        mayBeIntent.addIntentResponse(createIntentResponse(mayBeIntent.getIntent()));
+        intent.setMayBeIntent(mayBeIntent);
+
+        // utterances for the main intent
+        IntentUtterance intentUtterance = new IntentUtterance();
+        intentUtterance.setUtterance(utterance);
+        intent.addIntentUtterance(intentUtterance);
+        return intent;
+    }
+
+    protected static IntentResponse createIntentResponse(String response) {
+        IntentResponse intentResponse = new IntentResponse();
+        intentResponse.setResponseType(IntentResponse.RESPONSE_TYPE.STATIC.name());
+        intentResponse.setResponse(response);
+        return intentResponse;
     }
 }

@@ -10,6 +10,7 @@ import com.seerlogics.commons.model.IntentUtterance;
 import com.seerlogics.commons.model.TrainedModel;
 import com.seerlogics.commons.repository.LaunchInfoRepository;
 import com.seerlogics.commons.repository.TrainedModelRepository;
+import opennlp.tools.doccat.DocumentSample;
 import org.apache.commons.io.FileUtils;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
@@ -20,9 +21,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.URL;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 import static com.seerlogics.commons.CommonConstants.HAS_UBER_ADMIN_OR_ACCT_ADMIN_ROLE;
 
@@ -108,6 +107,30 @@ public class TrainedModelService extends BaseServiceImpl<TrainedModel> {
         trainedModelRepository.save(trainedModel);
     }
 
+    private void createModelFromDocumentSamples(TrainedModel trainedModel) {
+        List<DocumentSample> documentSamples = new ArrayList<>();
+        List<Intent> intents
+                = this.intentService.findIntentsByCategoryTypeAndOwner(trainedModel.getCategory().getCode(),
+                trainedModel.getType());
+        for (Intent currentIntent : intents) {
+            Set<IntentUtterance> intentUtterances = currentIntent.getUtterances();
+            String[] stringArray = new String[intentUtterances.size()];
+            int i = 0;
+            for (IntentUtterance intentUtterance: intentUtterances) {
+                stringArray[i] = intentUtterance.getUtterance();
+                i++;
+            }
+            documentSamples.add(new DocumentSample(currentIntent.getIntent(), stringArray));
+        }
+        LOGGER.debug("-------------------------------");
+        LOGGER.debug("Trained Model buffer = {}", documentSamples.size());
+        LOGGER.debug("-------------------------------");
+        ByteArrayOutputStream outStream = NLPModelTrainer.trainModelUsingMaxEntropy(documentSamples);
+        byte[] outputModelBytes = outStream.toByteArray();
+        LOGGER.debug("Output Model Bytes = " + outputModelBytes.length);
+        trainedModel.setFile(outputModelBytes);
+    }
+
     private void createModelFromUtterances(TrainedModel trainedModel) {
         StringBuilder buffer = new StringBuilder();
         List<Intent> intents
@@ -125,8 +148,10 @@ public class TrainedModelService extends BaseServiceImpl<TrainedModel> {
         LOGGER.debug("-------------------------------");
         LOGGER.debug("Trained Model buffer = {}", buffer);
         LOGGER.debug("-------------------------------");
-        ByteArrayOutputStream outStream = NLPModelTrainer.trainDoccatModel(buffer);
-        trainedModel.setFile(outStream.toByteArray());
+        ByteArrayOutputStream outStream = NLPModelTrainer.trainModelUsingNaiveBayes(buffer);
+        byte[] outputModelBytes = outStream.toByteArray();
+        LOGGER.debug("Output Model Bytes = " + outputModelBytes.length);
+        trainedModel.setFile(outputModelBytes);
     }
 
     public void reTrainModel(Long existingModelId) {
