@@ -12,14 +12,14 @@
       "option8": "Search Membership Plans"
     },
     "maintainIntents": {
-      "heading": "Maintain Intents",
+      "heading": "Manage Models",
       "option1": "Add Intents",
-      "option2": "Edit Intents",
+      "option2": "Manage Intents",
       "option3": "Train Models",
       "option4": "Search Trained Models"
     },
     "maintainBots": {
-      "heading": "Maintain Bots",
+      "heading": "Manage Bots",
       "option1": "Create Bot",
       "option2": "Edit Bot",
       "option3": "Launch Bot",
