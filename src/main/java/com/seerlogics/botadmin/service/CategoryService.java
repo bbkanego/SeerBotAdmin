@@ -3,8 +3,8 @@ package com.seerlogics.botadmin.service;
 import com.lingoace.common.exception.GeneralErrorException;
 import com.lingoace.common.exception.NotAuthorizedException;
 import com.lingoace.spring.service.BaseServiceImpl;
-import com.seerlogics.botadmin.event.CategoryCreatedEvent;
 import com.seerlogics.botadmin.exception.ErrorCodes;
+import com.seerlogics.commons.CommonConstants;
 import com.seerlogics.commons.dto.SearchBots;
 import com.seerlogics.commons.dto.SearchIntents;
 import com.seerlogics.commons.dto.SearchTrainedModel;
@@ -105,17 +105,18 @@ public class CategoryService extends BaseServiceImpl<Category> {
 
             LOGGER.debug("Creating Initiate intent for Category");
             Intent initiateIntent = IntentService.createStandardIntents(createCategory,
-                    createCategory.getOwnerAccount(), "Initiate", "Initiate");
+                    createCategory.getOwnerAccount(), CommonConstants.INITIATE, CommonConstants.INITIATE);
             intentRepository.save(initiateIntent);
 
             LOGGER.debug("Creating Salutation/HI intent for Category");
             Intent hiIntent = IntentService.createStandardIntents(createCategory,
-                    createCategory.getOwnerAccount(), "Hi", "Hi");
+                    createCategory.getOwnerAccount(), CommonConstants.HI, CommonConstants.HI);
             intentRepository.save(hiIntent);
 
             LOGGER.debug("Creating DoNotUnderstandIntent for Category");
             Intent doNotUnderstandIntent = IntentService.createStandardIntents(createCategory,
-                    createCategory.getOwnerAccount(), "DoNotUnderstandIntent", "NONE");
+                    createCategory.getOwnerAccount(), CommonConstants.DO_NOT_UNDERSTAND_INTENT,
+                    CommonConstants.DO_NOT_UNDERSTAND_INTENT);
             intentRepository.save(doNotUnderstandIntent);
 
             return createCategory;
