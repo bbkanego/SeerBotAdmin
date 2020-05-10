@@ -77,7 +77,7 @@ public class TrainedModelController extends BaseController implements CrudContro
     @Override
     @GetMapping(value = {"", "/"})
     public Collection<TrainedModel> getAll() {
-        return this.trainedModelService.findModelByOwner();
+        return this.trainedModelService.findModelsByOwner();
     }
 
     @Override

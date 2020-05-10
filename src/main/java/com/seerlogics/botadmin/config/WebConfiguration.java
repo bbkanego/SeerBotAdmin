@@ -52,6 +52,8 @@ public class WebConfiguration implements WebMvcConfigurer, ResourceLoaderAware {
     public void addCorsMappings(CorsRegistry registry) {
         String[] allowedOrigins = new String[]{"https://gabstatic.seersense.com:443", "https://gabstatic.seersense.com",
                 "https://gabstatic.seersense.com:80", "http://localhost:4300",
+                "https://gabadminstatic.seersense.com:443", "https://gabadminstatic.seersense.com",
+                "https://gabadminstatic.seersense.com:80",
                 "http://localhost:4320", "https://gab.seersense.com"};
         /**
          * This will be triggered for ALL URLs.

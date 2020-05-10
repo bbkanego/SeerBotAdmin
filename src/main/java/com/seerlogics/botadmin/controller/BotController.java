@@ -9,6 +9,7 @@ import com.seerlogics.botadmin.service.BotService;
 import com.seerlogics.botadmin.service.TrainedModelService;
 import com.seerlogics.commons.dto.LaunchModel;
 import com.seerlogics.commons.dto.SearchBots;
+import com.seerlogics.commons.dto.SearchTrainedModel;
 import com.seerlogics.commons.model.Account;
 import com.seerlogics.commons.model.Bot;
 import com.seerlogics.commons.model.Configuration;
@@ -74,8 +75,12 @@ public class BotController extends BaseController implements ApplicationListener
     @ResponseBody
     public LaunchModel startLaunch(@PathVariable("id") Long botId) {
         LaunchModel launchModel = new LaunchModel();
-        launchModel.setBot(this.botService.getSingle(botId));
-        launchModel.getReferenceData().put("trainedModels", this.trainedModelService.findModelByOwner());
+        Bot targetBot = this.botService.getSingle(botId);
+        launchModel.setBot(targetBot);
+        SearchTrainedModel searchTrainedModel = new SearchTrainedModel();
+        searchTrainedModel.setCategory(targetBot.getCategory());
+        searchTrainedModel.setOwnerAccount(this.accountService.getAuthenticatedUser());
+        launchModel.getReferenceData().put("trainedModels", this.trainedModelService.findModels(searchTrainedModel));
         return launchModel;
     }
 
