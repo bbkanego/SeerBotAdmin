@@ -7,6 +7,7 @@ import com.seerlogics.botadmin.service.AccountService;
 import com.seerlogics.botadmin.service.CategoryService;
 import com.seerlogics.botadmin.service.IntentService;
 import com.seerlogics.botadmin.service.TransactionService;
+import com.seerlogics.commons.dto.CopyIntents;
 import com.seerlogics.commons.dto.ReTrainBot;
 import com.seerlogics.commons.dto.SearchIntents;
 import com.seerlogics.commons.model.Intent;
@@ -111,5 +112,11 @@ public class CustomIntentController extends BaseController implements CrudContro
     @PostMapping("/associateIntents")
     public ReTrainBot associateAndRetrain(@RequestBody ReTrainBot reTrainBot) {
         return this.transactionService.associateUtteranceToIntents(reTrainBot);
+    }
+
+    @PostMapping("/copyIntents")
+    public ResponseEntity copyIntentsFromCategory(@RequestBody CopyIntents copyIntents) {
+        this.customIntentService.copyIntentsFromCategory(copyIntents);
+        return returnSuccessResponse();
     }
 }

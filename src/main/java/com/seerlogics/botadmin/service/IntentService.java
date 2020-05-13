@@ -3,17 +3,14 @@ package com.seerlogics.botadmin.service;
 import com.lingoace.spring.service.BaseServiceImpl;
 import com.lingoace.validation.ValidationException;
 import com.lingoace.validation.ValidationResult;
-import com.seerlogics.botadmin.event.CategoryCreatedEvent;
 import com.seerlogics.botadmin.exception.ErrorCodes;
 import com.seerlogics.commons.CommonConstants;
+import com.seerlogics.commons.dto.CopyIntents;
 import com.seerlogics.commons.dto.SearchIntents;
 import com.seerlogics.commons.exception.BaseRuntimeException;
 import com.seerlogics.commons.model.*;
 import com.seerlogics.commons.repository.IntentRepository;
 import org.apache.commons.lang3.StringUtils;
-import org.springframework.context.ApplicationListener;
-import org.springframework.context.event.EventListener;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,8 +19,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.nio.charset.StandardCharsets;
 import java.util.*;
-
-import static com.seerlogics.botadmin.exception.ErrorCodes.INTENT_ALREADY_ADDED;
 
 /**
  * Created by bkane on 11/3/18.
@@ -300,6 +295,9 @@ public class IntentService extends BaseServiceImpl<Intent> {
 
     public List<Intent> copyPredefinedIntents(String categoryCodeDesiredByUser) {
 
+        /**
+         * Check if the intents have already been copied over.
+         */
         List<Intent> copiedIntents = this.intentRepository.
                 findIntentsByCategoryCodeAndOwnerAndCopyOfPredefinedIntentNotNull(categoryCodeDesiredByUser,
                         accountService.getAuthenticatedUser());
@@ -317,10 +315,18 @@ public class IntentService extends BaseServiceImpl<Intent> {
          * that the user selected.
          */
         Category categoryDesiredByUser = this.categoryService.getCategoryByCode(categoryCodeDesiredByUser);
+        // get predefined Intents
         List<String> categoryCodes = Arrays.asList(categoryCodeDesiredByUser, this.helperService.getGenericCategoryCode());
         List<Intent> predefinedIntents = this.findIntentsByCategoryAndType(categoryCodes,
                 Intent.INTENT_TYPE.PREDEFINED.name());
-        List<Intent> customIntents = new ArrayList<>();
+
+        List<Intent> copiedIntentsFresh = copySourceIntentsToTargetIntents(categoryDesiredByUser, predefinedIntents);
+        this.saveAll(copiedIntentsFresh);
+        return copiedIntentsFresh;
+    }
+
+    private List<Intent> copySourceIntentsToTargetIntents(Category categoryDesiredByUser, List<Intent> predefinedIntents) {
+        List<Intent> copiedIntents = new ArrayList<>();
         Account targetOwner = accountService.getAuthenticatedUser();
         for (Intent predefinedIntentUtterance : predefinedIntents) {
             Intent customIntent = new Intent();
@@ -363,10 +369,9 @@ public class IntentService extends BaseServiceImpl<Intent> {
             for (IntentResponse predefinedResponse : predefinedIntentUtterance.getResponses()) {
                 copyIntentResponse(customIntent, predefinedResponse);
             }
-            customIntents.add(customIntent);
+            copiedIntents.add(customIntent);
         }
-        this.saveAll(customIntents);
-        return customIntents;
+        return copiedIntents;
     }
 
     private void copyIntentResponse(Intent mayBeIntent, IntentResponse predefinedResponse) {
@@ -449,5 +454,22 @@ public class IntentService extends BaseServiceImpl<Intent> {
         intentResponse.setResponseType(IntentResponse.RESPONSE_TYPE.STATIC.name());
         intentResponse.setResponse(response);
         return intentResponse;
+    }
+
+    public void copyIntentsFromCategory(CopyIntents copyIntents) {
+        SearchIntents searchSourceIntents = new SearchIntents();
+        searchSourceIntents.setIntentNames(Arrays.asList(StringUtils.split(copyIntents.getIntentName(), ",")));
+        searchSourceIntents.setCategory(this.categoryService.getCategoryByCode(copyIntents.getOwnerCategoryCode()));
+        searchSourceIntents.setIgnoreOwnerAccount(true);
+        List<Intent> desiredIntents = this.intentRepository.findIntentsAndUtterances(searchSourceIntents);
+        LOGGER.debug("******* desiredIntents = " + desiredIntents.size());
+
+        // now get the target Intent
+        SearchIntents searchTargetIntents = new SearchIntents();
+        searchTargetIntents.setIntentNames(Arrays.asList(StringUtils.split(copyIntents.getTargetIntentName(), ",")));
+        searchTargetIntents.setCategory(this.categoryService.getCategoryByCode(copyIntents.getTargetCategoryCode()));
+        searchTargetIntents.setIgnoreOwnerAccount(true);
+        List<Intent> targetIntents = this.intentRepository.findIntentsAndUtterances(searchTargetIntents);
+        LOGGER.debug("******* targetIntents = " + targetIntents.size());
     }
 }

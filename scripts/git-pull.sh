@@ -21,6 +21,9 @@ git pull origin develop
 cd $JAVA_CODE_PATH/SeerlogicsBotAdmin
 git pull origin develop
 
+cd $JAVA_CODE_PATH/SeerLogicsSharedBot
+git pull origin develop
+
 cd $ANGULAR_CODE_PATH/Angular-Library-With-NgPackagr
 git pull origin develop
 
