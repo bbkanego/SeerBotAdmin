@@ -41,9 +41,9 @@ public class CustomIntentController extends BaseController implements CrudContro
         this.transactionService = transactionService;
     }
 
-    @GetMapping(value = "/copy-standard-intents/{catCode}")
-    public Collection<Intent> copyStandardIntents(@PathVariable("catCode") String catCode) {
-        return this.customIntentService.copyPredefinedIntents(catCode);
+    @PostMapping(value = "/copy-intents")
+    public Collection<Intent> copyStandardIntents(@RequestBody CopyIntents copyIntents) {
+        return this.customIntentService.copyAllIntentsFromSourceToTarget(copyIntents);
     }
 
     @PostMapping(value = {"", "/",})
@@ -114,9 +114,9 @@ public class CustomIntentController extends BaseController implements CrudContro
         return this.transactionService.associateUtteranceToIntents(reTrainBot);
     }
 
-    @PostMapping("/copyIntents")
-    public ResponseEntity copyIntentsFromCategory(@RequestBody CopyIntents copyIntents) {
-        this.customIntentService.copyIntentsFromCategory(copyIntents);
+    @PostMapping("/copyUtteranceFromSourceIntent")
+    public ResponseEntity copyUtteranceFromSourceIntent(@RequestBody CopyIntents copyIntents) {
+        this.customIntentService.copyIntentUtterancesFromSourceIntent(copyIntents);
         return returnSuccessResponse();
     }
 }

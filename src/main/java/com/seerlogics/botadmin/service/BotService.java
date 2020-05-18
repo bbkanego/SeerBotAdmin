@@ -6,6 +6,7 @@ import com.lingoace.exception.jpa.UnknownTypeException;
 import com.lingoace.spring.service.BaseServiceImpl;
 import com.seerlogics.botadmin.config.AppProperties;
 import com.seerlogics.botadmin.exception.ErrorCodes;
+import com.seerlogics.commons.CommonConstants;
 import com.seerlogics.commons.dto.LaunchModel;
 import com.seerlogics.commons.dto.SearchBots;
 import com.seerlogics.commons.model.*;
@@ -251,5 +252,22 @@ public class BotService extends BaseServiceImpl<Bot> {
 
     public List<Bot> findBots(SearchBots searchBots) {
         return this.botRepository.findBots(searchBots);
+    }
+
+    public void copyBot(long botId) {
+        Bot sourceBot = this.botRepository.getOne(botId);
+        Account currentAccount = this.accountService.getAuthenticatedUser();
+        if (CommonConstants.PREDEFINED.equals(sourceBot.getCategory().getType())) {
+
+        } else if (CommonConstants.CUSTOM.equals(sourceBot.getCategory().getType())) {
+            if (sourceBot.getOwner().getUserName().equals(currentAccount.getUserName())) {
+
+            } else {
+                throw new NotAuthorizedException("You do not have access to this resource");
+            }
+        } else {
+            throw new IllegalStateException("The Bot you are trying to copy has " +
+                    "incorrect category = " + sourceBot.getCategory().getType());
+        }
     }
 }

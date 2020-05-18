@@ -18,6 +18,10 @@
     },
     "deleteAll": "Delete All",
     "addIntent": "Add Intent",
+    "copyIntents": "Copy Intents",
+    "copyFrom": "Copy From",
+    "currentBotCategory": "Your Bot type",
+    "copyIntentsVerbiage": "Select the bot type from where you want to copy intents",
     "deleteAllMessage": "Do you want to delete all intents",
     "pageSubHeading": "Following intents where found. These include intents that you copied from predefined intents and any new intents"
   }

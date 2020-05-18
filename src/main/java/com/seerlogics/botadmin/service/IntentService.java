@@ -5,6 +5,7 @@ import com.lingoace.validation.ValidationException;
 import com.lingoace.validation.ValidationResult;
 import com.seerlogics.botadmin.exception.ErrorCodes;
 import com.seerlogics.commons.CommonConstants;
+import com.seerlogics.commons.CommonUtils;
 import com.seerlogics.commons.dto.CopyIntents;
 import com.seerlogics.commons.dto.SearchIntents;
 import com.seerlogics.commons.exception.BaseRuntimeException;
@@ -160,14 +161,12 @@ public class IntentService extends BaseServiceImpl<Intent> {
         }
 
         if (duplicateIntents.size() > 0) {
-            ValidationResult validationResult = new ValidationResult();
-            ValidationException validationException = new ValidationException("DuplicateIntents", validationResult);
+            List<String> errorMessages = new ArrayList<>();
             for (String utterance : duplicateIntents) {
-                validationResult.addPageLevelError(this.helperService.getMessage(
-                        "message.intents.already.added",
+                errorMessages.add(this.helperService.getMessage("message.intents.already.added",
                         new String[]{utterance}));
             }
-            throw validationException;
+            CommonUtils.showPageLevelValidationErrors("DuplicateIntents", errorMessages);
         }
     }
 
@@ -293,13 +292,17 @@ public class IntentService extends BaseServiceImpl<Intent> {
         return false;
     }
 
-    public List<Intent> copyPredefinedIntents(String categoryCodeDesiredByUser) {
+    public List<Intent> copyAllIntentsFromSourceToTarget(CopyIntents copyIntents) {
 
         /**
          * Check if the intents have already been copied over.
          */
+        String targetCategoryCode = copyIntents.getTargetCategoryCode();
+        String sourceCategoryCode = copyIntents.getSourceCategoryCode();
+        Account currentUser = this.accountService.getAuthenticatedUser();
+
         List<Intent> copiedIntents = this.intentRepository.
-                findIntentsByCategoryCodeAndOwnerAndCopyOfPredefinedIntentNotNull(categoryCodeDesiredByUser,
+                findIntentsByCategoryCodeAndOwnerAndCopyOfPredefinedIntentNotNull(targetCategoryCode,
                         accountService.getAuthenticatedUser());
         if (!copiedIntents.isEmpty()) {
 
@@ -314,21 +317,39 @@ public class IntentService extends BaseServiceImpl<Intent> {
          * We will copy the intents, maybe intents and responses from the Generic category code and from the category
          * that the user selected.
          */
-        Category categoryDesiredByUser = this.categoryService.getCategoryByCode(categoryCodeDesiredByUser);
-        // get predefined Intents
-        List<String> categoryCodes = Arrays.asList(categoryCodeDesiredByUser, this.helperService.getGenericCategoryCode());
-        List<Intent> predefinedIntents = this.findIntentsByCategoryAndType(categoryCodes,
-                Intent.INTENT_TYPE.PREDEFINED.name());
+        Category targetCategoryDesiredByUser = this.categoryService.getCategoryByCode(targetCategoryCode);
 
-        List<Intent> copiedIntentsFresh = copySourceIntentsToTargetIntents(categoryDesiredByUser, predefinedIntents);
+        List<Intent> sourceIntents = new ArrayList<>();
+        if (CommonConstants.PREDEFINED.equals(copyIntents.getSourceCategoryTypeCode())) {
+            // get predefined Intents
+            List<String> categoryCodes = Arrays.asList(sourceCategoryCode, this.helperService.getGenericCategoryCode());
+            sourceIntents = this.findIntentsByCategoryAndType(categoryCodes, Intent.INTENT_TYPE.PREDEFINED.name());
+        } else if (CommonConstants.CUSTOM.equals(copyIntents.getSourceCategoryTypeCode())) {
+            // get custom Intents
+            Category sourceCategory = this.categoryService.getCategoryByCode(sourceCategoryCode);
+            if (!sourceCategory.getOwnerAccount().getUserName().equals(currentUser.getUserName())) {
+                String message = "You are not authorized to copy intents.";
+                List<String> messages = new ArrayList<>();
+                messages.add(message);
+                LOGGER.error(message);
+                CommonUtils.showPageLevelValidationErrors("NotAuthorized", messages);
+            }
+            List<String> categoryCodes = Arrays.asList(sourceCategoryCode);
+            sourceIntents = this.findIntentsByCategoryAndType(categoryCodes, Intent.INTENT_TYPE.CUSTOM.name());
+        } else {
+            CommonUtils.showPageLevelValidationErrors("InvalidCategoryCode",
+                    Arrays.asList("Invalid Category Code Selected"));
+        }
+
+        List<Intent> copiedIntentsFresh = copySourceIntentsToTargetIntents(targetCategoryDesiredByUser, sourceIntents);
         this.saveAll(copiedIntentsFresh);
         return copiedIntentsFresh;
     }
 
-    private List<Intent> copySourceIntentsToTargetIntents(Category categoryDesiredByUser, List<Intent> predefinedIntents) {
+    private List<Intent> copySourceIntentsToTargetIntents(Category categoryDesiredByUser, List<Intent> sourceIntents) {
         List<Intent> copiedIntents = new ArrayList<>();
         Account targetOwner = accountService.getAuthenticatedUser();
-        for (Intent predefinedIntentUtterance : predefinedIntents) {
+        for (Intent predefinedIntentUtterance : sourceIntents) {
             Intent customIntent = new Intent();
             customIntent.setOwner(targetOwner);
             customIntent.setCategory(categoryDesiredByUser);
@@ -374,20 +395,32 @@ public class IntentService extends BaseServiceImpl<Intent> {
         return copiedIntents;
     }
 
-    private void copyIntentResponse(Intent mayBeIntent, IntentResponse predefinedResponse) {
+    private void copyIntentResponse(Intent targetIntent, IntentResponse sourceResponse) {
+
+        // avoid duplicates
+        if (targetIntent.doesIntentAlreadyContainResponse(sourceResponse.getResponse())) {
+            return;
+        }
+
         IntentResponse customResponse = new IntentResponse();
-        customResponse.setLocale(predefinedResponse.getLocale());
-        customResponse.setResponse(predefinedResponse.getResponse());
-        customResponse.setResponseType(predefinedResponse.getResponseType());
+        customResponse.setLocale(sourceResponse.getLocale());
+        customResponse.setResponse(sourceResponse.getResponse());
+        customResponse.setResponseType(sourceResponse.getResponseType());
 
         // add the response to the custom intent
-        mayBeIntent.addIntentResponse(customResponse);
+        targetIntent.addIntentResponse(customResponse);
     }
 
-    private void copyIntentUtterance(Intent targetCustomIntent, IntentUtterance predefinedUtterance) {
+    private void copyIntentUtterance(Intent targetCustomIntent, IntentUtterance sourceUtterance) {
+
+        // avoid duplicates
+        if (targetCustomIntent.doesIntentAlreadyContainUtterance(sourceUtterance.getUtterance())) {
+            return;
+        }
+
         IntentUtterance customUtterance = new IntentUtterance();
-        customUtterance.setLocale(predefinedUtterance.getLocale());
-        customUtterance.setUtterance(predefinedUtterance.getUtterance());
+        customUtterance.setLocale(sourceUtterance.getLocale());
+        customUtterance.setUtterance(sourceUtterance.getUtterance());
 
         // add the utterance to custom intent
         targetCustomIntent.addIntentUtterance(customUtterance);
@@ -456,13 +489,37 @@ public class IntentService extends BaseServiceImpl<Intent> {
         return intentResponse;
     }
 
-    public void copyIntentsFromCategory(CopyIntents copyIntents) {
+    /**
+     * This method will allow you to copy intents from one category to the other. Here specific "intents" are copied
+     *
+     * @param copyIntents
+     */
+    public void copyIntentUtterancesFromSourceIntent(CopyIntents copyIntents) {
+        Account currentUser = this.accountService.getAuthenticatedUser();
+
+        Category sourceCategory = this.categoryService.getCategoryByCode(copyIntents.getSourceCategoryCode());
+
         SearchIntents searchSourceIntents = new SearchIntents();
         searchSourceIntents.setIntentNames(Arrays.asList(StringUtils.split(copyIntents.getIntentName(), ",")));
-        searchSourceIntents.setCategory(this.categoryService.getCategoryByCode(copyIntents.getOwnerCategoryCode()));
+        searchSourceIntents.setCategory(sourceCategory);
         searchSourceIntents.setIgnoreOwnerAccount(true);
-        List<Intent> desiredIntents = this.intentRepository.findIntentsAndUtterances(searchSourceIntents);
-        LOGGER.debug("******* desiredIntents = " + desiredIntents.size());
+        List<Intent> sourceIntents = this.intentRepository.findIntentsAndUtterances(searchSourceIntents);
+        LOGGER.debug("******* sourceIntents = " + sourceIntents.size());
+
+        if (sourceIntents.size() > 1) {
+            List<String> errorMessages = new ArrayList<>();
+            errorMessages.add("Duplicate Source Intent found");
+            CommonUtils.showPageLevelValidationErrors("MultipleSourceIntents", errorMessages);
+        }
+
+        if (sourceCategory.getType().equals(CommonConstants.CUSTOM) && !sourceCategory.getOwnerAccount()
+                .getUserName().equals(currentUser.getUserName())) {
+            String message = "You are not authorized to copy intents.";
+            List<String> messages = new ArrayList<>();
+            messages.add(message);
+            LOGGER.error(message);
+            CommonUtils.showPageLevelValidationErrors("NotAuthorized", messages);
+        }
 
         // now get the target Intent
         SearchIntents searchTargetIntents = new SearchIntents();
@@ -471,5 +528,25 @@ public class IntentService extends BaseServiceImpl<Intent> {
         searchTargetIntents.setIgnoreOwnerAccount(true);
         List<Intent> targetIntents = this.intentRepository.findIntentsAndUtterances(searchTargetIntents);
         LOGGER.debug("******* targetIntents = " + targetIntents.size());
+
+        if (targetIntents.size() > 1) {
+            List<String> errorMessages = new ArrayList<>();
+            errorMessages.add("Duplicate Target Intent found");
+            CommonUtils.showPageLevelValidationErrors("MultipleTargetIntents", errorMessages);
+        }
+
+        // now copy the intent responses from source to target.
+        Intent sourceIntent = sourceIntents.get(0);
+        for (Intent targetIntent : targetIntents) {
+            Set<IntentUtterance> sourceIntentUtterances = sourceIntent.getUtterances();
+            int originalSize = targetIntent.getUtterances().size();
+            for (IntentUtterance sourceUtterance : sourceIntentUtterances) {
+                copyIntentUtterance(targetIntent, sourceUtterance);
+            }
+            int newSize = targetIntent.getUtterances().size();
+            if (newSize > originalSize) {
+                this.intentRepository.save(targetIntent);
+            }
+        }
     }
 }
