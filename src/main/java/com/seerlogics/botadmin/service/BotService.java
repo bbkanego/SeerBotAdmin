@@ -214,10 +214,14 @@ public class BotService extends BaseServiceImpl<Bot> {
 
         //botLauncher.stopBotAsync(id);
         LaunchInfo launchInfo = (LaunchInfo) bot.getLaunchInfo().toArray()[0];
+        String uniqueBotId = launchInfo.getUniqueBotId();
         //bot.getLaunchInfo().remove(launchInfo);
         bot.getLaunchInfo().clear();
         bot.setStatus(statusService.findByCode(Status.STATUS_CODES.DRAFT.name()));
-        return save(bot);
+        bot = save(bot);
+
+        clearBotCache(uniqueBotId);
+        return bot;
     }
 
     public Bot restartBot(Long id) {
@@ -230,6 +234,17 @@ public class BotService extends BaseServiceImpl<Bot> {
         LaunchInfo launchInfo = this.launchInfoRepository.findByTargetBotId(bot.getId());
         String uniqueBotId = launchInfo.getUniqueBotId();
 
+        clearBotCache(uniqueBotId);
+
+        return bot;
+    }
+
+    /**
+     * This will make an API call and remove the bot details from the cache of the ChatBot APP when the Bot is stopped
+     * or re-inited.
+     * @param uniqueBotId
+     */
+    private void clearBotCache(String uniqueBotId) {
         ResponseEntity<String> response
                 = this.restTemplate.getForEntity(this.chatbotReInitUrl + "/" + this.authCode + "/"
                 + uniqueBotId, String.class);
@@ -240,8 +255,6 @@ public class BotService extends BaseServiceImpl<Bot> {
                     "Bot re-initialization failed", null);
             throw generalErrorException;
         }
-
-        return bot;
     }
 
     public SearchBots initSearchBots() {
