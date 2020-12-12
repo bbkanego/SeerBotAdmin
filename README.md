@@ -45,17 +45,18 @@ mvn clean install -P aws-ec2-war
 1. Start the DB server. This server will be common for both the admin and shared bot application
 ```
 $> cd  ~/svn/code/java/SeerlogicsBotAdmin/scripts
-$> ./runH2.sh
+$> ./runH2.sh (if on Mac)
+$> ./runH2_ubuntu.sh (on ubuntu)
 
 ```
 
 2. Next start the BotAdmin application using the idea run configurations:
 ```
-SeerBotAdminApp:local-8091
+SeerBotAdminApp:local-8091 (Intellij config: SeerBotAdmin-H2-local-war:8091)
 ```
 and then the shared bot using:
 ```
-SeerLogicsSharedBot:local-8099
+SeerLogicsSharedBot:local-8099 (Intellij config: SeerBot-H2-local-war:8099)
 ```
 Once the shared bot is running you can confirm that using:
 ```
@@ -196,8 +197,9 @@ cat ~/seerBotAdmin/logs/appDebug.log
 
 - Next run the command
 ```
-sudo systemctl start gogs
-sudo systemctl enable gogs
+$> sudo systemctl start gogs
+$> sudo systemctl enable gogs
+// now access Gogs using: http://bubuntu:3000/
 ```
 
 - You can now check the status of gogs service with the following command:
