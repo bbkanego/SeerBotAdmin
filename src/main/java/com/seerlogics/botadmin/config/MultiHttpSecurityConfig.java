@@ -75,6 +75,12 @@ public class MultiHttpSecurityConfig {
             web.ignoring().antMatchers("/api/**/generate-token", "/error", "/metadata/validation/**",
                     "/api/v1/account/signup", "/metadata/messages", "/actuator/**",
                     "/api/v1/account/init/**", "/api/cms/all-content",
+                    // swagger related resources
+                    "/swagger-resources/**",
+                    "/swagger-ui.html",
+                    "/v2/api-docs",
+                    "/webjars/**",
+                    // swagger related resources ends
                     "/api/v1/subscription/init/**", "/api/v1/subscription/signup");
         }
 

@@ -26,8 +26,16 @@ import org.springframework.core.io.support.ResourcePatternUtils;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import springfox.documentation.builders.PathSelectors;
+import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
+import springfox.documentation.spi.DocumentationType;
+import springfox.documentation.spring.web.plugins.Docket;
+import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,6 +43,7 @@ import java.util.Map;
  * Created by bkane on 10/31/18.
  */
 @Configuration
+@EnableSwagger2
 public class WebConfiguration implements WebMvcConfigurer, ResourceLoaderAware {
 
     private ResourceLoader resourceLoader;
@@ -197,6 +206,21 @@ public class WebConfiguration implements WebMvcConfigurer, ResourceLoaderAware {
     @Bean
     public ManageLoadBalancerFactory manageLoadBalancer() {
         return new ManageLoadBalancerFactory();
+    }
+
+    @Bean
+    public Docket swaggerDocket() {
+        return new Docket(DocumentationType.SWAGGER_2)
+                .select()
+                //.paths(PathSelectors.ant("/api/*"))
+                //.apis(RequestHandlerSelectors.basePackage("com.seerlogics.*"))
+                .build()
+                .apiInfo(new ApiInfo(
+                        "SeerBotAdmin API", "SeerBotAdmin API", "1.2.1",
+                        "Copyright 2020 SeerSense", new Contact("Bhushan Kane",
+                        "www.seersense.com", "bkane@seersense.com"),
+                        "API License", "www.seersense.com", Collections.emptyList()
+                ));
     }
 
     /*@Bean
